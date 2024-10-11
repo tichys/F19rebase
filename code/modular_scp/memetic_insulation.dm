@@ -63,7 +63,7 @@ Made by TheDarkElites
 
 // VISUAL MEMETICS
 
-/mob/living/carbon/human/can_see(atom/origin, visual_memetic = 0) //Checks if origin can be seen by a human. visiual_memetics should be one if you're checking for a visual memetic hazard as opposed to say someone looking at scp 173. If origin is null, checks for if the human can see in general.
+/mob/living/carbon/human/proc/can_see(atom/origin, visual_memetic = 0) //Checks if origin can be seen by a human. visiual_memetics should be one if you're checking for a visual memetic hazard as opposed to say someone looking at scp 173. If origin is null, checks for if the human can see in general.
 	var/turf/origin_turf
 	var/area/origin_area
 	if(stat) //Unconscious humans cant see.

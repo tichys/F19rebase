@@ -1970,6 +1970,8 @@
 #include "code\modular_scp\memetic_insulation.dm"
 #include "code\modular_scp\mob_living.dm"
 #include "code\modular_scp\scp.dm"
+#include "code\modular_scp\screen_objects.dm"
+#include "code\modular_scp\vision_cone.dm"
 #include "code\modular_scp\SCPs\SCP-008.dm"
 #include "code\modules\actionspeed\_actionspeed_modifier.dm"
 #include "code\modules\actionspeed\modifiers\addiction.dm"
