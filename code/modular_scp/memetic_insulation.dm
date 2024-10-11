@@ -125,9 +125,8 @@ Made by TheDarkElites
 		var/mob/origin_Mob = origin
 		size_class = origin_Mob.mob_size
 		switch(size_class)
-			if(MOB_SMALL) viewdistance -= DEBUFF_SMALL
-			if(MOB_TINY) viewdistance -= DEBUFF_TINY
-			if(MOB_MINISCULE) viewdistance -= DEBUFF_MINISCULE
+			if(MOB_SIZE_SMALL) viewdistance -= DEBUFF_SMALL
+			if(MOB_SIZE_TINY) viewdistance -= DEBUFF_TINY
 
 	if(get_dist_euclidian(get_turf(src), get_turf(origin)) <= clamp(viewdistance, 0, 7))
 		if((visual_insulation_calculated == V_INSL_IMPERFECT) && visual_memetic)

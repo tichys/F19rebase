@@ -63,3 +63,22 @@
 #define COMSIG_MOB_HEARD_WHISPER "mobHeardWhisper"
 /// Called in 'mob/on_hear_say' on the mob who heard whatever message (/mob/hearer, message)
 #define COMSIG_MOB_HEAR "mob_hear"
+
+
+/*
+*	Photos
+*/
+
+/// Called in '/obj/item/device/camera/proc/captureimage' on the atom taken a picture of (/obj/item/device/camera, mob/living/user)
+#define COMSIG_PHOTO_TAKEN_OF "photoTakenOf"
+/// Called in '/obj/item/photo/proc/show' on the atom that the photo was shown of (/obj/item/photo, mob/user)
+#define COMSIG_PHOTO_SHOWN_OF "photoShownOf"
+
+/*
+*	Sound
+*/
+
+/// Called in '/mob/proc/playsound_local' on the atom that the sound originated from (/mob/hearer, sound)
+#define COMSIG_OBJECT_SOUND_HEARD "atomHeard"
+/// Called in '/datum/sound_token/proc/PrivUpdateListener' on the atom that the sound originated from (/mob/hearer, sound)
+#define COMSIG_OBJECT_SOUND_HEARD_LOOPING "atomHeardLooping"

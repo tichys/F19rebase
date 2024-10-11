@@ -7,3 +7,6 @@
 	var/atom/movable/screen/fov/fov = null//The screen object because I can't figure out how the hell TG does their screen objects so I'm just using legacy code.
 	var/atom/movable/screen/fov/fov_mask/fov_mask
 	var/usefov = 1
+
+/mob/proc/is_invisible_to(mob/viewer)
+	return (!alpha || !mouse_opacity || viewer.see_invisible < invisibility)
