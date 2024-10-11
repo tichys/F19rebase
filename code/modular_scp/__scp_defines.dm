@@ -42,3 +42,24 @@
 #define MPERSISTENT			(1<<5)
 ///Is the scp memetic effect synced? If this flag is enabled the memetic comp's active_memetic_effect() must be called to enact the memetic effect.
 #define MSYNCED				(1<<6)
+
+//Memetic insulation defines
+//Audio insulation
+#define A_INSL_NONE 		0
+#define A_INSL_IMPERFECT 	1
+#define A_INSL_PERFECT 		2
+//Visual insulation
+#define V_INSL_NONE 		0
+#define V_INSL_IMPERFECT 	1
+#define V_INSL_PERFECT 		2
+
+
+/// Called in '/mob/verb/examinate' on examined atom (/mob/examinee)
+#define COMSIG_ATOM_EXAMINED "atomExamined"
+
+/// Called in '/mob/living/say' on the mob who heard speech (/mob/living/speaker, message)
+#define COMSIG_MOB_HEARD_SPEECH "mobHeardSpeech"
+/// Called in '/mob/living/say' on the mob who heard the whisper (/mob/living/speaker, list(message)). Message is passed in a list so that back-editing is possible.
+#define COMSIG_MOB_HEARD_WHISPER "mobHeardWhisper"
+/// Called in 'mob/on_hear_say' on the mob who heard whatever message (/mob/hearer, message)
+#define COMSIG_MOB_HEAR "mob_hear"

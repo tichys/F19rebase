@@ -1967,6 +1967,8 @@
 #include "code\modular_scp\__span.dm"
 #include "code\modular_scp\_lists.dm"
 #include "code\modular_scp\memetic_comp.dm"
+#include "code\modular_scp\memetic_insulation.dm"
+#include "code\modular_scp\mob_living.dm"
 #include "code\modular_scp\scp.dm"
 #include "code\modular_scp\SCPs\SCP-008.dm"
 #include "code\modules\actionspeed\_actionspeed_modifier.dm"
