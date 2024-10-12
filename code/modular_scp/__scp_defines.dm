@@ -89,3 +89,6 @@
 
 /// Called in '/mob/proc/reset_view' on every atom in view of new eyeobj (/mob/viewer, /atom/new_view)
 #define COMSIG_ATOM_VIEW_RESET "atomViewReset"
+
+#define set_temp_blindness(duration) set_timed_status_effect(duration, /datum/status_effect/temporary_blindness)
+#define set_temp_blindness_if_lower(duration) set_timed_status_effect(duration, /datum/status_effect/temporary_blindness, TRUE)

@@ -31,7 +31,7 @@
 	if(lit)
 		if(H.humanStageHandler.createStage("BlueLady"))
 			update_013_status(H)
-			affected += weakref(H)
+			affected += WEAKREF(H)
 
 /obj/item/clothing/mask/smokable/cigarette/bluelady/proc/update_013_status(mob/living/carbon/human/H)
 	H.humanStageHandler.adjustStage("BlueLady", 1)

@@ -397,7 +397,7 @@ GLOBAL_LIST_INIT(zombie_species, list(\
 	var/decl/cultural_info/culture = get_cultural_value(TAG_CULTURE)
 	SetName(culture.get_random_name(gender))
 	real_name = name
-
+	/*
 	var/decl/hierarchy/outfit/outfit = pick(
 		/decl/hierarchy/outfit/zombie/lczcadet,\
 		/decl/hierarchy/outfit/zombie/lczguard,\
@@ -414,6 +414,7 @@ GLOBAL_LIST_INIT(zombie_species, list(\
 		/decl/hierarchy/outfit/zombie/officeworker,\
 		/decl/hierarchy/outfit/zombie/classd\
 	)
+	*/
 	outfit = outfit_by_type(outfit)
 	outfit.equip(src, OUTFIT_ADJUSTMENT_SKIP_SURVIVAL_GEAR)
 
