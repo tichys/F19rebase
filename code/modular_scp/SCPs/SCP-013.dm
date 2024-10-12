@@ -1,4 +1,4 @@
-/obj/item/clothing/mask/smokable/cigarette/bluelady
+/obj/item/clothing/mask/cigarette/bluelady
 	name = "'Blue Lady' cigarette"
 	brand = "\improper Blue Lady"
 	desc = "The words 'Blue Lady' are written on this deftly-rolled cigarette in blue ink."
@@ -12,9 +12,9 @@
 	var/decl/appearance_handler/bl_handle = new /decl/appearance_handler()
 
 	///Humans who have smoked 013, helps us prevent it from extinguishing if someone is still undergoing the effects
-	var/list/weakref/affected
+	var/list/datum/weakref/affected
 
-/obj/item/clothing/mask/smokable/cigarette/bluelady/Initialize()
+/obj/item/clothing/mask/cigarette/bluelady/Initialize()
 	. = ..()
 	SCP = new /datum/scp(
 		src, // Ref to actual SCP atom
@@ -27,13 +27,13 @@
 
 //Mechanics
 
-/obj/item/clothing/mask/smokable/cigarette/bluelady/proc/effect(mob/living/carbon/human/H)
+/obj/item/clothing/mask/cigarette/bluelady/proc/effect(mob/living/carbon/human/H)
 	if(lit)
 		if(H.humanStageHandler.createStage("BlueLady"))
 			update_013_status(H)
 			affected += WEAKREF(H)
 
-/obj/item/clothing/mask/smokable/cigarette/bluelady/proc/update_013_status(mob/living/carbon/human/H)
+/obj/item/clothing/mask/cigarette/bluelady/proc/update_013_status(mob/living/carbon/human/H)
 	H.humanStageHandler.adjustStage("BlueLady", 1)
 	switch(H.humanStageHandler.getStage("BlueLady"))
 		if(1)
@@ -59,11 +59,11 @@
 			addtimer(CALLBACK(src, PROC_REF(update_013_status), H), 55 SECONDS)
 		if(7)
 			addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, bluelady_message)), 10 SECONDS)
-			affected -= weakref(H)
+			affected -= WEAKREF(H)
 			if(!LAZYLEN(affected))
 				extinguish()
 
-/obj/item/clothing/mask/smokable/cigarette/bluelady/proc/get_bluelady_image(mob/living/carbon/human/H)
+/obj/item/clothing/mask/cigarette/bluelady/proc/get_bluelady_image(mob/living/carbon/human/H)
 	var/image/I = image('icons/mob/human.dmi', H, "body_f_s")
 	I.override = 1
 	I.add_overlay(image('icons/mob/human_face.dmi', icon_state = "hair_emo2_s"))
@@ -75,22 +75,22 @@
 
 //Overrides
 
-/obj/item/clothing/mask/smokable/cigarette/bluelady/light()
+/obj/item/clothing/mask/cigarette/bluelady/light()
 	. = ..()
 	if(!ishuman(loc))
 		return
 	var/mob/living/carbon/human/H = loc
-	if(H.get_inventory_slot(src) != slot_wear_mask)
+	if(H.get_inventory_slot(src) != ITEM_SLOT_MASK)
 		return
 	effect(H)
 
-/obj/item/clothing/mask/smokable/cigarette/bluelady/equipped(mob/user, slot)
+/obj/item/clothing/mask/cigarette/bluelady/equipped(mob/user, slot)
 	. = ..()
 	if(slot != slot_wear_mask || !ishuman(user))
 		return
 	effect(user)
 
-/obj/item/clothing/mask/smokable/cigarette/bluelady/smoke(amount)
+/obj/item/clothing/mask/cigarette/bluelady/smoke(amount)
 	. = ..()
 	smoketime += amount //Infite smoke time until 013 can complete its effects
 
@@ -111,4 +111,4 @@
 	icon_state = "BLpacket"
 	desc = "A packet of six Blue Lady cigarettes. The SCP logo is stamped on the paper."
 
-	startswith = list(/obj/item/clothing/mask/smokable/cigarette/bluelady = 6)
+	startswith = list(/obj/item/clothing/mask/cigarette/bluelady = 6)

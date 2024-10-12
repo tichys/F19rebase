@@ -4,20 +4,11 @@
 	icon = 'icons/SCP/scp-017.dmi'
 
 	icon_state = "scp-017"
-	response_help = "tries to reach inside"
-	response_disarm = "tries to push away"
-	response_harm = "tries to punch"
-
-	can_escape = TRUE //snip snip
-	pass_flags = PASS_FLAG_TABLE
+	response_help_simple = "tries to reach inside"
+	response_disarm_simple = "tries to push away"
+	response_harm_simple = "tries to punch"
 	density = FALSE
 
-	meat_type = null
-	meat_amount = 0
-	skin_material = null
-	skin_amount = 0
-	bone_material = null
-	bone_amount = 0
 
 	maxHealth = 100
 	health = 100

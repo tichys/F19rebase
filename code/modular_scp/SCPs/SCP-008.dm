@@ -84,7 +84,7 @@
 		if (M.getBrainLoss() < 75)
 			M.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(1, 2))
 		if (prob(0.5))
-			H.seizure()
+			H.shake_animation()
 			H.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(12, 24))
 		if (prob(5))
 			to_chat(M, SPAN_DANGER("<font style='font-size:[rand(2,3)]'>[pick(zombie_messages["stage2"])]</font>"))

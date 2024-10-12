@@ -3,7 +3,7 @@
 	icon = 'icons/SCP/scp-012.dmi'
 	desc = "An old paper of handwritten sheet music, titled \"On Mount Golgotha\". The writing is in a conspicuous blood red."
 
-	w_class = ITEM_SIZE_NO_CONTAINER
+	w_class = WEIGHT_CLASS_GIGANTIC
 	show_title = FALSE
 
 	//Config
@@ -98,7 +98,7 @@
 
 // Overrides
 
-/obj/item/paper/scp012/Process()
+/obj/item/paper/scp012/proc/Process()
 	SCP.meme_comp.check_viewers()
 	SCP.meme_comp.activate_memetic_effects() //Memetic effects are synced because of how we handle sound
 
@@ -107,14 +107,14 @@
 	switch(mode)
 		if(MODE_VERY_FINE)
 			log_and_message_admins("put [src] through SCP-914 on \"Very Fine\" mode.", user, src)
-			for(var/mob/living/carbon/human/H in GLOB.human_mob_list)
+			for(var/mob/living/carbon/human/H in GLOB.living_mob_list)
 				if(H.z != z)
 					continue
 				H.playsound_local(get_turf(H), looping_sound, 50, FALSE)
 				to_chat(H, SPAN_USERDANGER("The music is bleeding into your body!"))
 				flash_color(H, flash_color = "#ff4444", flash_time = 200)
 				for(var/i = 1 to 50)
-					addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, drip), 2), i * rand(2 SECONDS, 10 SECONDS))
+					addtimer(CALLBACK(H, TYPE_PROC_REF(/mob/living/carbon/human, bleed), 2), i * rand(2 SECONDS, 10 SECONDS))
 			return null
 	return ..()
 

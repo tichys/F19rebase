@@ -100,8 +100,8 @@
 	if(!ishuman(examinee))
 		return
 	var/mob/living/carbon/human/H = examinee
-	var/datum/job/job = SSjobs.get_by_title(H.job)
-	if(job && (job.department_flag & (COM|SCI|SEC)))
+	var/datum/job/job = SSjob.get_by_title(H.job)
+	if(job)
 		to_chat(examinee, SPAN_CLASS("scp", "You know this is SCP-[designation]!"))
 
 /datum/scp/proc/has_minimum_players()
@@ -125,3 +125,10 @@
 	else
 		to_chat(src, SPAN_WARNING("You must be SCP!"))
 		return
+
+///Lets us attempt to set faction of something not explicitly defined as a mob
+/proc/set_faction(mob/M, faction)
+	if(!istype(M))
+		return FALSE
+
+	M.faction = faction

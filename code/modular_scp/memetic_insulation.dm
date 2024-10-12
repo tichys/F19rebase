@@ -119,8 +119,8 @@ Made by TheDarkElites
 		var/obj/origin_Obj = origin
 		size_class = origin_Obj.w_class
 		switch(size_class)
-			if(ITEM_SIZE_SMALL) viewdistance -= DEBUFF_SMALL
-			if(ITEM_SIZE_TINY) viewdistance -= DEBUFF_TINY
+			if(WEIGHT_CLASS_SMALL) viewdistance -= DEBUFF_SMALL
+			if(WEIGHT_CLASS_TINY) viewdistance -= DEBUFF_TINY
 	else if(ismob(origin))
 		var/mob/origin_Mob = origin
 		size_class = origin_Mob.mob_size

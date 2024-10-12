@@ -178,9 +178,9 @@ GLOBAL_LIST_INIT(zombie_species, list(\
 			if (!target.lying) //Subdue meals
 				H.face_atom(target)
 
-				if (!H.zone_sel)
-					H.zone_sel = new /atom/movable/screen/zone_sel(null)
-				H.zone_sel.selecting = BP_CHEST
+				if (!H.zone_select)
+					H.zone_select = new /atom/movable/screen/zone_sel(null)
+				H.zone_select.selecting = BP_CHEST
 				target.attack_hand(H)
 
 			else //Eat said meals
