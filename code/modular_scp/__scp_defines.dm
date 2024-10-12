@@ -82,3 +82,10 @@
 #define COMSIG_OBJECT_SOUND_HEARD "atomHeard"
 /// Called in '/datum/sound_token/proc/PrivUpdateListener' on the atom that the sound originated from (/mob/hearer, sound)
 #define COMSIG_OBJECT_SOUND_HEARD_LOOPING "atomHeardLooping"
+
+/*
+*	Eye
+*/
+
+/// Called in '/mob/proc/reset_view' on every atom in view of new eyeobj (/mob/viewer, /atom/new_view)
+#define COMSIG_ATOM_VIEW_RESET "atomViewReset"

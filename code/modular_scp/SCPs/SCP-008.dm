@@ -4,12 +4,14 @@
 	taste_description = "decaying blood"
 	color = "#540000"
 	taste_mult = 5
+	/* WE dont need this do we?
 	metabolism = REM
 	overdose = 200
 	hidden_from_codex = TRUE
 	heating_products = null
 	heating_point = null
 	should_admin_log = TRUE
+	*/
 
 	var/list/zombie_messages = list(
 	"stage1" = list(
@@ -78,7 +80,7 @@
 
 	if (true_dose >= 90)
 		M.add_chemical_effect(CE_HALLUCINATION, -2)
-		M.hallucination(50, min(true_dose / 2, 50))
+		M.hallucinating(50, min(true_dose / 2, 50))
 		if (M.getBrainLoss() < 75)
 			M.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(1, 2))
 		if (prob(0.5))
@@ -89,7 +91,7 @@
 		M.bodytemperature += 9
 
 	if (true_dose >= 110)
-		M.adjustHalLoss(5)
+		M.adjustOrganLoss(ORGAN_SLOT_BRAIN, 5)
 		M.adjust_dizzy(10 SECONDS)
 		if (prob(8))
 			to_chat(M, SPAN_DANGER("<font style='font-size:[rand(3,4)]'>[pick(zombie_messages["stage3"])]</font>"))
@@ -98,7 +100,7 @@
 		if (prob(3))
 			H.zombify()
 
-	M.reagents.add_reagent(/datum/reagent/scp008, RAND_F(1.5, 3.5))
+	M.reagents.add_reagent(/datum/reagent/scp008, rand(1.5, 3.5))
 
 /datum/reagent/scp008/affect_touch(mob/living/carbon/M, alien, removed)
 	affect_blood(M, alien, removed * 0.5)
