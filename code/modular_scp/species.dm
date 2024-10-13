@@ -1,0 +1,1 @@
+#define SPECIES_SCP049_1 	"SCP-049-1"

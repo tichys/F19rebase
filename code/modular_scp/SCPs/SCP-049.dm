@@ -68,32 +68,19 @@
 	))
 
 	InitSkills()
-	add_language(LANGUAGE_ENGLISH)
-	add_language(LANGUAGE_HUMAN_FRENCH)
-	add_language(LANGUAGE_HUMAN_GERMAN)
-	add_language(LANGUAGE_HUMAN_SPANISH)
-	add_language(LANGUAGE_PLAGUESPEAK_GLOBAL)
+	grant_language(LANGUAGE_ENGLISH)
+	grant_language(LANGUAGE_HUMAN_FRENCH)
+	grant_language(LANGUAGE_HUMAN_GERMAN)
+	grant_language(LANGUAGE_HUMAN_SPANISH)
+	grant_language(LANGUAGE_PLAGUESPEAK_GLOBAL)
 
 	home_area = get_area(src)
 
 /mob/living/carbon/human/scp049/proc/InitSkills()
-	skillset.skill_list = list()
-	for(var/decl/hierarchy/skill/S in GLOB.skills)
-		skillset.skill_list[S.type] = SKILL_UNTRAINED
-	skillset.skill_list[SKILL_COOKING] = SKILL_TRAINED
-	skillset.skill_list[SKILL_HAULING] = SKILL_MASTER
-	skillset.skill_list[SKILL_COMBAT] = SKILL_EXPERIENCED
-	skillset.skill_list[SKILL_ANATOMY] = SKILL_MASTER
-	skillset.skill_list[SKILL_CHEMISTRY] = SKILL_MASTER
-	skillset.skill_list[SKILL_MEDICAL] = SKILL_MASTER
-	skillset.skill_list[SKILL_SCIENCE] = SKILL_EXPERIENCED
-	skillset.on_levels_change()
-	if(!(MUTATION_XRAY in mutations))
-		mutations.Add(MUTATION_XRAY)
-		update_mutations()
-		update_sight()
+	ADD_TRAIT(src, TRAIT_XRAY_VISION, GENETIC_MUTATION)
+	update_sight()
 
-/mob/living/carbon/human/scp049/do_possession(mob/observer/ghost/possessor)
+/mob/living/carbon/human/scp049/do_possession(mob/dead/observer/possessor)
 	if(!..())
 		return
 	priority_announcement.Announce("Motion sensors triggered in the containment chamber of SCP-049, on-site security personnel are to investigate the issue.", "Motion Sensors", 'sounds/AI/049.ogg')
@@ -102,7 +89,7 @@
 //Mechanics
 
 /mob/living/carbon/human/scp049/proc/AttackVoiceLine() //for when we're up to no good!
-	var/voiceline = list('sounds/scp/voice/SCP049_1.ogg','sounds/scp/voice/SCP049_2.ogg','sounds/scp/voice/SCP049_3.ogg','sounds/scp/voice/SCP049_4.ogg','sounds/scp/voice/SCP049_5.ogg')
+	var/voiceline = list('sound/scp/voice/SCP049_1.ogg','sound/scp/voice/SCP049_2.ogg','sound/scp/voice/SCP049_3.ogg','sound/scp/voice/SCP049_4.ogg','sound/scp/voice/SCP049_5.ogg')
 	playsound(src, pick(voiceline), 30)
 	show_sound_effect(loc, src)
 
@@ -235,7 +222,7 @@
 				// Crowd control tool!
 				if(anger_timer >= anger_timer_max * 0.75)
 					visible_message(SPAN_DANGER(SPAN_ITALIC("[src] reaches towards [H], making them stumble!")))
-					H.Weaken(10)
+					H.Stun(10)
 					return
 				visible_message(SPAN_WARNING(SPAN_ITALIC("[src] reaches towards [H], but nothing happens...")))
 				to_chat(src, SPAN_WARNING("\The target's [zone_sel.selecting] is covered. You must make contact with bare skin to kill!"))
@@ -353,7 +340,7 @@
 	if(!CanSpecialEmote())
 		return
 
-	playsound(src, 'sounds/scp/voice/SCP049_1.ogg', 30)
+	playsound(src, 'sound/scp/voice/SCP049_1.ogg', 30)
 	show_sound_effect(loc, src)
 
 /mob/living/carbon/human/scp049/verb/YetAnotherVictim()
@@ -363,7 +350,7 @@
 	if(!CanSpecialEmote())
 		return
 
-	playsound(src, 'sounds/scp/voice/SCP049_2.ogg', 30)
+	playsound(src, 'sound/scp/voice/SCP049_2.ogg', 30)
 	show_sound_effect(loc, src)
 
 /mob/living/carbon/human/scp049/verb/YouAreNotDoctor()
@@ -373,7 +360,7 @@
 	if(!CanSpecialEmote())
 		return
 
-	playsound(src, 'sounds/scp/voice/SCP049_3.ogg', 30)
+	playsound(src, 'sound/scp/voice/SCP049_3.ogg', 30)
 	show_sound_effect(loc, src)
 
 /mob/living/carbon/human/scp049/verb/SenseDiseaseInYou()
@@ -383,7 +370,7 @@
 	if(!CanSpecialEmote())
 		return
 
-	playsound(src, 'sounds/scp/voice/SCP049_4.ogg', 30)
+	playsound(src, 'sound/scp/voice/SCP049_4.ogg', 30)
 	show_sound_effect(loc, src)
 
 /mob/living/carbon/human/scp049/verb/HereToCureYou()
@@ -393,7 +380,7 @@
 	if(!CanSpecialEmote())
 		return
 
-	playsound(src, 'sounds/scp/voice/SCP049_5.ogg', 30)
+	playsound(src, 'sound/scp/voice/SCP049_5.ogg', 30)
 	show_sound_effect(loc, src)
 
 /mob/living/carbon/human/scp049/proc/CanSpecialEmote()
@@ -453,15 +440,8 @@
 
 	target.Weaken(4)
 
-	if(target.skillset && target.skillset.skill_list)
-		target.skillset.skill_list = list()
-		for(var/decl/hierarchy/skill/S in GLOB.skills) //Only want trained CQC and athletics
-			skillset.skill_list[S.type] = SKILL_UNTRAINED
-		target.skillset.skill_list[SKILL_HAULING] = SKILL_TRAINED
-		target.skillset.skill_list[SKILL_COMBAT] = SKILL_TRAINED
-		target.skillset.on_levels_change()
 
 	target.species = all_species[SPECIES_SCP049_1]
 	target.species.handle_post_spawn(target)
 
-	playsound(get_turf(target), 'sounds/hallucinations/wail.ogg', 25, 1)
+	playsound(get_turf(target), 'sound/hallucinations/wail.ogg', 25, 1)

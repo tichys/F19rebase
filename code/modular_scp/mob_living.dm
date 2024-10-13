@@ -74,3 +74,4 @@ GLOBAL_LIST_INIT(ghost_master, list(
 	client.screen += VC
 	client.screen += mob
 	client.screen += sounds
+

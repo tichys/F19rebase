@@ -58,7 +58,7 @@
 		var/mob/pMob = parent
 		if(LAZYLEN(name))
 			pMob.fully_replace_character_name(name)
-		pMob.status_flags += NO_ANTAG
+		//pMob.status_flags += NO_ANTAG --- We need to rimplement no antag///
 
 	if(metaFlags & SCP_DISABLED)
 		//log_and_message_staff("Disabled SCP-[designation] spawned and subsequently deleted! Do not spawn disabled SCPs!", location = get_turf(parent))
