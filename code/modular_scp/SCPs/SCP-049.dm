@@ -247,7 +247,7 @@
 		to_chat(M, SPAN_DANGER(SPAN_BOLD("Do not attack your master!")))
 		return
 
-	if(M.a_intent != I_HELP && M != src)
+	if(M.action_intent != I_HELP && M != src)
 		M.humanStageHandler.setStage("Pestilence", 1)
 		anger_timer = min(anger_timer + 2, anger_timer_max)
 
@@ -327,7 +327,7 @@
 	if((step_count % 3) && !has_gravity(src))
 		return
 
-	if(istype(move_intent, /decl/move_intent/creep)) //We don't make sounds if we're tiptoeing
+	if(M.set_move_intent(MOVE_INTENT_WALK)) //We don't make sounds if we're tiptoeing
 		return
 
 	var/turf/T = get_turf(src)

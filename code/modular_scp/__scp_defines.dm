@@ -94,3 +94,7 @@
 #define set_temp_blindness_if_lower(duration) set_timed_status_effect(duration, /datum/status_effect/temporary_blindness, TRUE)
 
 #define MOB_FACTION_NEUTRAL "neutral"
+
+#define EXTENSION_FLAG_NONE 0
+#define EXTENSION_FLAG_IMMEDIATE 1          // Instantly instantiates, instead of doing it lazily.
+//#define EXTENSION_FLAG_MULTIPLE_INSTANCES 2 // Allows multiple instances per base type. To be implemented

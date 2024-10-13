@@ -45,13 +45,13 @@ Made by TheDarkElites
 		else if(hearable_range == AUDIBLE_RANGE_DECREASED)
 			cut_off -= 1
 		var/distance_from_origin = range_override ? range_override : get_dist(src, origin)
-		if(hearable_range == AUDIBLE_RANGE_NONE || AUDIBLE_RANGE_FULL < get_dist_euclidian(get_turf(src), get_turf(origin)))
+		if(hearable_range == AUDIBLE_RANGE_NONE || AUDIBLE_RANGE_FULL < get_dist_euclidean(get_turf(src), get_turf(origin)))
 			return 0
 		if(distance_from_origin <= cut_off)
 			return 100
 		return clamp((((AUDIBLE_RANGE_FULL - clamp((distance_from_origin - cut_off)**2, 0, AUDIBLE_RANGE_FULL))/AUDIBLE_RANGE_FULL)  * 100), 0, 100)
 	else
-		if(hearable_range >= get_dist_euclidian(get_turf(src), get_turf(origin)))
+		if(hearable_range >= get_dist_euclidean(get_turf(src), get_turf(origin)))
 			return TRUE
 		else
 			return FALSE
@@ -122,13 +122,13 @@ Made by TheDarkElites
 			if(WEIGHT_CLASS_SMALL) viewdistance -= DEBUFF_SMALL
 			if(WEIGHT_CLASS_TINY) viewdistance -= DEBUFF_TINY
 	else if(ismob(origin))
-		var/mob/origin_Mob = origin
+		var/mob/living/origin_Mob = origin
 		size_class = origin_Mob.mob_size
 		switch(size_class)
 			if(MOB_SIZE_SMALL) viewdistance -= DEBUFF_SMALL
 			if(MOB_SIZE_TINY) viewdistance -= DEBUFF_TINY
 
-	if(get_dist_euclidian(get_turf(src), get_turf(origin)) <= clamp(viewdistance, 0, 7))
+	if(get_dist_euclidean(get_turf(src), get_turf(origin)) <= clamp(viewdistance, 0, 7))
 		if((visual_insulation_calculated == V_INSL_IMPERFECT) && visual_memetic)
 			return prob(40) //If its a memetic check and your protection is imperfect/faulty there is a 40% chance of you being affected by a memetic hazard
 		return TRUE

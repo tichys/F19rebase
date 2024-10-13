@@ -61,7 +61,7 @@
 		pMob.status_flags += NO_ANTAG
 
 	if(metaFlags & SCP_DISABLED)
-		log_and_message_staff("Disabled SCP-[designation] spawned and subsequently deleted! Do not spawn disabled SCPs!", location = get_turf(parent))
+		//log_and_message_staff("Disabled SCP-[designation] spawned and subsequently deleted! Do not spawn disabled SCPs!", location = get_turf(parent))
 		qdel(parent)
 		return
 
@@ -100,7 +100,7 @@
 	if(!ishuman(examinee))
 		return
 	var/mob/living/carbon/human/H = examinee
-	var/datum/job/job = SSjob.get_by_title(H.job)
+	var/datum/job/job = SSjob.GetJob(H.job)
 	if(job)
 		to_chat(examinee, SPAN_CLASS("scp", "You know this is SCP-[designation]!"))
 

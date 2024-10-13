@@ -188,8 +188,14 @@ Specifically: ZMIMIC_MAX_PLANE to (ZMIMIC_MAX_PLANE - ZMIMIC_MAX_DEPTH)
 
 ///Popup Chat Messages
 #define RUNECHAT_PLANE 501
+
+#define VISION_CONE_PLANE               502
+
+#define INSIDE_VISION_CONE_PLANE        503
+
+#define ABOVE_VISION_CONE_PLANE         504
 /// Plane for balloon text (text that fades up)
-#define BALLOON_CHAT_PLANE 502
+#define BALLOON_CHAT_PLANE 505
 
 //-------------------- Rendering ---------------------
 #define RENDER_PLANE_GAME 990
