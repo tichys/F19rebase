@@ -19,20 +19,20 @@
 /*
   PLANE MASTERS
 */
-
+#warn Fix this where its commented out
 /atom/movable/screen/plane_master
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER"
-	globalscreen = 1
+	//globalscreen = 1
 
 /atom/movable/screen/plane_master/ghost_master
-	plane = OBSERVER_PLANE
+	//plane = OBSERVER_PLANE
 
 /atom/movable/screen/plane_master/ghost_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
 	alpha = 0
 	appearance_flags = 0
-	plane = OBSERVER_PLANE
+	//plane = OBSERVER_PLANE
 
 GLOBAL_LIST_INIT(ghost_master, list(
 	new /atom/movable/screen/plane_master/ghost_master(),
@@ -49,7 +49,7 @@ GLOBAL_LIST_INIT(ghost_master, list(
 
 /atom/movable/screen/plane_master/vision_cone_target
 	name = "vision cone master"
-	plane = HIDDEN_PLANE
+	//plane = HIDDEN_PLANE
 	render_target = "vision_cone_target"
 
 /atom/movable/screen/plane_master/vision_cone/primary/Initialize() //Things to hide
@@ -59,7 +59,7 @@ GLOBAL_LIST_INIT(ghost_master, list(
 /atom/movable/screen/plane_master/vision_cone/inverted/Initialize() //Things to show in hidden section
 	. = ..()
 	add_filter("inverted_vision_cone", 50, list(type="alpha", render_source="vision_cone_target"))
-
+/*
 /mob/living/carbon/human/InitializePlanes()
 	..()
 	var/atom/movable/screen/plane_master/vision_cone_target/VC = new
@@ -74,4 +74,4 @@ GLOBAL_LIST_INIT(ghost_master, list(
 	client.screen += VC
 	client.screen += mob
 	client.screen += sounds
-
+*/

@@ -38,6 +38,9 @@
 #define GLAND_HUD "17"
 #define SENTIENT_DISEASE_HUD "18"
 #define AI_DETECT_HUD "19"
+#define BLINK_HUD       "20" // A line representing the blink time remaining on a mob.
+#define PESTILENCE_HUD  "21" // A visual indicator of the pestilence for SCP-049.
+
 /// Displays launchpads' targeting reticle
 #define DIAG_LAUNCHPAD_HUD "22"
 

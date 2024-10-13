@@ -314,7 +314,7 @@
 	if((step_count % 3) && !has_gravity(src))
 		return
 
-	if(M.set_move_intent(MOVE_INTENT_WALK)) //We don't make sounds if we're tiptoeing
+	if(M.m_intent(MOVE_INTENT_WALK)) //We don't make sounds if we're tiptoeing
 		return
 
 	var/turf/T = get_turf(src)

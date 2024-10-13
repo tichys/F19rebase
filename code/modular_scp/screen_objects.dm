@@ -27,4 +27,4 @@
 	icon_state = "combat_mask_alt"
 	screen_loc = "1,1"
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	plane = HIDDEN_PLANE
+	//plane = HIDDEN_PLANE
