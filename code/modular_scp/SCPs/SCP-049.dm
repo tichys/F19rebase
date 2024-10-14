@@ -256,7 +256,8 @@
 	return ..()
 
 /mob/living/carbon/human/scp049/attackby(obj/item/W, mob/user)
-	if(isspecies(user, SPECIES_SCP049_1))
+	var/mob/living/carbon/human/human = affected_mob
+	if(human.dna.species.id = SPECIES_SCP049_1)
 		to_chat(user, SPAN_DANGER(SPAN_BOLD("Do not attack your master!")))
 		return
 

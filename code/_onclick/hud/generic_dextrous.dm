@@ -1,4 +1,8 @@
 //Used for normal mobs that have hands.
+
+/datum/hud/dextrous
+	has_interaction_ui = TRUE
+
 /datum/hud/dextrous/New(mob/living/owner)
 	..()
 	var/atom/movable/screen/using
@@ -27,12 +31,6 @@
 	using.icon_state = "swap_2"
 	using.screen_loc = ui_swaphand_position(owner,2)
 	static_inventory += using
-
-	action_intent = new /atom/movable/screen/combattoggle/flashy(null, src)
-	action_intent.icon = ui_style
-	action_intent.screen_loc = ui_combat_toggle
-	static_inventory += action_intent
-
 
 	zone_select = new /atom/movable/screen/zone_sel(null, src)
 	zone_select.icon = ui_style

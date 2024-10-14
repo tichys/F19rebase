@@ -1,3 +1,6 @@
+/datum/hud/human
+	has_interaction_ui = TRUE
+
 /atom/movable/screen/human
 	icon = 'icons/hud/screen_midnight.dmi'
 
@@ -80,12 +83,6 @@
 	using = new /atom/movable/screen/area_creator(null, src)
 	using.icon = ui_style
 	static_inventory += using
-
-	action_intent = new /atom/movable/screen/combattoggle/flashy(null, src)
-	action_intent.icon = ui_style
-	action_intent.screen_loc = ui_combat_toggle
-	static_inventory += action_intent
-
 
 	using = new /atom/movable/screen/mov_intent(null, src)
 	using.icon = ui_style

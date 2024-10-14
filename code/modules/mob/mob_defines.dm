@@ -24,8 +24,8 @@
 	/// HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 	var/client/canon_client
 
-	var/shift_to_open_context_menu = TRUE
-
+	///If set to true, this mob will have rightclick always act as the context menu
+	var/rclick_always_context_menu = null
 	///when this be added to vis_contents of something it inherit something.plane, important for visualisation of mob in openspace.
 	vis_flags = VIS_INHERIT_PLANE
 
@@ -228,3 +228,7 @@
 
 	/// A ref of the area we're taking our ambient loop from.
 	var/area/ambience_tracked_area
+	/// Path to forced interaction mode, should be used for mobs that have special interaction modes such as cyborgs.
+	var/forced_interaction_mode
+	/// The interaction state of this mob, istate for short because typing interaction_state is annoying.
+	var/istate = NONE

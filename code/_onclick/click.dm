@@ -28,8 +28,6 @@
 		adj += effect.nextmove_adjust()
 	next_move = world.time + ((num + adj)*mod)
 
-	SEND_SIGNAL(src, COMSIG_LIVING_CHANGENEXT_MOVE, next_move)
-
 /**
  * Before anything else, defer these calls to a per-mobtype handler.  This allows us to
  * remove istype() spaghetti code, but requires the addition of other handler procs to simplify it.
@@ -39,18 +37,17 @@
  *
  * Note that this proc can be overridden, and is in the case of screen objects.
  */
-/atom/Click(location, control, params)
-	if(initialized)
+/atom/Click(location,control,params)
+	if(flags_1 & INITIALIZED_1)
 		SEND_SIGNAL(src, COMSIG_CLICK, location, control, params, usr)
-
 		usr.ClickOn(src, params)
 
 /atom/DblClick(location,control,params)
-	if(initialized)
+	if(flags_1 & INITIALIZED_1)
 		usr.DblClickOn(src,params)
 
 /atom/MouseWheel(delta_x,delta_y,location,control,params)
-	if(initialized)
+	if(flags_1 & INITIALIZED_1)
 		usr.MouseWheelOn(src, delta_x, delta_y, params)
 
 /**
@@ -71,43 +68,44 @@
 		return
 	next_click = world.time + 1
 
-	if(check_click_intercept(params,A) || notransform)
+	if(check_click_intercept(params,A))
+		return
+
+	if(notransform)
 		return
 
 	var/list/modifiers = params2list(params)
 
+	if(client)
+		client.imode.update_istate(src, modifiers)
+
 	if(SEND_SIGNAL(src, COMSIG_MOB_CLICKON, A, modifiers) & COMSIG_MOB_CANCEL_CLICKON)
 		return
-
-	if(LAZYACCESS(modifiers, SHIFT_CLICK))
+	if(!LAZYACCESS(modifiers, RIGHT_CLICK))
+		if(LAZYACCESS(modifiers, SHIFT_CLICK))
+			if(LAZYACCESS(modifiers, MIDDLE_CLICK))
+				ShiftMiddleClickOn(A)
+				return
+			if(LAZYACCESS(modifiers, CTRL_CLICK))
+				CtrlShiftClickOn(A)
+				return
+			ShiftClickOn(A)
+			return
 		if(LAZYACCESS(modifiers, MIDDLE_CLICK))
-			ShiftMiddleClickOn(A)
+			if(LAZYACCESS(modifiers, CTRL_CLICK))
+				CtrlMiddleClickOn(A)
+			else
+				MiddleClickOn(A, params)
 			return
-
-		if(LAZYACCESS(modifiers, CTRL_CLICK))
-			CtrlShiftClickOn(A)
+		if(LAZYACCESS(modifiers, ALT_CLICK)) // alt and alt-gr (rightalt)
+			if(LAZYACCESS(modifiers, RIGHT_CLICK))
+				alt_click_on_secondary(A)
+			else
+				AltClickOn(A)
 			return
-
-		ShiftClickOn(A)
-		return
-
-	if(LAZYACCESS(modifiers, MIDDLE_CLICK))
 		if(LAZYACCESS(modifiers, CTRL_CLICK))
-			CtrlMiddleClickOn(A)
-		else
-			MiddleClickOn(A, params)
-		return
-
-	if(LAZYACCESS(modifiers, ALT_CLICK)) // alt and alt-gr (rightalt)
-		if(LAZYACCESS(modifiers, RIGHT_CLICK))
-			alt_click_on_secondary(A)
-		else
-			AltClickOn(A)
-		return
-
-	if(LAZYACCESS(modifiers, CTRL_CLICK))
-		CtrlClickOn(A, modifiers)
-		return
+			CtrlClickOn(A)
+			return
 
 	//PARIAH EDIT ADDITION
 	if(typing_indicator)
@@ -127,7 +125,7 @@
 
 	if(HAS_TRAIT(src, TRAIT_HANDS_BLOCKED))
 		changeNext_move(CLICK_CD_HANDCUFFED)   //Doing shit in cuffs shall be vey slow
-		UnarmedAttack(A, Adjacent(A), modifiers)
+		UnarmedAttack(A, FALSE, modifiers)
 		return
 
 	if(throw_mode)
@@ -138,13 +136,14 @@
 	var/obj/item/W = get_active_held_item()
 
 	if(W == A)
-		if(LAZYACCESS(modifiers, RIGHT_CLICK))
+		if((istate & ISTATE_SECONDARY))
 			W.attack_self_secondary(src, modifiers)
-			update_held_items()
+			update_inv_hands()
+			return
 		else
 			W.attack_self(src, modifiers)
-			update_held_items()
-		return
+			update_inv_hands()
+			return
 
 	//These are always reachable.
 	//User itself, current loc, and user inventory
@@ -155,18 +154,12 @@
 			if(ismob(A))
 				changeNext_move(CLICK_CD_MELEE)
 
-			UnarmedAttack(A, TRUE, modifiers)
+			UnarmedAttack(A, FALSE, modifiers)
 		return
 
 	//Can't reach anything else in lockers or other weirdness
 	if(!loc.AllowClick())
 		return
-
-	// In a storage item with a disassociated storage parent
-	var/obj/item/item_atom = A
-	if(istype(item_atom))
-		if((item_atom.item_flags & IN_STORAGE) && (item_atom.loc.flags_1 & HAS_DISASSOCIATED_STORAGE_1))
-			UnarmedAttack(item_atom, TRUE, modifiers)
 
 	//Standard reach turf to turf or reaching inside storage
 	if(CanReach(A,W))
@@ -175,7 +168,7 @@
 		else
 			if(ismob(A))
 				changeNext_move(CLICK_CD_MELEE)
-			UnarmedAttack(A, TRUE,modifiers)
+			UnarmedAttack(A,1,modifiers)
 	else
 		if(W)
 			if(LAZYACCESS(modifiers, RIGHT_CLICK))
@@ -184,7 +177,7 @@
 				if(after_attack_secondary_result == SECONDARY_ATTACK_CALL_NORMAL)
 					W.afterattack(A, src, FALSE, params)
 			else
-				W.afterattack(A,src, FALSE, params)
+				W.afterattack(A,src,0,params)
 		else
 			if(LAZYACCESS(modifiers, RIGHT_CLICK))
 				ranged_secondary_attack(A, modifiers)
@@ -221,7 +214,6 @@
 
 	var/list/closed = list()
 	var/list/checking = list(ultimate_target)
-
 	while (checking.len && depth > 0)
 		var/list/next = list()
 		--depth
@@ -229,17 +221,16 @@
 		for(var/atom/target in checking)  // will filter out nulls
 			if(closed[target] || isarea(target))  // avoid infinity situations
 				continue
-
-			if(isturf(target) || isturf(target.loc) || (target in direct_access) || (ismovable(target) && target.flags_1 & IS_ONTOP_1) || target.loc?.atom_storage) //Directly accessible atoms
+			closed[target] = TRUE
+			if(isturf(target) || isturf(target.loc) || (target in direct_access) || (ismovable(target) && target.flags_1 & IS_ONTOP_1)) //Directly accessible atoms
 				if(Adjacent(target) || (tool && CheckToolReach(src, target, tool.reach))) //Adjacent or reaching attacks
 					return TRUE
-
-			closed[target] = TRUE
 
 			if (!target.loc)
 				continue
 
-			if(target.loc.atom_storage)
+			//Storage and things with reachable internal atoms need add to next here. Or return COMPONENT_ALLOW_REACH.
+			if(SEND_SIGNAL(target.loc, COMSIG_ATOM_CANREACH, next) & COMPONENT_ALLOW_REACH)
 				next += target.loc
 
 		checking = next
@@ -288,10 +279,7 @@
 
 
 /**
- * UnarmedAttack: The higest level of mob click chain discounting click itself.
- *
- * This handles, just "clicking on something" without an item. It translates
- * into [atom/proc/attack_hand], [atom/proc/attack_animal] etc.
+ * Translates into [atom/proc/attack_hand], etc.
  *
  * Note: proximity_flag here is used to distinguish between normal usage (flag=1),
  * and usage when clicking on things telekinetically (flag=0).  This proc will
@@ -303,7 +291,6 @@
  * modifiers is a lazy list of click modifiers this attack had,
  * used for figuring out different properties of the click, mostly right vs left and such.
  */
-
 /mob/proc/UnarmedAttack(atom/A, proximity_flag, list/modifiers)
 	if(ismob(A))
 		changeNext_move(CLICK_CD_MELEE)
@@ -353,22 +340,19 @@
 
 /atom/proc/ShiftClick(mob/user)
 	var/flags = SEND_SIGNAL(user, COMSIG_CLICK_SHIFT, src)
-	if(!user.client)
-		return
-	if(!((user.client.eye == user) || (user.client.eye == user.loc) || isobserver(user)) && !(flags & COMPONENT_ALLOW_EXAMINATE))
-		return
-
-	user.examinate(src)
+	if(user.client && (user.client.eye == user || user.client.eye == user.loc || flags & COMPONENT_ALLOW_EXAMINATE))
+		user.examinate(src)
+	return
 
 /**
  * Ctrl click
  * For most objects, pull
  */
-/mob/proc/CtrlClickOn(atom/A, list/params)
-	A.CtrlClick(src, params)
+/mob/proc/CtrlClickOn(atom/A)
+	A.CtrlClick(src)
 	return
 
-/atom/proc/CtrlClick(mob/user, list/params)
+/atom/proc/CtrlClick(mob/user)
 	SEND_SIGNAL(src, COMSIG_CLICK_CTRL, user)
 	SEND_SIGNAL(user, COMSIG_MOB_CTRL_CLICKED, src)
 	var/mob/living/ML = user
@@ -377,7 +361,7 @@
 	if(!can_interact(user))
 		return FALSE
 
-/mob/living/CtrlClick(mob/user, list/params)
+/mob/living/CtrlClick(mob/user)
 	if(!isliving(user) || !user.CanReach(src) || user.incapacitated())
 		return ..()
 
@@ -385,14 +369,14 @@
 		return FALSE
 
 	var/mob/living/user_living = user
-	if(user_living.apply_martial_art(src, null, is_grab=TRUE) == MARTIAL_ATTACK_SUCCESS)
+	if(user_living.apply_martial_art(src, null) == MARTIAL_ATTACK_SUCCESS)
 		user_living.changeNext_move(CLICK_CD_MELEE)
 		return TRUE
 
 	return ..()
 
 
-/mob/living/carbon/human/CtrlClick(mob/user, list/params)
+/mob/living/carbon/human/CtrlClick(mob/user)
 
 	if(!ishuman(user) || !user.CanReach(src) || user.incapacitated())
 		return ..()
@@ -401,13 +385,7 @@
 		return FALSE
 
 	var/mob/living/carbon/human/human_user = user
-	// If they're wielding a grab item, do the normal click chain.
-	var/obj/item/hand_item/grab/G = user.get_active_held_item()
-	if(isgrab(G))
-		G.current_grab.hit_with_grab(G, src, params)
-		return TRUE
-
-	if(human_user.dna.species.grab(human_user, src, human_user.mind.martial_art, params))
+	if(human_user.dna.species.grab(human_user, src, human_user.mind.martial_art))
 		human_user.changeNext_move(CLICK_CD_MELEE)
 		return TRUE
 
@@ -436,8 +414,9 @@
 	if(SEND_SIGNAL(src, COMSIG_CLICK_ALT, user) & COMPONENT_CANCEL_CLICK_ALT)
 		return
 	var/turf/T = get_turf(src)
-	if(T && (isturf(loc) || isturf(src)) && user.TurfAdjacent(T) && !HAS_TRAIT(user, TRAIT_MOVE_VENTCRAWLING))
-		user.set_listed_turf(T)
+	if(T && (isturf(loc) || isturf(src)) && user.TurfAdjacent(T))
+		user.listed_turf = T
+		user.client << output("[url_encode(json_encode(T.name))];", "statbrowser:create_listedturf")
 
 ///The base proc of when something is right clicked on when alt is held - generally use alt_click_secondary instead
 /atom/proc/alt_click_on_secondary(atom/A)
@@ -460,7 +439,8 @@
 /atom/proc/AltClickNoInteract(mob/user, atom/A)
 	var/turf/T = get_turf(A)
 	if(T && user.TurfAdjacent(T))
-		user.set_listed_turf(T)
+		user.listed_turf = T
+		user.client << output("[url_encode(json_encode(T.name))];", "statbrowser:create_listedturf")
 
 /mob/proc/TurfAdjacent(turf/T)
 	return T.Adjacent(src)
@@ -531,10 +511,6 @@
 	mouse_opacity = MOUSE_OPACITY_OPAQUE
 	screen_loc = "CENTER"
 
-/atom/movable/screen/click_catcher/can_usr_use(mob/user)
-	return TRUE // Owned by a client, not a mob. It's all safe anyways.
-
-
 #define MAX_SAFE_BYOND_ICON_SCALE_TILES (MAX_SAFE_BYOND_ICON_SCALE_PX / world.icon_size)
 #define MAX_SAFE_BYOND_ICON_SCALE_PX (33 * 32) //Not using world.icon_size on purpose.
 
@@ -554,10 +530,6 @@
 	transform = M
 
 /atom/movable/screen/click_catcher/Click(location, control, params)
-	. = ..()
-	if(.)
-		return FALSE
-
 	var/list/modifiers = params2list(params)
 	if(LAZYACCESS(modifiers, MIDDLE_CLICK) && iscarbon(usr))
 		var/mob/living/carbon/C = usr

@@ -24,6 +24,7 @@
 	screen_loc = ui_alien_queen_finder
 
 /datum/hud/alien
+	has_interaction_ui = TRUE
 	ui_style = 'icons/hud/screen_alien.dmi'
 
 /datum/hud/alien/New(mob/living/carbon/alien/humanoid/owner)
@@ -49,11 +50,6 @@
 	using.icon_state = "swap_2"
 	using.screen_loc = ui_swaphand_position(owner,2)
 	static_inventory += using
-
-	action_intent = new /atom/movable/screen/combattoggle/flashy(null, src)
-	action_intent.icon = ui_style
-	action_intent.screen_loc = ui_combat_toggle
-	static_inventory += action_intent
 
 	if(isalienhunter(mymob))
 		var/mob/living/carbon/alien/humanoid/hunter/H = mymob

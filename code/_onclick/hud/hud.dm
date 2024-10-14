@@ -92,6 +92,7 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	var/atom/movable/screen/vis_holder/vis_holder
 	// subtypes can override this to force a specific UI style
 	var/ui_style
+	var/has_interaction_ui = FALSE
 
 /datum/hud/New(mob/owner)
 	mymob = owner
