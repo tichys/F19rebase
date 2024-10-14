@@ -912,7 +912,7 @@
 	C.leave_evidence(user, src)
 
 	var/mob/living/L = user
-	if(L.combat_mode)
+	if((L.istate & ISTATE_HARM))
 		return ..()
 
 	if(is_wire_tool(C) && panel_open)

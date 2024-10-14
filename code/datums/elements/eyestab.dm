@@ -76,7 +76,7 @@
 	else
 		target.take_bodypart_damage(damage)
 
-	log_combat(user, target, "attacked", "[item.name]", "(Combat mode: [user.combat_mode ? "On" : "Off"])")
+	log_combat(user, target, "attacked", "[item.name]", "(Combat mode: [(user.istate & ISTATE_HARM) ? "On" : "Off"])")
 
 	var/obj/item/organ/eyes/eyes = target.getorganslot(ORGAN_SLOT_EYES)
 	if (!eyes)

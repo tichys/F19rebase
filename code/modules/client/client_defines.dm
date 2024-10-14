@@ -277,3 +277,8 @@
 
 	/// Keeps track of what ambience we are playing. Yeah i know it sucks.
 	var/playing_ambience
+
+	/// Player interaction mode, set by preferences.
+	var/datum/interaction_mode/imode
+	///Cache for the prefence value of [/datum/preference/toggle/context_menu_requires_shift]
+	var/context_menu_requires_shift = FALSE
