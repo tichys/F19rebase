@@ -94,7 +94,7 @@
 			if(isalienadult(living_user) || issilicon(living_user))
 				context[SCREENTIP_CONTEXT_LMB] = "Open"
 				return CONTEXTUAL_SCREENTIP_SET
-			if(!living_user.combat_mode)
+			if(!(living_user.istate & ISTATE_HARM))
 				if(ishuman(living_user))
 					context[SCREENTIP_CONTEXT_LMB] = "Knock"
 					return CONTEXTUAL_SCREENTIP_SET
@@ -204,7 +204,7 @@
 		return
 	user.changeNext_move(CLICK_CD_MELEE)
 
-	if(!user.combat_mode || modifiers[RIGHT_CLICK])
+	if(!(user.istate & ISTATE_HARM))
 		knock_on(user)
 		return TRUE
 	else

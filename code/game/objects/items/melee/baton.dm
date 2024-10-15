@@ -97,7 +97,7 @@
 		return
 	RegisterSignal(user, COMSIG_LIVING_TOGGLE_COMBAT_MODE, PROC_REF(user_flip))
 	var/mob/living/L = user
-	user_flip(L, L.combat_mode)
+	user_flip(L, (user.istate & ISTATE_HARM))
 
 /obj/item/melee/baton/dropped(mob/user, silent)
 	. = ..()
@@ -138,13 +138,13 @@
 	else
 		if (active)
 
-			if (user.combat_mode)
+			if ((user.istate & ISTATE_HARM))
 				context[SCREENTIP_CONTEXT_LMB] = context_living_target_active_combat_mode
 			else
 				context[SCREENTIP_CONTEXT_LMB] = context_living_target_active
 		else
 
-			if (user.combat_mode)
+			if ((user.istate & ISTATE_HARM))
 				context[SCREENTIP_CONTEXT_LMB] = context_living_target_inactive_combat_mode
 			else
 				context[SCREENTIP_CONTEXT_LMB] = context_living_target_inactive

@@ -346,7 +346,7 @@ DEFINE_INTERACTABLE(/obj/machinery/door)
 	return TOOL_ACT_TOOLTYPE_SUCCESS
 
 /obj/machinery/door/crowbar_act(mob/living/user, obj/item/tool)
-	if(user.combat_mode)
+	if((user.istate & ISTATE_HARM))
 		return
 
 	var/forced_open = FALSE
@@ -357,10 +357,10 @@ DEFINE_INTERACTABLE(/obj/machinery/door)
 	return TOOL_ACT_TOOLTYPE_SUCCESS
 
 /obj/machinery/door/attackby(obj/item/I, mob/living/user, params)
-	if((I.item_flags & NOBLUDGEON) || user.combat_mode)
+	if(I.item_flags & NOBLUDGEON || (user.istate & ISTATE_HARM))
 		return ..()
 
-	if(istype(I, /obj/item/fireaxe))
+	if(!(user.istate & ISTATE_HARM) && istype(I, /obj/item/fireaxe))
 		try_to_crowbar(I, user, FALSE)
 		return TRUE
 

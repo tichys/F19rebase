@@ -94,7 +94,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		log_game("[key_name(user)] set [key_name(M)] on fire with [src] at [AREACOORD(user)]")
 
 	var/obj/item/clothing/mask/cigarette/cig = help_light_cig(M)
-	if(!lit || !cig || user.combat_mode)
+	if(!lit || !cig || (user.istate & ISTATE_HARM))
 		..()
 		return
 
@@ -382,7 +382,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		light(span_notice("[user] lights [src] with [M]'s burning body. What a cold-blooded badass."))
 		return
 
-	if(user.combat_mode)
+	if((user.istate & ISTATE_HARM))
 		return ..()
 
 	if(lit && user == M)
@@ -859,7 +859,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		message_admins("[ADMIN_LOOKUPFLW(user)] set [key_name_admin(M)] on fire with [src] at [AREACOORD(user)]")
 		log_game("[key_name(user)] set [key_name(M)] on fire with [src] at [AREACOORD(user)]")
 	var/obj/item/clothing/mask/cigarette/cig = help_light_cig(M)
-	if(!lit || !cig || user.combat_mode)
+	if(!lit || !cig || (user.istate & ISTATE_HARM))
 		..()
 		return
 

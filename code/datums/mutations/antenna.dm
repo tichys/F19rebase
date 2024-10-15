@@ -120,7 +120,7 @@
 
 	if(iscarbon(cast_on))
 		var/mob/living/carbon/carbon_cast_on = cast_on
-		to_chat(user, span_boldnotice("You find that their intent is to [(H.istate & ISTATE_HARM) ? "Harm" : "Help"]..."))
+		to_chat(owner, span_boldnotice("You find that their intent is to [(carbon_cast_on.istate & ISTATE_HARM) ? "Harm" : "Help"]..."))
 		to_chat(owner, span_boldnotice("You uncover that [carbon_cast_on.p_their()] true identity is [carbon_cast_on.mind.name]."))
 
 /datum/mutation/human/mindreader/New(class_ = MUT_OTHER, timer, datum/mutation/human/copymut)
