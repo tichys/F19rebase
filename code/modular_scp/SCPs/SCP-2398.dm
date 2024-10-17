@@ -25,14 +25,14 @@
 	if(!istype(M) || !istype(user) || M.SCP)
 		return ..()
 
-	var/hand_used = user.hand ? BODY_ZONE_PRECISE_L_HAND : BODY_ZONE_PRECISE_R_HAND
+	var/hand_used = user.active_hand_index ? BODY_ZONE_PRECISE_L_HAND : BODY_ZONE_PRECISE_R_HAND
 
 	visible_message(SPAN_DANGER("[user] begins to swing [src] at [M]!"))
 	if(!do_after(user, swing_time, M))
 		visible_message(SPAN_DANGER("[user] misses [M] with \The [src]!"))
 		return
 
-	var/obj/item/bodypart/E = user.get_organ(hand_used)
+	var/obj/item/bodypart/E = user.getorganslot(hand_used)
 	E?.break_bones()
 
 	//Calculate explosion power based on mob size

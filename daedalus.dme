@@ -1992,6 +1992,7 @@
 #include "code\modular_scp\jobs\job.dm"
 #include "code\modular_scp\SCPs\SCP-2398.dm"
 #include "code\modular_scp\SCPs\SCP-3349.dm"
+#include "code\modular_scp\SCPs\SCP-343.dm"
 #include "code\modular_scp\status_effects\blindness.dm"
 #include "code\modules\actionspeed\_actionspeed_modifier.dm"
 #include "code\modules\actionspeed\modifiers\addiction.dm"
