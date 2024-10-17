@@ -98,3 +98,22 @@
 #define EXTENSION_FLAG_NONE 0
 #define EXTENSION_FLAG_IMMEDIATE 1          // Instantly instantiates, instead of doing it lazily.
 //#define EXTENSION_FLAG_MULTIPLE_INSTANCES 2 // Allows multiple instances per base type. To be implemented
+
+/// Gained by having a certain equipment_tint_total
+#define EQUIPMENT_TINT_TOTAL_TRAIT "equipment_tint_total"
+
+#define TRAIT_NEARSIGHTED_CORRECTED "nearsighted_corrected"
+
+
+#define TINT_NONE       0
+#define TINT_MODERATE   1
+#define TINT_HEAVY      2
+
+/// Is the mob nearsighted CURRENTLY?
+/// This check fails if the mob is nearsighted but is wearing glasses,
+/// While is_nearsighted will always succeed even if they are wearing glasses.
+/mob/living/proc/is_nearsighted_currently()
+	var/datum/status_effect/grouped/nearsighted/nearsight = has_status_effect(/datum/status_effect/grouped/nearsighted)
+	if(isnull(nearsight))
+		return FALSE
+	return nearsight.should_be_nearsighted()

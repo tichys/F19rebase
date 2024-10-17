@@ -628,3 +628,11 @@
 			A.atom_storage.return_inv(item_stuff)
 			processing_list += item_stuff
 	return processing_list
+
+///////FOUNDATION 19 EDIT////////////////
+
+//gets the object or mob whos loc is turf and not another object of the passed moveable atom. If the passed moveable atom is already on turf, it returns itself.
+/atom/proc/get_holder_or_object()
+	if(isturf(loc) || !ismovable(loc))
+		return src
+	return loc.get_holder_or_object()

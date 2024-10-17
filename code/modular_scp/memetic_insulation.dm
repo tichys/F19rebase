@@ -57,15 +57,13 @@ Made by TheDarkElites
 			return FALSE
 
 /mob/living/carbon/human/proc/get_audio_insul() //gets total insulation from clothing/disabilities without any calculations.
-	if((sdisabilities & DEAFENED) || ear_deaf || incapacitated(INCAPACITATION_KNOCKOUT) || HAS_TRAIT(src, TRAIT_DEAF)) // cant hear if you're deaf.
+	if((HAS_TRAIT(src, TRAIT_DEAF))) // cant hear if you're deaf.
 		return A_INSL_PERFECT
 	return audible_insulation
 
 // VISUAL MEMETICS
 
 /mob/living/carbon/human/proc/can_see(atom/origin, visual_memetic = 0) //Checks if origin can be seen by a human. visiual_memetics should be one if you're checking for a visual memetic hazard as opposed to say someone looking at scp 173. If origin is null, checks for if the human can see in general.
-	var/turf/origin_turf
-	var/area/origin_area
 	if(stat) //Unconscious humans cant see.
 		return FALSE
 	if(origin)
@@ -80,10 +78,7 @@ Made by TheDarkElites
 		if(is_blind())
 			return FALSE
 
-		origin_turf = get_turf(origin)
-		origin_area = get_area(origin)
-
-		if((is_dark(origin_turf)) && (see_in_dark <= 2) && (see_invisible != SEE_INVISIBLE_NOLIGHTING) && (origin_area.dynamic_lighting != 0)) //Cant see whats in the dark (unless you have nightvision). Also regular view does check light level, but here we do it ourselves to allow flexibility for what we consider dark + integration with night vision goggles, etc.
+		if((see_in_dark <= 2)) //Cant see whats in the dark (unless you have nightvision). Also regular view does check light level, but here we do it ourselves to allow flexibility for what we consider dark + integration with night vision goggles, etc.
 			return FALSE
 		if(ismob(origin))
 			var/mob/origin_mob = origin
@@ -136,7 +131,7 @@ Made by TheDarkElites
 	return FALSE
 
 /mob/living/carbon/human/proc/get_visual_insul(include_tint = 1) //gets total insulation from clothing/disabilities without any calculations. Include_tint is for if you want to include tints in your insulation.
-	if((is_blind()) || incapacitated(INCAPACITATION_KNOCKOUT)) // cant see if you're blind.
+	if(is_blind()) // cant see if you're blind.
 		return V_INSL_PERFECT
 	if(include_tint)
 		if(equipment_tint_total >= TINT_BLIND) //Checks tints. Tints are different from insulation in that they graphicaly obstruct your view, whereas insulation just insulates you from memetic hazards without obstructing your view.

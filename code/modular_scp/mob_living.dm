@@ -1,4 +1,6 @@
 /mob/living/carbon/human
+	var/hud_updateflag = 0
+	var/equipment_tint_total = 0			// Total level of visualy impairing items
 	var/visual_insulation = V_INSL_NONE		// How much your eyes are insulated, I.E how blinded you are. Different from tint in that insulation does not always mean your view is physically obstructed.
 	var/audible_insulation = A_INSL_NONE	// How much your ears are insulated, I.E how deafened you are.
 

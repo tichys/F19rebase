@@ -1,7 +1,7 @@
 // ACTIVITY
 
-/mob/living/carbon/human/proc/handle_3349()
-	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+/mob/living/carbon/human/proc/handle_3349(mob/living/carbon/H)
+	var/obj/item/organ/heart/heart = H.getorganslot(ORGAN_SLOT_HEART)
 	if(stat == DEAD)
 		heart.SCP.Destroy()
 		UnregisterSignal(src, COMSIG_CARBON_LIFE)
@@ -10,10 +10,12 @@
 			if(prob(0.75))		// about 2-5 minutes after starting, it ends.
 				heart.SCP.Destroy()
 				to_chat(src, SPAN_INFO("The euphoric sensation ends."))
+			/* For sanity system later
 			if(prob(20))
 				adjustSanityLoss(-1)	// the sensation is comforting
+			*/
 			if(prob(10))
-				adjust_stamina(-1)		// little harder to run though
+				stamina.adjust(-1)		// little harder to run though
 		else
 			if(prob(0.1))	// takes a good 20-30 minutes on average, probably
 				heart.SCP = new /datum/scp(
@@ -46,4 +48,3 @@ GLOBAL_VAR(scp3349_fake_precedent)
 
 /obj/item/paper/scp3349_ekg
 	color = COLOR_OFF_WHITE
-	origin_tech = list(TECH_BIO = 6)

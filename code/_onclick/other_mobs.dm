@@ -37,7 +37,7 @@
 
 /mob/living/UnarmedAttack(atom/attack_target, proximity_flag)
 	//This signal is needed to prevent gloves of the north star + hulk.
-	var/sig_return = SEND_SIGNAL(src, COMSIG_LIVING_EARLY_UNARMED_ATTACK, attack_target, proximity_flag, modifiers)
+	var/sig_return = SEND_SIGNAL(src, COMSIG_LIVING_EARLY_UNARMED_ATTACK, attack_target, proximity_flag)
 	if(sig_return & COMPONENT_CANCEL_ATTACK_CHAIN)
 		return ATTACK_CHAIN_SUCCESS
 

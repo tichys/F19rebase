@@ -25,15 +25,15 @@
 	if(!istype(M) || !istype(user) || M.SCP)
 		return ..()
 
-	var/hand_used = user.hand ? BP_L_HAND : BP_R_HAND
+	var/hand_used = user.hand ? BODY_ZONE_PRECISE_L_HAND : BODY_ZONE_PRECISE_R_HAND
 
 	visible_message(SPAN_DANGER("[user] begins to swing [src] at [M]!"))
 	if(!do_after(user, swing_time, M))
 		visible_message(SPAN_DANGER("[user] misses [M] with \The [src]!"))
 		return
 
-	var/obj/item/organ/external/E = user.get_organ(hand_used)
-	E?.fracture()
+	var/obj/item/bodypart/E = user.get_organ(hand_used)
+	E?.break_bones()
 
 	//Calculate explosion power based on mob size
 	var/explosion_size = ceil(clamp(((M.mob_size / 40) * 5), 0, 5)) //40 is used as its the max mob size, and five represents the maximium explosion size
@@ -41,8 +41,7 @@
 	explosion(M, explosion_size * 0.25, explosion_size * 0.25, explosion_size * 0.5, explosion_size, TRUE)
 	M.gib()
 
-	admin_attack_log(user, M, null, null, "[user] has attacked [M] with an instance of SCP-[SCP.designation]!") //TODO: switch to admin macros once they are ported.
-	log_and_message_staff("[user]/[user.ckey] has swung SCP-2398 at [M]/[M.ckey]!", user, get_turf(user))
+	log_combat(user, M, null, null, "[user] has attacked [M] with an instance of SCP-[SCP.designation]!") //TODO: switch to admin macros once they are ported.
 
 /obj/item/material/twohanded/baseballbat/scp2398/ex_act(severity) //We shouldent explode ourselves as a result
 	return
