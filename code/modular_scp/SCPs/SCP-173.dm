@@ -3,9 +3,6 @@
 	desc = "A statue, constructed from concrete and rebar with traces of Krylon brand spray paint."
 	icon = 'icons/SCP/scp-173.dmi'
 	icon_state = "173"
-	status_flags = NO_ANTAG
-
-	see_invisible = SEE_INVISIBLE_NOLIGHTING
 	see_in_dark = 7
 
 	maxHealth = 5000
@@ -13,9 +10,7 @@
 
 	mob_size = MOB_LARGE //173 should not be able to be pulled around by humans
 
-	can_pull_size = 0 // Can't pull things
-	a_intent = "harm" // Doesn't switch places with people
-	can_be_buckled = FALSE
+	istate = INTENT_HARM // Doesn't switch places with people
 
 	//Config
 
@@ -93,11 +88,6 @@
 
 	defecation_cooldown = world.time + 10 MINUTES // Give everyone some time to prepare
 	spawn_area = get_area(src)
-	add_language(LANGUAGE_EAL, FALSE)
-	add_language(LANGUAGE_SKRELLIAN, FALSE)
-	add_language(LANGUAGE_GUTTER, FALSE)
-	add_language(LANGUAGE_SIGN, FALSE)
-	add_language(LANGUAGE_ENGLISH, FALSE)
 	return ..()
 
 /mob/living/scp173/Destroy()
@@ -141,7 +131,7 @@
 			return
 		snap_cooldown = world.time + snap_cooldown_time
 		visible_message(SPAN_DANGER("[src] snaps [H]'s neck!"))
-		playsound(loc, pick('sounds/scp/spook/NeckSnap1.ogg', 'sounds/scp/spook/NeckSnap3.ogg'), 50, 1)
+		playsound(loc, pick('sound/scp/spook/NeckSnap1.ogg', 'sound/scp/spook/NeckSnap3.ogg'), 50, 1)
 		show_sound_effect(loc, src)
 		H.death()
 		return
@@ -209,7 +199,7 @@
 		return
 	handle_AI()
 
-/mob/living/scp173/ClimbCheck(atom/A)
+/mob/living/scp173/proc/ClimbCheck(atom/A)
 	if(IsBeingWatched())
 		to_chat(src, SPAN_DANGER("You can't climb while being watched."))
 		return FALSE
@@ -238,7 +228,6 @@
 // Someone decided to put 173 into it? Good lord, it's over!
 // P.S. Only humans can activate 914, so no powergaming here
 /mob/living/scp173/Conversion914(mode = MODE_ONE_TO_ONE, mob/user = usr)
-	log_and_message_admins("put [src] through SCP-914 on \"[mode]\" mode.", user, src)
 	switch(mode)
 		if(MODE_ROUGH, MODE_COARSE)
 			movement_sound = null
@@ -248,12 +237,12 @@
 			maxHealth = initial(maxHealth)
 			health = clamp(health - maxHealth * 0.5, maxHealth * 0.1, maxHealth)
 		if(MODE_FINE)
-			playsound(src, 'sounds/effects/screech.ogg', 75, FALSE, 16)
+			playsound(src, 'sound/effects/screech.ogg', 75, FALSE, 16)
 			to_chat(src, SPAN_USERDANGER("You are feeling more powerful!"))
 			movement_sound = 'sounds/scp/173/rattle.ogg'
 			bump_attack = TRUE
 		if(MODE_VERY_FINE) // God has abandoned you
-			playsound(src, 'sounds/effects/screech2.ogg', 150, FALSE, 32)
+			playsound(src, 'sound/effects/screech2.ogg', 150, FALSE, 32)
 			to_chat(src, SPAN_USERDANGER("You are unstoppable, nothing can stand on your path now!"))
 			movement_sound = 'sounds/scp/173/rattle.ogg'
 			bump_attack = TRUE
@@ -297,7 +286,7 @@
 		return
 
 	var/open_time = 4 SECONDS
-	if(istype(A, /obj/machinery/door/blast))
+	if(istype(A, /obj/machinery/door/poddoor))
 		if(get_area(A) == spawn_area)
 			to_chat(src, SPAN_WARNING("You cannot open blast doors in your containment zone."))
 			return
@@ -309,26 +298,24 @@
 			open_time += 23 SECONDS
 		if(AR.welded)
 			open_time += 3 SECONDS
-		if(AR.secured_wires)
-			open_time += 3 SECONDS
 
 	A.visible_message(SPAN_WARNING("\The [src] begins to pry open \the [A]!"))
-	playsound(get_turf(A), 'sounds/machines/airlock_creaking.ogg', 35, 1)
+	playsound(get_turf(A), 'sound/machines/airlock_creaking.ogg', 35, 1)
 	door_cooldown = world.time + open_time // To avoid sound spam
-	if(!do_after(src, open_time, A, bonus_percentage = 25))
+	if(!do_after(src, open_time, A))
 		return
 
-	if(istype(A, /obj/machinery/door/blast))
-		var/obj/machinery/door/blast/DB = A
+	if(istype(A, /obj/machinery/door/poddoor))
+		var/obj/machinery/door/poddoor/DB = A
 		DB.visible_message(SPAN_DANGER("\The [src] forcefully opens \the [DB]!"))
-		DB.force_open()
+		DB.open(TRUE)
 		return
 
 	if(istype(A, /obj/machinery/door/airlock))
 		var/obj/machinery/door/airlock/AR = A
 		AR.unlock(TRUE) // No more bolting in the SCPs and calling it a day
 		AR.welded = FALSE
-	A.set_broken(TRUE)
+	A.atom_break(TRUE)
 	var/check = A.open(1)
 	src.visible_message("\The [src] slices \the [A]'s controls[check ? ", ripping it open!" : ", breaking it!"]")
 
@@ -347,11 +334,11 @@
 			return
 		breach_cooldown = world.time + 15 MINUTES
 		warning_cooldown = world.time + 5 MINUTES // Just in case 173 doesn't immediately leave the area
-		priority_announcement.Announce("ALERT! SCP-173's containment zone security measures have shut down due to severe acidic degradation. Security personnel are to report to the location and secure the threat as soon as possible.", "Containment Failure", 'sounds/AI/173.ogg')
+		priority_announce("ALERT! SCP-173's containment zone security measures have shut down due to severe acidic degradation. Security personnel are to report to the location and secure the threat as soon as possible.", "Containment Failure", 'sound/ai/173.ogg')
 		BreachEffect()
 	else if((feces_amount >= 40) && world.time > warning_cooldown) // Warning, after ~20 minutes
 		warning_cooldown = world.time + 2 MINUTES
-		priority_announcement.Announce("ATTENTION! SCP-173's containment zone is suffering from mild acidic degradation. Janitorial services involvement is required.", "Acidic Degredation", 'sounds/AI/acidic_degredation.ogg')
+		priority_announce("ATTENTION! SCP-173's containment zone is suffering from mild acidic degradation. Janitorial services involvement is required.", "Acidic Degredation", 'sound/ai/acidic_degredation.ogg')
 
 /mob/living/scp173/proc/CheckFeces(containment_zone = TRUE) // Proc that returns amount of 173 feces in the area
 	var/area/A = get_area(src)
@@ -361,7 +348,7 @@
 	for(var/obj/O in A)
 		if(istype(O, /obj/effect/decal/cleanable/blood))
 			var/obj/effect/decal/cleanable/blood/B = O
-			if(B.amount == 0)
+			if(B.bloodiness == 0)
 				continue
 		if(O.type in defecation_types)
 			feces_amount += 1
@@ -482,11 +469,11 @@
 			var/obj/machinery/door/D = obstacle
 			if(!D.density)
 				continue
-			if((get_area(D) == spawn_area) && (istype(D, /obj/machinery/door/blast)))
+			if((get_area(D) == spawn_area) && (istype(D, /obj/machinery/door/poddoor)))
 				continue
 			UnarmedAttack(D)
 			return
-		else if(obstacle.can_climb(src)) //If we can climb it, we should
+		else if(obstacle.get_climbable_surface(src)) //If we can climb it, we should
 			obstacle.do_climb(src)
 			return
 		else if(istype(obstacle, /obj/structure/window) || istype(obstacle, /obj/structure/grille))
@@ -643,13 +630,13 @@
 	update_icon()
 	if(damage_state <= 0)
 		visible_message(SPAN_NOTICE("\The [src] is completely repaired!"))
-	playsound(src.loc, 'sounds/items/Welder.ogg', 30, 1)
+	playsound(src.loc, 'sound/items/Welder.ogg', 30, 1)
 	return TRUE
 
 /obj/structure/scp173_cage/proc/ReleaseContents() //Releases cage contents
 	if(!LAZYLEN(contents))
 		return FALSE
-	playsound(loc, 'sounds/machines/bolts_up.ogg', 50, 1)
+	playsound(loc, 'sound/machines/bolts_up.ogg', 50, 1)
 	for(var/mob/living/L in contents)
 		L.forceMove(get_turf(src))
 	update_icon()
@@ -692,7 +679,7 @@
 	target = null
 	. = ..()
 
-/obj/effect/acid/Process()
+/obj/effect/acid/process()
 	if(QDELETED(target))
 		qdel(src)
 	else if(world.time > last_melt + melt_time)
@@ -702,16 +689,3 @@
 			qdel(src)
 
 /atom/var/acid_melted = 0
-
-/atom/proc/acid_melt()
-	. = FALSE
-	switch(acid_melted)
-		if(0)
-			visible_message(SPAN_CLASS("euclid","Acid hits \the [src] with a sizzle!"))
-		if(1 to 3)
-			visible_message(SPAN_CLASS("euclid","The acid melts \the [src]!"))
-		if(4)
-			visible_message(SPAN_CLASS("euclid","The acid melts \the [src] away into nothing!"))
-			. = TRUE
-			qdel(src)
-	acid_melted++

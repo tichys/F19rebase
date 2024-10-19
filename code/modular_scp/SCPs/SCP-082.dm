@@ -187,7 +187,7 @@
 		open_time *= hungering_door_open_mult
 
 	door.visible_message(SPAN_WARNING("[src] begins to pry open [door]!"))
-	playsound(get_turf(door), 'sounds/machines/airlock_creaking.ogg', 35, 1)
+	playsound(get_turf(door), 'sound/machines/airlock_creaking.ogg', 35, 1)
 	COOLDOWN_START(src, door_cooldown_track, door_cooldown)
 
 	if(!do_after(src, open_time, door) || !door.Adjacent(src))
@@ -306,7 +306,7 @@
 
 		var/mob/living/carbon/human/grabbed = grab.affecting
 		visible_message(SPAN_WARNING("[src] consumes the rest of [grab.affecting], eating [grabbed.p_them()] whole!"), SPAN_WARNING("You consume the rest of [grabbed]!"))
-		playsound(src, pick('sounds/weapons/alien_bite1.ogg', 'sounds/weapons/alien_bite2.ogg'), 70, TRUE)
+		playsound(src, pick('sound/weapons/alien_bite1.ogg', 'sound/weapons/alien_bite2.ogg'), 70, TRUE)
 		grabbed.blood_squirt(1, get_turf(grabbed))
 		stop_hunger()
 		heal_overall_damage(torso_heal_amount / 2, torso_heal_amount / 2)
@@ -324,7 +324,7 @@
 			grabbed.emote("scream", AUDIBLE_MESSAGE)
 		grabbed.blood_squirt(2, get_turf(grabbed))
 		stop_hunger()
-		playsound(src, pick('sounds/weapons/alien_bite1.ogg', 'sounds/weapons/alien_bite2.ogg'), 70, TRUE)
+		playsound(src, pick('sound/weapons/alien_bite1.ogg', 'sound/weapons/alien_bite2.ogg'), 70, TRUE)
 		if(limb_to_tear == BP_HEAD)
 			heal_overall_damage(head_heal_amount / 2, head_heal_amount / 2)
 			vessel.add_reagent(/datum/reagent/blood, head_heal_amount * eat_blood_regen_mult)

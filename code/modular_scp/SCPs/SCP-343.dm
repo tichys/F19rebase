@@ -4,12 +4,10 @@
 	icon = 'icons/SCP/scp-343.dmi'
 	icon_state = null
 
-	see_invisible = SEE_INVISIBLE_NOLIGHTING
 	see_in_dark = 7
 
 	status_flags = CANPUSH|GODMODE
 
-	roundstart_traits = list(TRAIT_ADVANCED_TOOL_USER)
 
 	//Config
 
@@ -32,7 +30,7 @@
 			continue
 
 		// Things that will block our phasing
-		if(istype(O, /obj/machinery/shieldwall) || istype(O, /obj/machinery/shieldwallgen))
+		if(istype(O, /obj/machinery/shieldwall))
 			to_chat(src, SPAN_WARNING("You cannot phase through [O]."))
 			return
 
@@ -52,7 +50,7 @@
 	var/old_layer = layer
 	var/anim_x = 0
 	var/anim_y = 0
-	layer = OBSERVER_LAYER
+	layer = GHOST_PLANE
 
 	if(dir in list(NORTH, NORTHEAST, NORTHWEST))
 		anim_y = 32
@@ -82,15 +80,6 @@
 		SCP_PLAYABLE|SCP_ROLEPLAY
 	)
 
-	add_language(LANGUAGE_ENGLISH)
-	add_language(LANGUAGE_HUMAN_FRENCH)
-	add_language(LANGUAGE_HUMAN_GERMAN)
-	add_language(LANGUAGE_HUMAN_SPANISH)
-	if(!(MUTATION_XRAY in mutations))
-		mutations.Add(MUTATION_XRAY)
-		update_mutations()
-		update_sight()
-
 	add_verb(src, /mob/living/carbon/human/scp343/verb/object_phase)
 
 	SCP.min_time = 15 MINUTES
@@ -101,15 +90,15 @@
 //Overrides
 
 /mob/living/carbon/human/scp343/UnarmedAttack(atom/A, proximity)
-	if((a_intent == I_HURT) && iscarbon(A))
+	if((istate == INTENT_HARM) && iscarbon(A))
 		to_chat(src, SPAN_WARNING("You know better than to hurt one of your own children."))
 		return
 
-	if((a_intent == I_HELP) && ismob(A))
+	if((istate == INTENT_HELP) && ismob(A))
 		var/mob/living/target = A
 		to_chat(src, SPAN_WARNING("You start to heal [target]'s wounds"))
 		visible_message(SPAN_NOTICE("\The [src] starts to heal [target]'s wounds"))
-		if(!do_after(src, 12 SECONDS, A, bonus_percentage = 25))
+		if(!do_after(src, 12 SECONDS, A))
 			return
 		target.revive()
 		visible_message(SPAN_NOTICE("\The [src] has fully healed [target]!"))
@@ -117,21 +106,13 @@
 
 	return ..()
 
-/mob/living/carbon/human/scp343/get_pressure_weakness()
-	return 0
-
-/mob/living/carbon/human/scp343/handle_breath()
-	return 1
-
-/mob/living/carbon/human/scp343/movement_delay()
-	return 3.0
 
 //TODO: Change pathing of SCPs to no longer be humans so that we dont have to do this bullshit.
 /mob/living/carbon/human/scp343/update_icons()
 	return
 
-/mob/living/carbon/human/scp343/on_update_icon()
-	if(lying || resting)
+/mob/living/carbon/human/scp343/proc/on_update_icon()
+	if(resting)
 		var/matrix/M =  matrix()
 		transform = M.Turn(90)
 	else
@@ -154,6 +135,3 @@
 
 
 	to_chat(src, SPAN_WARNING("You change your visibility."))
-
-/mob/living/carbon/human/scp343/movement_delay()
-	return move_delay

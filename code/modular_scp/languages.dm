@@ -12,3 +12,6 @@
 //Human misc
 #define LANGUAGE_GUTTER				"Gutter"
 #define LANGUAGE_ENGLISH			"English"
+//SCP
+#define LANGUAGE_EYEPOD				"Eyepod"
+#define LANGUAGE_PLAGUESPEAK_GLOBAL	"Plaguespeak"

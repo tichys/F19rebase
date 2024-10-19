@@ -109,6 +109,9 @@
 #define TINT_MODERATE   1
 #define TINT_HEAVY      2
 
+#define CLICK_CD_ATTACK 8 //Default timeout for aggressive actions
+
+
 /// Is the mob nearsighted CURRENTLY?
 /// This check fails if the mob is nearsighted but is wearing glasses,
 /// While is_nearsighted will always succeed even if they are wearing glasses.

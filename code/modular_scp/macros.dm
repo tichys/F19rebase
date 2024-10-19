@@ -14,9 +14,10 @@
 
 #define isscp173(A) istype(A, /mob/living/scp173)
 
+#define sequential_id(key) uniqueness_repository.Generate(/datum/uniqueness_generator/id_sequential, key)
 
-/proc/isspecies(A, B)
-	if(!iscarbon(A))
-		return FALSE
-	var/mob/living/carbon/C = A
-	return C.species?.name == B
+#define sound_to(target, sound)               to_target(target, sound)
+
+#define isvirtualmob(A) istype(A, /mob/observer/virtual)
+
+#define to_target(target, payload)            target << (payload)

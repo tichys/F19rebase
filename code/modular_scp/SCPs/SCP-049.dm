@@ -3,12 +3,6 @@
 	desc = "A mysterious plague doctor."
 	icon = 'icons/SCP/scp-049.dmi'
 
-	status_flags = NO_ANTAG | SPECIES_FLAG_NO_EMBED | SPECIES_FLAG_NEED_DIRECT_ABSORB
-
-	roundstart_traits = list(TRAIT_ADVANCED_TOOL_USER)
-
-	handcuffs_breakout_modifier = 0.2
-
 	//Config
 
 	/// Emote cooldown
@@ -109,7 +103,7 @@
 		return
 
 	var/open_time = 8 SECONDS - anger_timer * 2
-	if(istype(A, /obj/machinery/door/blast))
+	if(istype(A, /obj/machinery/door/poddoor))
 		if(get_area(src) == home_area && world.time <= last_interaction_time + patience_limit && anger_timer < 5)
 			to_chat(src, SPAN_WARNING("You don't feel like leaving just yet."))
 			return
@@ -121,23 +115,21 @@
 			open_time += 3 SECONDS
 		if(AR.welded)
 			open_time += 3 SECONDS
-		if(AR.secured_wires)
-			open_time += 3 SECONDS
 
 	if(istype(A, /obj/machinery/door/airlock/highsecurity))
 		open_time += 6 SECONDS
 
 	A.visible_message(SPAN_WARNING("\The [src] begins to pry open \the [A]!"))
-	playsound(get_turf(A), 'sounds/machines/airlock_creaking.ogg', 35, 1)
+	playsound(get_turf(A), 'sound/machines/airlock_creaking.ogg', 35, 1)
 	door_cooldown_track = world.time + open_time // To avoid sound spam
 
 	if(!do_after(src, open_time, A))
 		return
 
-	if(istype(A, /obj/machinery/door/blast))
-		var/obj/machinery/door/blast/DB = A
+	if(istype(A, /obj/machinery/door/poddoor))
+		var/obj/machinery/door/poddoor/DB = A
 		DB.visible_message(SPAN_DANGER("\The [src] forcefully opens \the [DB]!"))
-		DB.force_open()
+		DB.open()
 		return
 
 	if(istype(A, /obj/machinery/door/airlock))
@@ -145,7 +137,7 @@
 		AR.unlock(TRUE) // No more bolting in the SCPs and calling it a day
 		AR.welded = FALSE
 
-	A.set_broken(TRUE)
+	A.atom_break(TRUE)
 	A.do_animate("spark")
 	var/check = A.open(1)
 	visible_message("\The [src] slices \the [A]'s controls[check ? ", ripping it open!" : ", breaking it!"]")
@@ -153,7 +145,7 @@
 //Overrides
 
 /mob/living/carbon/human/scp049/on_update_icon()
-	if(lying || resting)
+	if(resting)
 		var/matrix/M =  matrix()
 		transform = M.Turn(90)
 	else
@@ -207,11 +199,11 @@
 
 	setClickCooldown(CLICK_CD_ATTACK)
 
-	switch(a_intent)
-		if(I_HELP)
+	switch(istate)
+		if(INTENT_HELP)
 			to_chat(src, SPAN_NOTICE("You refrain from curing as your intent is set to help."))
 			return ..()
-		if(I_HURT)
+		if(INTENT_HARM)
 			if(H.stat == DEAD)
 				to_chat(src, SPAN_NOTICE("They are ready for your cure."))
 			else if(can_touch_bare_skin(H))
@@ -225,7 +217,7 @@
 					H.Stun(10)
 					return
 				visible_message(SPAN_WARNING(SPAN_ITALIC("[src] reaches towards [H], but nothing happens...")))
-				to_chat(src, SPAN_WARNING("\The target's [zone_sel.selecting] is covered. You must make contact with bare skin to kill!"))
+				to_chat(src, SPAN_WARNING("\The target's [zone_selected] is covered. You must make contact with bare skin to kill!"))
 			return
 	return ..()
 
@@ -234,13 +226,13 @@
 		to_chat(M, SPAN_DANGER(SPAN_BOLD("Do not attack your master!")))
 		return
 
-	if(M.action_intent != I_HELP && M != src)
+	if(M.istate != INTENT_HELP && M != src)
 		M.humanStageHandler.setStage("Pestilence", 1)
 		anger_timer = min(anger_timer + 2, anger_timer_max)
 
 	return ..()
 
-/mob/living/carbon/human/scp049/bullet_act(obj/item/projectile/P, def_zone)
+/mob/living/carbon/human/scp049/bullet_act(obj/projectile/P, def_zone)
 	if(!ishuman(P.firer))
 		return
 
@@ -256,8 +248,7 @@
 	return ..()
 
 /mob/living/carbon/human/scp049/attackby(obj/item/W, mob/user)
-	var/mob/living/carbon/human/human = affected_mob
-	if(human.dna.species.id = SPECIES_SCP049_1)
+	if(isspecies(user, SPECIES_SCP049_1))
 		to_chat(user, SPAN_DANGER(SPAN_BOLD("Do not attack your master!")))
 		return
 
@@ -268,9 +259,6 @@
 
 	return ..()
 
-/mob/living/carbon/human/scp049/GetUnbuckleTime()
-	return 15 SECONDS
-
 /mob/living/carbon/human/scp049/examinate(atom/A)
 	. = ..()
 	if(!ishuman(A))
@@ -280,7 +268,7 @@
 		var/pest_message = pick("They reek of the disease.", "They need to be cured.", "The disease is strong in them.", "You sense the pestilence in them.")
 		to_chat(src, "[SPAN_DANGER(SPAN_BOLD(pest_message))]")
 
-/mob/living/carbon/human/scp049/hear_say(message, verb = "says", datum/language/language = null, alt_name = "", italics = 0, mob/speaker = null, sound/speech_sound, sound_vol)
+/mob/living/carbon/human/scp049/Hear(message, verb = "says", datum/language/language = null, alt_name = "", italics = 0, mob/speaker = null, sound/speech_sound, sound_vol)
 	. = ..()
 	// Check if the speaker is not SCP-049 itself
 	if(speaker == src)
@@ -292,45 +280,6 @@
 
 /mob/living/carbon/human/scp049/update_icons()
 	return
-
-/mob/living/carbon/human/scp049/get_pressure_weakness()
-	return 0
-
-/mob/living/carbon/human/scp049/handle_breath()
-	return 1
-
-/mob/living/carbon/human/scp049/movement_delay()
-	return 3.0 - round(anger_timer * 0.03, 0.1)
-
-// Override for footstep volume
-/mob/living/carbon/human/scp049/handle_footsteps()
-	if(!has_footsteps())
-		return
-
-	 //every other turf makes a sound
-	if((step_count % 2) && MOVING_QUICKLY(src))
-		return
-
-	// don't need to step as often when you hop around
-	if((step_count % 3) && !has_gravity(src))
-		return
-
-	if(M.m_intent(MOVE_INTENT_WALK)) //We don't make sounds if we're tiptoeing
-		return
-
-	var/turf/T = get_turf(src)
-	if(istype(T))
-		var/footsound = T.get_footstep_sound(src)
-		if(footsound)
-			var/range = -(world.view - 2)
-			var/volume = 70
-			if(MOVING_DELIBERATELY(src))
-				volume -= 45
-				range -= 0.333
-			playsound(T, footsound, volume, 1, range)
-			play_special_footstep_sound(T, volume, range)
-
-	show_sound_effect(T, src)
 
 // Emotes
 
@@ -393,20 +342,10 @@
 // Cure procs
 
 /mob/living/carbon/human/scp049/proc/PlagueDoctorCure(mob/living/carbon/human/target)
-	if(!(target.species.name in GLOB.zombie_species) || !target.humanStageHandler.getStage("Pestilence"))
-		return
-
-	if(isspecies(target, SPECIES_DIONA) || isspecies(target, SPECIES_SCP049_1) || target.isSynthetic())
-		return
-
-	if(target.mind)
-		if(target.mind.special_role == ANTAG_SCP049_1)
-			return
-		target.mind.special_role = ANTAG_SCP049_1
 
 	var/turf/T = get_turf(target)
 	new /obj/effect/decal/cleanable/blood(T)
-	playsound(T, 'sounds/effects/splat.ogg', 20, 1)
+	playsound(T, 'sound/effects/splat.ogg', 20, 1)
 	cured_count++
 
 	target.SCP = new /datum/scp(
@@ -433,16 +372,12 @@
 		return
 
 	target.revive()
-	target.ChangeToHusk()
+	target.become_husk()
 	target.visible_message(\
 		SPAN_DANGER("\The [target]'s skin decays before your very eyes!"), \
 		SPAN_DANGER("You feel the last of your mind drift away... You must follow the one who cured you of your wretched disease."))
 	log_admin("[key_name(target)] has transformed into an instance of 049-1!")
 
-	target.Weaken(4)
-
-
-	target.species = all_species[SPECIES_SCP049_1]
-	target.species.handle_post_spawn(target)
+	target.Stun(4)
 
 	playsound(get_turf(target), 'sound/hallucinations/wail.ogg', 25, 1)

@@ -46,8 +46,8 @@
 
 	parent = creation
 
-	//if(LAZYLEN(name))
-	//	parent.SetName(name)
+	if(LAZYLEN(name))
+		parent.SetName(name)
 
 	if(classification == SCP_SAFE)
 		set_faction(parent, MOB_FACTION_NEUTRAL)

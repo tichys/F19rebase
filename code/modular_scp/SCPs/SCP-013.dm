@@ -90,7 +90,7 @@
 		return
 	effect(user)
 
-/obj/item/clothing/mask/cigarette/bluelady/smoke(amount)
+/obj/item/clothing/mask/cigarette/bluelady/proces(amount)
 	. = ..()
 	smoketime += amount //Infite smoke time until 013 can complete its effects
 

@@ -403,6 +403,7 @@
 ////////////////////////////////////////
 
 /atom/movable/Move(atom/newloc, direct, glide_size_override = 0, z_movement_flags)
+	
 	if(!loc || !newloc)
 		return FALSE
 

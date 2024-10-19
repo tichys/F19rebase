@@ -4,7 +4,6 @@
 	desc = "An old paper of handwritten sheet music, titled \"On Mount Golgotha\". The writing is in a conspicuous blood red."
 
 	w_class = WEIGHT_CLASS_GIGANTIC
-	show_title = FALSE
 
 	//Config
 
@@ -17,7 +16,7 @@
 	var/effect_cooldown_counter
 
 	/* Looping sound related stuff, stolen from egor */
-	var/looping_sound = 'sounds/scp/012/012.ogg'
+	var/looping_sound = 'sound/scp/012/012.ogg'
 	var/looping_sound_volume = 50
 	var/sound_id
 	var/datum/sound_token/sound_token
@@ -35,7 +34,7 @@
 
 	SCP.memeticFlags = MVISUAL|MAUDIBLE|MSYNCED //Memetic flags determine required factors for a human to be affected
 	SCP.memetic_proc = TYPE_PROC_REF(/obj/item/paper/scp012, memetic_effect) //proc to be called for the effect an affected individual should recieve
-	SCP.memetic_sounds = list('sounds/scp/012/012.ogg')
+	SCP.memetic_sounds = list('sound/scp/012/012.ogg')
 	SCP.compInit()
 
 	sound_id = "[type]_[sequential_id(type)]"
@@ -106,8 +105,7 @@
 /obj/item/paper/scp012/Conversion914(mode = MODE_ONE_TO_ONE, mob/user = usr)
 	switch(mode)
 		if(MODE_VERY_FINE)
-			log_and_message_admins("put [src] through SCP-914 on \"Very Fine\" mode.", user, src)
-			for(var/mob/living/carbon/human/H in GLOB.living_mob_list)
+			for(var/mob/living/carbon/human/H in GLOB.alive_mob_list)
 				if(H.z != z)
 					continue
 				H.playsound_local(get_turf(H), looping_sound, 50, FALSE)

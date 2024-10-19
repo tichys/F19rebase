@@ -77,3 +77,9 @@ GLOBAL_LIST_INIT(ghost_master, list(
 	client.screen += mob
 	client.screen += sounds
 */
+
+/proc/isspecies(A, B)
+	if(!iscarbon(A))
+		return FALSE
+	var/mob/living/carbon/C = A
+	return C.dna.species?.name == B
