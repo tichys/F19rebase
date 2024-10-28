@@ -29,3 +29,6 @@ GLOBAL_LIST_EMPTY(scramble_hud_users)     // List of all entities using SCRAMBLE
 
 /// Called on `/atom/movable/Move` and `/atom/movable/proc/forceMove` (/atom/movable, /atom, /atom)
 #define COMSIG_MOVED "moved"
+
+
+#define SPECIES_SCP049_1 	"SCP-049-1"

@@ -44,9 +44,10 @@
 	var/datum/arranged_hud_process/P = arrange_hud_process(M, Alt, GLOB.scramble_hud_users)
 	// The only things that will have scramble hud, or so we assume
 	// is SCP-096 (or, if admin shenanigans were happening, SCP-096s)
+	/*
 	for(var/mob/living/scp096/shylad in P.Mob.in_view(P.Turf))
 		P.Client.images += new /image/hud_overlay('icons/SCP/hud_scramble.dmi', shylad, "scramble-alive")
-
+	*/
 /proc/can_process_hud(mob/M)
 	if(!M)
 		return 0

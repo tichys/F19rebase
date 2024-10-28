@@ -1,10 +1,8 @@
 /obj/item/clothing/mask/cigarette/bluelady
 	name = "'Blue Lady' cigarette"
-	brand = "\improper Blue Lady"
 	desc = "The words 'Blue Lady' are written on this deftly-rolled cigarette in blue ink."
 
-	filling = list(/datum/reagent/medicine/fluff/tobacco = 1)
-	hidden_from_codex = TRUE
+	list_reagents = list(/datum/reagent/drug/nicotine = 1)
 
 	//Mechanical
 
@@ -67,9 +65,9 @@
 	var/image/I = image('icons/mob/human.dmi', H, "body_f_s")
 	I.override = 1
 	I.add_overlay(image('icons/mob/human_face.dmi', icon_state = "hair_emo2_s"))
-	I.add_overlay(image('icons/mob/onmob/uniform.dmi', icon_state = "lady_in_blue_s"))
-	I.add_overlay(image('icons/mob/onmob/mask.dmi', icon_state = "ccigon"))
-	I.add_overlay(image('icons/mob/onmob/feet.dmi', icon_state = "heels"))
+	I.add_overlay(image('icons/mob/clothing/under/misc.dmi', icon_state = "lady_in_blue_s"))
+	I.add_overlay(image('icons/mob/clothing/mask.dmi', icon_state = "ccigon"))
+	I.add_overlay(image('icons/mob/clothing/feet.dmi', icon_state = "heels"))
 
 	return I
 
@@ -80,17 +78,17 @@
 	if(!ishuman(loc))
 		return
 	var/mob/living/carbon/human/H = loc
-	if(H.get_inventory_slot(src) != ITEM_SLOT_MASK)
+	if(!ITEM_SLOT_MASK)
 		return
 	effect(H)
 
 /obj/item/clothing/mask/cigarette/bluelady/equipped(mob/user, slot)
 	. = ..()
-	if(slot != slot_wear_mask || !ishuman(user))
+	if(slot != ITEM_SLOT_MASK || !ishuman(user))
 		return
 	effect(user)
 
-/obj/item/clothing/mask/cigarette/bluelady/proces(amount)
+/obj/item/clothing/mask/cigarette/bluelady/process(amount)
 	. = ..()
 	smoketime += amount //Infite smoke time until 013 can complete its effects
 
@@ -110,5 +108,5 @@
 	name = "Pack of 'Blue Lady' cigarettes"
 	icon_state = "BLpacket"
 	desc = "A packet of six Blue Lady cigarettes. The SCP logo is stamped on the paper."
-
-	startswith = list(/obj/item/clothing/mask/cigarette/bluelady = 6)
+	spawn_type = /obj/item/clothing/mask/cigarette/bluelady
+	spawn_count = 6

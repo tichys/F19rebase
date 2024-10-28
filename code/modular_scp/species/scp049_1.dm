@@ -28,7 +28,7 @@
 		H.drop_from_inventory(H.head, get_turf(H)) //Remove helmet so headshots aren't impossible
 	..()
 
-/datum/species/scp049_1/handle_environment_special(mob/living/carbon/human/H)
+/datum/species/scp049_1/handle_environment(mob/living/carbon/human/H)
 	if (H.stat == CONSCIOUS)
 		if (prob(5))
 			playsound(H.loc, 'sound/hallucinations/far_noise.ogg', 15, 1)
@@ -41,7 +41,6 @@
 		if (I.damage > 0)
 			I.damage = max(I.damage - heal_rate, 0)
 
-	H.vessel.add_reagent(/datum/reagent/blood, min(heal_rate * 10, blood_volume - H.vessel.total_volume))
 
 	if (H.getBruteLoss() || H.getFireLoss() || H.getOxyLoss() || H.getToxLoss())
 		H.adjustBruteLoss(-heal_rate)
@@ -50,24 +49,23 @@
 		H.adjustToxLoss(-heal_rate)
 		return TRUE
 
-	H.handle_regular_hud_updates()
 	process_pestilence_hud(H)
 
-/datum/species/scp049_1/handle_npc(mob/living/carbon/human/H)
+/datum/species/scp049_1/proc/handle_npc(mob/living/carbon/human/H)
 	H.resting = FALSE
 
 	if (prob(5))
 		H.custom_emote("wails!")
 	else if (prob(5))
 		H.custom_emote("groans!")
-	if (H.restrained() && prob(8))
+	if (H.resist_restraints() && prob(8))
 		H.custom_emote("thrashes and writhes!")
 
 	if (H.resting)
 		walk(H, 0)
 		return
 
-	if (H.restrained() || H.buckled())
+	if (H.resist_restraints() || H.buckled)
 		H.resist()
 		return
 
@@ -76,11 +74,7 @@
 /datum/species/scp049_1/proc/handle_action(mob/living/carbon/human/H)
 	var/dist = 128
 	for(var/mob/living/M in hearers(H, 15))
-		if ((ishuman(M) || istype(M, /mob/living/exosuit)) && !isspecies(M, SPECIES_SCP049_1) && !isspecies(M, SPECIES_DIONA) && !isscp049(M)) //Don't attack fellow zombies, or diona
-			if (istype(M, /obj/vehicle/sealed))
-				var/obj/vehicle/sealed/mecha/MC = M
-				if (!LAZYLEN(MC.occupant))
-					continue //Don't attack empty mechs
+		if ((ishuman(M)) && !isspecies(M, SPECIES_SCP049_1) && !isscp049(M)) //Don't attack fellow zombies, or diona
 			if (M.stat == DEAD && target)
 				continue //Only eat corpses when no living (and able) targets are around
 			var/D = get_dist(M, H)
@@ -115,12 +109,7 @@
 			if (target == M) //If our target is still nearby
 				return
 		target = null //Target lost
-
-	else
-		if (!H.lying)
-			if (prob(33) && isturf(H.loc) && !H.pulledby)
-				H.SelfMove(pick(GLOB.cardinal))
-
+/*
 /datum/unarmed_attack/bite/sharp/scp049_1
 	attack_verb = list("slashed", "sunk their teeth into", "bit", "mauled")
 	damage = 3
@@ -136,3 +125,4 @@
 		to_chat(usr, SPAN_WARNING("They are free from the pestilence!"))
 		return FALSE
 	return TRUE
+*/
