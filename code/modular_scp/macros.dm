@@ -21,3 +21,8 @@
 #define isvirtualmob(A) istype(A, /mob/observer/virtual)
 
 #define to_target(target, payload)            target << (payload)
+
+#define list_find(L, needle, LIMITS...) L.Find(needle, LIMITS)
+
+// Insert an object A into a sorted list using cmp_proc (/code/_helpers/cmp.dm) for comparison.
+#define ADD_SORTED(list, A, cmp_proc) if(!list.len) {list.Add(A)} else {list.Insert(FindElementIndex(A, list, cmp_proc), A)}

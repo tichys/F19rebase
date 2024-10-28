@@ -62,7 +62,7 @@
 
 /mob/proc/custom_emote(message = null)
 
-	if((usr && stat) || (!use_me && usr == src))
+	if((usr && stat))
 		to_chat(src, "You are unable to emote.")
 		return
 
@@ -76,7 +76,7 @@
 		message = format_emote(src, message)
 	else
 		return
-	message = process_chat_markup(message)
+	message = parsemarkdown_basic_step1(message)
 	if (message)
 		log_emote("[name]/[key] : [message]")
 
@@ -92,7 +92,7 @@
 /mob/proc/remove_from_mob(obj/O, atom/target)
 	if(!O) // Nothing to remove, so we succeed.
 		return 1
-	src.u_equip(O)
+	src.dropItemToGround(O)
 	if (src.client)
 		src.client.screen -= O
 	O.reset_plane_and_layer()
@@ -107,10 +107,7 @@
 	return 1
 
 /mob/proc/get_prefix_key(prefix_type)
-	if(client && client.prefs)
-		return client.prefs.prefix_keys_by_type[prefix_type]
-	var/decl/prefix/prefix_instance = decls_repository.get_decl(prefix_type)
-	return prefix_instance.default_key
+
 
 // Open everything and then kill APC
 /area/proc/full_breach()
@@ -128,3 +125,23 @@
 	if(T.get_lumcount() <= darkness_threshold)
 		return TRUE
 	return FALSE
+
+
+/*
+	List generation helpers
+*/
+
+/proc/get_turfs_in_range(turf/center, range, list/predicates)
+	. = list()
+
+	if (!istype(center))
+		return
+
+	for (var/turf/T in trange(range, center))
+		if (!predicates || all_predicates_true(list(T), predicates))
+			. += T
+
+/proc/pick_turf_in_range(turf/center, range, list/turf_predicates)
+	var/list/turfs = get_turfs_in_range(center, range, turf_predicates)
+	if (length(turfs))
+		return pick(turfs)

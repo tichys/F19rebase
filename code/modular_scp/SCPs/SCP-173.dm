@@ -8,8 +8,6 @@
 	maxHealth = 5000
 	health = 5000
 
-	mob_size = MOB_LARGE //173 should not be able to be pulled around by humans
-
 	istate = INTENT_HARM // Doesn't switch places with people
 
 	//Config
@@ -112,9 +110,6 @@
 		return FALSE
 	return ..()
 
-/mob/living/scp173/movement_delay()
-	return -5
-
 /mob/living/scp173/UnarmedAttack(atom/A)
 	if(IsBeingWatched() || incapacitated())// We can't do anything while being watched
 		return
@@ -138,6 +133,7 @@
 	if(istype(A, /obj/machinery/door))
 		OpenDoor(A)
 		return
+	/*
 	if(istype(A,/obj/machinery/floor_light))
 		if(get_area(A) == spawn_area)
 			to_chat(src, SPAN_WARNING("You can't reach the lights in your own containment zone."))
@@ -149,6 +145,7 @@
 		W.physical_attack_hand(src)
 		light_break_cooldown = world.time + light_break_cooldown_time
 		return
+	*/
 	if(istype(A,/obj/machinery/light))
 		if(get_area(A) == spawn_area)
 			to_chat(src, SPAN_WARNING("You can't reach the lights in your own containment zone."))
@@ -157,15 +154,15 @@
 			to_chat(src, SPAN_WARNING("You can't break that yet."))
 			return
 		var/obj/machinery/light/W = A
-		W.broken()
+		W.atom_break()
 		light_break_cooldown = world.time + light_break_cooldown_time
 		return
 	if(istype(A,/obj/structure/window))
 		var/obj/structure/window/W = A
-		W.shatter()
+		W.atom_break()
 		return
 	if(istype(A,/obj/structure/grille))
-		playsound(get_turf(A), 'sounds/effects/grillehit.ogg', 50, 1)
+		playsound(get_turf(A), 'sound/effects/grillehit.ogg', 50, 1)
 		qdel(A)
 		return
 	if(istype(A, /obj/structure/inflatable))
@@ -189,7 +186,6 @@
 	for(var/mob/living/carbon/human/H in our_view)
 		H.enable_blink(src)
 		next_blinks |= H
-	handle_regular_hud_updates()
 	process_blink_hud(src)
 	if(!isturf(loc)) // Inside of something
 		return
@@ -212,10 +208,10 @@
 		. += "Estimated time until breach: [max(Round(((defication_max - CheckFeces()) * defecation_cooldown_time) / (60 SECONDS)), 0)] minutes."
 
 // Remove it when 173 becomes simple animal subtype
-/mob/living/scp173/DoMove(direction, mob/mover)
+/mob/living/scp173/Move(direction, mob/mover)
 	var/turf/old_turf = get_turf(src)
 	. = ..()
-	if(. & MOVEMENT_HANDLED)
+	if(. & COMSIG_MOVABLE_MOVED)
 		if(movement_sound && old_turf != get_turf(src))
 			playsound(src, movement_sound, 50, TRUE)
 
@@ -239,12 +235,12 @@
 		if(MODE_FINE)
 			playsound(src, 'sound/effects/screech.ogg', 75, FALSE, 16)
 			to_chat(src, SPAN_USERDANGER("You are feeling more powerful!"))
-			movement_sound = 'sounds/scp/173/rattle.ogg'
+			movement_sound = 'sound/scp/173/rattle.ogg'
 			bump_attack = TRUE
 		if(MODE_VERY_FINE) // God has abandoned you
 			playsound(src, 'sound/effects/screech2.ogg', 150, FALSE, 32)
 			to_chat(src, SPAN_USERDANGER("You are unstoppable, nothing can stand on your path now!"))
-			movement_sound = 'sounds/scp/173/rattle.ogg'
+			movement_sound = 'sound/scp/173/rattle.ogg'
 			bump_attack = TRUE
 			ignore_vision = TRUE
 			snap_cooldown_time = 0
@@ -371,7 +367,7 @@
 	for(var/mob/living/carbon/human/H in dview(18, src)) //Identifies possible human targets. Range is double regular view to allow 173 to pursue tarets outside of world.view to make evading him harder.
 		if(H.SCP || H.stat == DEAD)
 			continue
-		if(!LAZYLEN(get_path_to(src, H, flee_distance * 2, min_target_dist = 1)))
+		if(!LAZYLEN(jps_path_to(src, H, flee_distance * 2, mintargetdist = 1)))
 			continue
 		possible_human_targets += H
 
@@ -385,14 +381,10 @@
 			if(H.stat == DEAD || (get_dist(src, target) >= target_track_distance))
 				clear_target()
 			if(target && (target_pos_last != target_turf_current))
-				steps_to_target = get_path_to(src, target_turf_current, flee_distance * 2, min_target_dist = 1)		//if our target changes positions we recalculate our path
+				steps_to_target = jps_path_to(src, target_turf_current, flee_distance * 2, mintargetdist = 1)		//if our target changes positions we recalculate our path
 				target_pos_last = target_turf_current
 				if(!LAZYLEN(steps_to_target))
 					clear_target()
-		else if(istype(target, /obj/machinery/light))
-			var/obj/machinery/light/L = target
-			if(L.get_status() != LIGHT_OK)
-				clear_target()
 		else if(isturf(target))
 			if((LAZYLEN(possible_human_targets)) && LAZYLEN(steps_to_target) < wander_distance) //If we get a possible target or if our wandering target is invalid and we arent currently fleeing we stop wandering and remove our wander target
 				clear_target()
@@ -445,7 +437,7 @@
 	if(!new_target)
 		return FALSE
 
-	var/list/temp_steps_to_target = get_path_to(src, new_target, flee_distance * 2, min_target_dist = 1)
+	var/list/temp_steps_to_target = jps_path_to(src, new_target, flee_distance * 2, mintargetdist = 1)
 	if(LAZYLEN(temp_steps_to_target)) //Double check to ensure that whatever target we assign we can actually get to
 		steps_to_target = temp_steps_to_target
 		target = new_target
@@ -474,7 +466,7 @@
 			UnarmedAttack(D)
 			return
 		else if(obstacle.get_climbable_surface(src)) //If we can climb it, we should
-			obstacle.do_climb(src)
+			obstacle.ClimbUp(src)
 			return
 		else if(istype(obstacle, /obj/structure/window) || istype(obstacle, /obj/structure/grille))
 			UnarmedAttack(obstacle)
@@ -486,8 +478,6 @@
 		step_turf = steps_to_target[1]
 		step_towards(src, step_turf)
 		if(get_turf(src) != step_turf) //if for whatever reason we are unable to move to the next turf, we stop
-			if(step_turf.contains_dense_objects_whitelist(list(/obj/machinery/door, /obj/structure/window, /obj/structure/grille)) || get_area(step_turf) == spawn_area) //if we are blocked by something we cant break, we clear our target
-				clear_target()
 			break
 		else
 			LAZYREMOVE(steps_to_target, step_turf)
@@ -496,9 +486,7 @@
 	for(var/obj/machinery/light/light_in_view in dview(9, src))
 		if(get_area(light_in_view) == spawn_area)
 			continue
-		if(light_in_view.get_status() != LIGHT_OK)
-			continue
-		if(!get_path_to(src, light_in_view, wander_distance))
+		if(!jps_path_to(src, light_in_view, wander_distance))
 			continue
 		return light_in_view
 	return null
@@ -518,7 +506,7 @@
 	/// Maximum damage points, upon which cage becomes unusable and 173, if inside, escapes
 	var/damage_state_max = 5
 
-/obj/structure/scp173_cage/MouseDrop_T(atom/movable/dropping, mob/user) // When someone drags 173 onto the cage
+/obj/structure/scp173_cage/MouseDrop(atom/movable/dropping, mob/user) // When someone drags 173 onto the cage
 	if(locate(/mob/living) in contents)
 		to_chat(user, SPAN_WARNING("\The [src] is already full!"))
 		return FALSE
@@ -528,11 +516,11 @@
 	if(isscp173(dropping))
 		visible_message(SPAN_WARNING("[user] starts to put [dropping] into the cage."))
 		var/oloc = loc
-		if(do_after(user, 13 SECONDS, dropping, bonus_percentage = 25) && loc == oloc)
+		if(do_after(user, 13 SECONDS, dropping) && loc == oloc)
 			dropping.forceMove(src)
 			update_icon()
 			visible_message(SPAN_NOTICE("[user] puts [dropping] in the cage."))
-			playsound(loc, 'sounds/machines/bolts_down.ogg', 50, 1)
+			playsound(loc, 'sound/machines/bolts_down.ogg', 50, 1)
 			return TRUE
 		return FALSE
 	if(isliving(dropping))
@@ -543,7 +531,7 @@
 	if(!LAZYLEN(contents))
 		return ..()
 	visible_message(SPAN_WARNING("[L] attempts to open \the [src]."))
-	if(do_after(L, 7 SECONDS, src, bonus_percentage = 25))
+	if(do_after(L, 7 SECONDS, src))
 		visible_message(SPAN_DANGER("[L] opens \the [src]!"))
 		ReleaseContents()
 
@@ -554,7 +542,7 @@
 		to_chat(user, SPAN_WARNING("Someone is looking at you!"))
 		return
 	resist_cooldown = world.time + 5 SECONDS
-	if(!do_after(user, 1 SECOND, src, DO_BOTH_CAN_MOVE|DO_DEFAULT, bonus_percentage = 100)) // Some moron suggested putting 173 in a conveyor loop.
+	if(!do_after(user, 1 SECOND, src)) // Some moron suggested putting 173 in a conveyor loop.
 		return
 	if(user.IsBeingWatched())
 		to_chat(user, SPAN_WARNING("Someone is looking at you!"))
@@ -563,7 +551,7 @@
 	update_icon()
 	if(damage_state < damage_state_max)
 		visible_message(SPAN_WARNING("[user] damages \the [src]!"))
-		playsound(src, 'sounds/effects/grillehit.ogg', 35, TRUE)
+		playsound(src, 'sound/effects/grillehit.ogg', 35, TRUE)
 		return
 	visible_message(SPAN_DANGER("[user] opens \the [src] from the inside!"))
 	ReleaseContents()
@@ -582,13 +570,14 @@
 
 // Updates icon state and underlays
 /obj/structure/scp173_cage/update_icon()
+	. = ..()
 	underlays.Cut()
 
 	if(!LAZYLEN(contents))
 		plane = initial(plane)
 		icon_state = "open"
 	else
-		plane = MOB_PLANE
+		plane = MOB_LAYER
 		icon_state = "closed"
 
 	switch(damage_state)
@@ -603,8 +592,6 @@
 		underlays += image(M)
 
 /obj/structure/scp173_cage/attackby(obj/item/I, mob/user) //Gotta be able to repair the cage
-	if(!isWelder(I))
-		return
 	if(LAZYLEN(contents))
 		to_chat(user, SPAN_WARNING("\The [src] must be empty to complete this task!"))
 		return
@@ -619,12 +606,10 @@
 	if(WT.get_fuel() < damage_state)
 		to_chat(user, SPAN_WARNING("You will need more fuel to repair [src]."))
 		return
-	playsound(src, 'sounds/items/Welder2.ogg', 30, TRUE)
+	playsound(src, 'sound/items/Welder2.ogg', 30, TRUE)
 	user.visible_message(SPAN_NOTICE("\The [user] starts repairing sections of \the [src]."))
-	if(!do_after(user, (6 SECONDS + damage_state SECONDS), src, bonus_percentage = 25))
+	if(!do_after(user, (6 SECONDS + damage_state SECONDS), src))
 		return FALSE
-	if(!WT.remove_fuel(damage_state, user))
-		return
 	user.visible_message(SPAN_NOTICE("\The [user] successfuly repairs a section of \the [src]."))
 	damage_state -= 1
 	update_icon()
@@ -683,9 +668,10 @@
 	if(QDELETED(target))
 		qdel(src)
 	else if(world.time > last_melt + melt_time)
-		var/done_melt = target.acid_melt()
+		var/done_melt = acid_melt()
 		last_melt = world.time
 		if(done_melt)
 			qdel(src)
 
 /atom/var/acid_melted = 0
+

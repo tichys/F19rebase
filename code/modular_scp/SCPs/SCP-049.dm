@@ -77,7 +77,7 @@
 /mob/living/carbon/human/scp049/do_possession(mob/dead/observer/possessor)
 	if(!..())
 		return
-	priority_announcement.Announce("Motion sensors triggered in the containment chamber of SCP-049, on-site security personnel are to investigate the issue.", "Motion Sensors", 'sounds/AI/049.ogg')
+	priority_announce("Motion sensors triggered in the containment chamber of SCP-049, on-site security personnel are to investigate the issue.", "Motion Sensors", 'sound/ai/049.ogg')
 	last_interaction_time = world.time + 5 MINUTES
 
 //Mechanics
@@ -144,7 +144,7 @@
 
 //Overrides
 
-/mob/living/carbon/human/scp049/on_update_icon()
+/mob/living/carbon/human/scp049/proc/on_update_icon()
 	if(resting)
 		var/matrix/M =  matrix()
 		transform = M.Turn(90)
@@ -155,7 +155,7 @@
 /mob/living/carbon/human/scp049/Life()
 	. = ..()
 
-	handle_regular_hud_updates()
+	//handle_regular_hud_updates()
 	process_pestilence_hud(src)
 	anger_timer = max(anger_timer - 1, 0)
 

@@ -42,3 +42,6 @@
 			if(covered_parts & HEAD)
 				return FALSE
 	return TRUE
+
+/proc/isfloor(turf/T)
+	return (istype(T, /turf/open/floor))
