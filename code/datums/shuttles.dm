@@ -529,6 +529,11 @@
 /datum/map_template/shuttle/emergency/zeta/prerequisites_met()
 	return SSshuttle.shuttle_purchase_requirements_met[SHUTTLE_UNLOCK_ALIENTECH]
 
+//Site 404 Shuttle Templates
+/datum/map_template/shuttle/arrival/site404
+	suffix = "site404"
+	name = "arrival shuttle (site404)"
+
 /datum/map_template/shuttle/arrival/box
 	suffix = "box"
 	name = "arrival shuttle (Box)"
