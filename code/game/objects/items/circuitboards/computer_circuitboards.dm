@@ -272,7 +272,12 @@
 /obj/item/circuitboard/computer/lift106_shuttle
 	name = "SCP-106 Access Lift (Computer Board)"
 	greyscale_colors = CIRCUIT_COLOR_GENERIC
-	build_path = /obj/machinery/computer/shuttle/lift106
+	build_path = /obj/machinery/computer/shuttle/site404/lift106
+
+/obj/item/circuitboard/computer/primaryelevator_shuttle
+	name = "Site 404 Primary Elevator (Computer Board)"
+	greyscale_colors = CIRCUIT_COLOR_GENERIC
+	build_path = /obj/machinery/computer/shuttle/site404/primaryelevator
 
 /obj/item/circuitboard/computer/monastery_shuttle
 	name = "Monastery Shuttle (Computer Board)"

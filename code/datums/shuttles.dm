@@ -153,6 +153,10 @@
 	port_id = "snowdin"
 	who_can_purchase = null
 
+/datum/map_template/shuttle/site404
+	port_id = "site404"
+	who_can_purchase = null
+
 // Shuttles start here:
 
 /datum/map_template/shuttle/emergency/backup
@@ -533,6 +537,10 @@
 
 /datum/map_template/shuttle/site404/lift106
 	suffix = "lift106"
+	name = "106 elevator (site404)"
+
+/datum/map_template/shuttle/site404/primaryelevator
+	suffix = "primaryelevator"
 	name = "106 elevator (site404)"
 
 /datum/map_template/shuttle/arrival/site404

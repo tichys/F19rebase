@@ -5,7 +5,7 @@
 	},
 /obj/structure/table,
 /turf/open/floor/iron/ported/techfloor,
-/area/shuttle/arrival)
+/area/shuttle/site404/lift106)
 "d" = (
 /obj/structure/railing{
 	dir = 8
@@ -14,29 +14,31 @@
 	dir = 4
 	},
 /turf/open/floor/iron/ported/techfloor_grid,
-/area/shuttle/arrival)
+/area/shuttle/site404/lift106)
 "m" = (
 /obj/structure/railing,
-/obj/docking_port/mobile/elevator{
-	dwidth = 1;
-	height = 4;
-	width = 3
-	},
-/obj/machinery/computer/shuttle/lift106{
+/obj/machinery/computer/shuttle/site404/lift106{
 	dir = 1
 	},
+/obj/docking_port/mobile/elevator{
+	id = "lift106";
+	height = 4;
+	dwidth = 1;
+	width = 3;
+	name = "Site 404 - SCP-106 Access Lift"
+	},
 /turf/open/floor/iron/ported/techfloor_grid,
-/area/shuttle/arrival)
+/area/shuttle/site404/lift106)
 "s" = (
 /turf/open/floor/iron,
-/area/shuttle/arrival)
+/area/shuttle/site404/lift106)
 "u" = (
 /obj/structure/railing{
 	dir = 6
 	},
 /obj/structure/table,
 /turf/open/floor/iron/ported/techfloor,
-/area/shuttle/arrival)
+/area/shuttle/site404/lift106)
 "S" = (
 /obj/structure/railing{
 	dir = 4
@@ -45,7 +47,7 @@
 	dir = 8
 	},
 /turf/open/floor/iron/ported/techfloor_grid,
-/area/shuttle/arrival)
+/area/shuttle/site404/lift106)
 
 (1,1,1) = {"
 d
