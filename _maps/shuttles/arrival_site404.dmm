@@ -20,7 +20,8 @@
 	dir = 1;
 	dwidth = 4;
 	width = 9;
-	height = 19
+	height = 19;
+	id = "Site 404 Arrival Shuttle"
 	},
 /turf/template_noop,
 /area/template_noop)

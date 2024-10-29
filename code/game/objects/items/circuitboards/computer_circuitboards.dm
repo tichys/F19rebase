@@ -269,6 +269,11 @@
 		to_chat(user, span_notice("Access protocols successfully updated."))
 	return TRUE
 
+/obj/item/circuitboard/computer/lift106_shuttle
+	name = "SCP-106 Access Lift (Computer Board)"
+	greyscale_colors = CIRCUIT_COLOR_GENERIC
+	build_path = /obj/machinery/computer/shuttle/lift106
+
 /obj/item/circuitboard/computer/monastery_shuttle
 	name = "Monastery Shuttle (Computer Board)"
 	greyscale_colors = CIRCUIT_COLOR_GENERIC

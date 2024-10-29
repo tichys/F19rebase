@@ -907,7 +907,7 @@
 "anF" = (
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/maintenance{
-	name = "Docking Bay Maintenance Access"
+	name = "Administration Zone Maintenance Access"
 	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/dockingbay)
@@ -2518,6 +2518,10 @@
 /turf/open/floor/iron/white,
 /area/site404/lightcontainmentzone/hallway/south)
 "aSM" = (
+/obj/machinery/door/airlock/highsecurity{
+	name = "SCP-106 Lower Exterior Containment Chamber Access"
+	},
+/obj/machinery/door/firedoor,
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/chamber/lowercontainment)
 "aTd" = (
@@ -3154,9 +3158,11 @@
 	icon_state = "3"
 	},
 /obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/maintenance,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/administration/maintenance/portbow)
 "beb" = (
@@ -3536,7 +3542,7 @@
 /area/site404/entrancezone/escapepodhall)
 "bjY" = (
 /obj/docking_port/stationary{
-	name = "arrivals";
+	name = "Site 404 - Arrivals Shuttle Hangar";
 	width = 9;
 	height = 19;
 	id = "arrivals_stationary";
@@ -4426,7 +4432,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "12"
 	},
-/turf/open/space/basic,
+/turf/open/floor/plating,
 /area/site404/containmentchambers/scp106/entrance)
 "bEq" = (
 /obj/structure/table/glass,
@@ -4991,6 +4997,9 @@
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/lowerhallway)
 "bQz" = (
@@ -5671,7 +5680,7 @@
 /turf/open/floor/iron/white,
 /area/site404/containmentchambers/scp008/laboratory)
 "cfO" = (
-/obj/machinery/light/directional/north,
+/obj/machinery/light/cold/no_nightlight/directional/north,
 /turf/open/floor/iron/dark,
 /area/site404/containmentchambers/scp106/uppermaintenance)
 "cfQ" = (
@@ -7055,6 +7064,9 @@
 /obj/structure/cable/yellow{
 	icon_state = "4"
 	},
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
 /turf/open/floor/plating,
 /area/site404/containmentchambers/scp106/uppermaintenance)
 "cKq" = (
@@ -7229,6 +7241,12 @@
 "cNI" = (
 /obj/structure/cable/yellow{
 	icon_state = "12"
+	},
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
+/obj/machinery/door/airlock/maintenance{
+	name = "SCP-106 Access Lift Shaft"
 	},
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/entrance)
@@ -7817,6 +7835,9 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/securityoffice/checkpoint)
 "cYz" = (
@@ -8700,7 +8721,10 @@
 /obj/structure/cable/yellow{
 	icon_state = "12"
 	},
-/turf/open/space/basic,
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/open/floor/plating,
 /area/site404/containmentchambers/scp106/upperobservation)
 "dnn" = (
 /obj/item/clothing/glasses/blindfold,
@@ -9627,6 +9651,7 @@
 /area/site404/heavycontainmentzone/maintenance/starboard)
 "dEa" = (
 /obj/effect/spawner/structure/window/reinforced/prepainted,
+/obj/machinery/door/firedoor,
 /turf/open/floor/plating,
 /area/site404/containmentchambers/scp106/entrance)
 "dEf" = (
@@ -10331,7 +10356,10 @@
 /area/site404/containmentchambers/scp529)
 "dSo" = (
 /obj/structure/window/reinforced/spawner,
-/turf/open/floor/iron,
+/obj/machinery/computer/shuttle/lift106{
+	dir = 1
+	},
+/turf/open/floor/iron/dark/textured_large,
 /area/site404/heavycontainmentzone/hallway/central)
 "dSt" = (
 /obj/structure/cable/yellow{
@@ -11008,7 +11036,7 @@
 /turf/open/floor/iron/smooth_large,
 /area/site404/entrancezone/waitingroom/lower)
 "efm" = (
-/turf/open/space/basic,
+/turf/open/openspace,
 /area/site404/containmentchambers/scp106/entrance)
 "efq" = (
 /obj/machinery/rnd/production/fabricator/department/medical,
@@ -11053,6 +11081,9 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/administration/maintenance/central/b)
 "egc" = (
@@ -12485,7 +12516,7 @@
 /turf/open/floor/plating,
 /area/site404/administration/communication_satellite/dormitory)
 "eHg" = (
-/obj/machinery/light/directional/west,
+/obj/machinery/light/cold/no_nightlight/directional/west,
 /turf/open/floor/iron,
 /area/site404/containmentchambers/scp106/uppermaintenance)
 "eHh" = (
@@ -14443,11 +14474,11 @@
 /turf/open/space/basic,
 /area/site404/engineering/lockerroom)
 "fsx" = (
-/obj/machinery/door/airlock/maintenance{
-	name = "Docking Bay Maintenance Access"
-	},
 /obj/machinery/door/firedoor{
 	dir = 4
+	},
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
 	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/dockingbay)
@@ -14589,7 +14620,7 @@
 /turf/open/floor/plating,
 /area/site404/entrancezone/maintenance/fore)
 "fuW" = (
-/turf/open/space/basic,
+/turf/open/openspace,
 /area/site404/containmentchambers/scp106/upperobservation)
 "fuZ" = (
 /turf/open/floor/iron/white/textured_large,
@@ -15790,7 +15821,7 @@
 /turf/open/floor/iron/smooth,
 /area/site404/administration/communication_satellite/communications)
 "fUU" = (
-/obj/machinery/light/directional/north,
+/obj/machinery/light/cold/no_nightlight/directional/north,
 /turf/open/floor/iron/dark,
 /area/site404/containmentchambers/scp106/upperobservation)
 "fVc" = (
@@ -17837,6 +17868,18 @@
 /obj/machinery/light/directional/south,
 /turf/open/floor/iron/dark,
 /area/site404/service/chapel/office)
+"gJn" = (
+/obj/structure/cable/yellow{
+	icon_state = "12"
+	},
+/obj/structure/lattice/catwalk,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
+/turf/open/floor/plating,
+/area/site404/containmentchambers/scp106/lowerhallway)
 "gJr" = (
 /obj/machinery/light/cold/directional/east,
 /obj/machinery/porta_turret,
@@ -18022,6 +18065,10 @@
 	},
 /obj/structure/cable/yellow{
 	icon_state = "3"
+	},
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/research/glass{
+	name = "SCP-106 Containment Facilities"
 	},
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/entrance)
@@ -18697,6 +18744,9 @@
 /area/site404/containmentchambers/scp096/observation)
 "gZt" = (
 /obj/structure/lattice,
+/obj/structure/railing{
+	dir = 6
+	},
 /turf/open/openspace,
 /area/site404/containmentchambers/scp106/uppermaintenance)
 "gZy" = (
@@ -20894,6 +20944,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "3"
 	},
+/obj/machinery/door/firedoor,
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/upperobservation)
 "hMq" = (
@@ -23200,7 +23251,7 @@
 /area/site404/containmentchambers/scp049/chamber/quarters)
 "iFK" = (
 /obj/structure/table/reinforced,
-/obj/machinery/light/directional/east,
+/obj/machinery/light/cold/no_nightlight/directional/east,
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/upperobservation)
 "iFN" = (
@@ -25162,6 +25213,12 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/iron/dark,
 /area/site404/containmentchambers/scp008/laboratory)
+"jsd" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/structure/ladder,
+/turf/open/floor/engine,
+/area/site404/heavycontainmentzone/maintenance/starboard)
 "jsi" = (
 /obj/structure/cable/yellow{
 	icon_state = "12"
@@ -25692,6 +25749,15 @@
 "jBO" = (
 /turf/open/floor/engine,
 /area/site404/research/aic/cores/three)
+"jBP" = (
+/obj/structure/cable/yellow{
+	icon_state = "3"
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/firedoor,
+/turf/open/floor/iron/textured_large,
+/area/site404/containmentchambers/scp106/lowerhallway)
 "jBY" = (
 /turf/closed/wall/r_wall/prepainted,
 /area/site404/containmentchambers/scp457)
@@ -27169,7 +27235,9 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/maintenance,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/hallway/port)
 "kgL" = (
@@ -30714,6 +30782,18 @@
 /obj/machinery/mineral/stacking_machine,
 /turf/open/floor/iron/ported/techfloor,
 /area/site404/classdzone/labor/mining/refinery)
+"lut" = (
+/obj/structure/cable/yellow{
+	icon_state = "12"
+	},
+/obj/structure/lattice/catwalk,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
+/turf/open/floor/plating,
+/area/site404/containmentchambers/scp106/lowermaintenance)
 "luA" = (
 /obj/structure/closet/crate/bin{
 	anchored = 1;
@@ -31703,6 +31783,9 @@
 "lNO" = (
 /obj/machinery/door/firedoor{
 	dir = 4
+	},
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
 	},
 /turf/open/floor/plating,
 /area/site404/administration/maintenance/central/a)
@@ -32744,6 +32827,9 @@
 /obj/machinery/door/firedoor{
 	dir = 4
 	},
+/obj/machinery/door/airlock/maintenance{
+	name = "Entrance Zone Elevator Shaft Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/maintenance/elevator)
 "mks" = (
@@ -32837,6 +32923,10 @@
 "mmJ" = (
 /obj/structure/cable/yellow{
 	icon_state = "3"
+	},
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/research/glass{
+	name = "SCP-106 Containment Facilities"
 	},
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/entrance)
@@ -33013,6 +33103,10 @@
 /turf/open/floor/plating,
 /area/site404/administration/maintenance/fore)
 "mpB" = (
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/highsecurity{
+	name = "SCP-106 Upper Exterior Containment Chamber Access"
+	},
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/chamber/uppercontainment)
 "mpT" = (
@@ -34174,6 +34268,9 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/administration/maintenance/central/a)
 "mJm" = (
@@ -34738,6 +34835,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "3"
 	},
+/obj/machinery/door/firedoor,
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/uppermaintenance)
 "mVa" = (
@@ -34874,7 +34972,7 @@
 /turf/open/floor/iron/white,
 /area/site404/administration/groupsofinterestlounge)
 "mXc" = (
-/obj/machinery/light/directional/north,
+/obj/machinery/light/cold/no_nightlight/directional/north,
 /turf/open/floor/iron/smooth,
 /area/site404/containmentchambers/scp106/entrance)
 "mXd" = (
@@ -35165,7 +35263,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "12"
 	},
-/turf/open/space/basic,
+/turf/open/floor/plating,
 /area/site404/containmentchambers/scp106/entrance)
 "ncB" = (
 /obj/structure/cable/yellow{
@@ -35398,7 +35496,7 @@
 /turf/open/floor/iron/dark/textured_half,
 /area/site404/containmentchambers/scp049/observation)
 "nhx" = (
-/obj/machinery/light/directional/west,
+/obj/machinery/light/cold/no_nightlight/directional/west,
 /turf/open/floor/iron/dark,
 /area/site404/containmentchambers/scp106/entrance)
 "nhH" = (
@@ -36292,6 +36390,11 @@
 	},
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp082/chamber/janitorial)
+"nwi" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/turf/open/floor/engine,
+/area/site404/heavycontainmentzone/maintenance/starboard)
 "nwo" = (
 /obj/machinery/power/apc/auto_name/directional/south,
 /obj/structure/cable/yellow{
@@ -36302,6 +36405,13 @@
 "nwt" = (
 /turf/open/floor/engine,
 /area/site404/entrancezone/maintenance/portbow)
+"nwz" = (
+/obj/structure/window/reinforced/spawner,
+/obj/machinery/computer/shuttle/lift106{
+	dir = 1
+	},
+/turf/open/floor/iron/dark/textured_large,
+/area/site404/containmentchambers/scp106/entrance)
 "nwB" = (
 /turf/open/floor/iron/white/textured_large,
 /area/site404/lightcontainmentzone/officebreakroom)
@@ -36505,6 +36615,14 @@
 /obj/item/coin/silver,
 /turf/open/floor/carpet,
 /area/site404/containmentchambers/scp2427/chamber)
+"nCg" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/airlock/maintenance{
+	name = "SCP-106 Access Lift Shaft"
+	},
+/turf/open/floor/engine,
+/area/site404/heavycontainmentzone/maintenance/starboard)
 "nCj" = (
 /obj/effect/spawner/structure/window/reinforced/prepainted,
 /obj/machinery/door/firedoor,
@@ -37545,6 +37663,9 @@
 "nVt" = (
 /obj/structure/cable/yellow{
 	icon_state = "12"
+	},
+/obj/machinery/door/firedoor{
+	dir = 4
 	},
 /turf/open/floor/plating,
 /area/site404/containmentchambers/scp106/upperobservation)
@@ -40348,6 +40469,12 @@
 	},
 /turf/open/floor/plating,
 /area/site404/containmentchambers/scp106/uppermaintenance)
+"oXW" = (
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
+/turf/open/floor/iron/textured_large,
+/area/site404/containmentchambers/scp106/lowerhallway)
 "oYa" = (
 /obj/effect/turf_decal/tile/brown/half{
 	dir = 4
@@ -42720,6 +42847,9 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/hallway/port)
 "pNZ" = (
@@ -43947,7 +44077,7 @@
 	dir = 4
 	},
 /obj/machinery/door/airlock/maintenance{
-	name = "Docking Bay Maintenance Access"
+	name = "Administration Zone Maintenance Access"
 	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/dockingbay)
@@ -45515,6 +45645,9 @@
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/hallway/starboard)
 "qRx" = (
@@ -46248,6 +46381,13 @@
 /obj/machinery/pipedispenser/disposal,
 /turf/open/floor/iron/smooth_large,
 /area/site404/engineering/atmospherics)
+"rgL" = (
+/obj/effect/spawner/structure/window/reinforced/prepainted,
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
+/turf/open/floor/plating,
+/area/site404/containmentchambers/scp106/entrance)
 "rgM" = (
 /obj/structure/cable/yellow{
 	icon_state = "12"
@@ -51023,6 +51163,17 @@
 	},
 /turf/open/floor/iron/ported/lino,
 /area/site404/administration/assemblywaitingroom)
+"sYP" = (
+/obj/docking_port/stationary{
+	dwidth = 1;
+	height = 4;
+	id = "lower_lift106";
+	name = "Site 404 - SCP-106 Lower Elevator Shaft";
+	roundstart_template = /datum/map_template/shuttle/site404/lift106;
+	width = 3
+	},
+/turf/open/floor/plating/elevatorshaft,
+/area/site404/heavycontainmentzone/hallway/central)
 "sYX" = (
 /obj/structure/cable/yellow{
 	icon_state = "3"
@@ -51441,6 +51592,16 @@
 /obj/effect/turf_decal/ported/border/borderfull,
 /turf/open/floor/iron/white/textured_large,
 /area/site404/service/kitchen)
+"tgy" = (
+/obj/docking_port/stationary{
+	dwidth = 1;
+	height = 4;
+	id = "upper_lift106";
+	name = "Site 404 - SCP-106 Upper Elevator Shaft";
+	width = 3
+	},
+/turf/open/openspace,
+/area/site404/containmentchambers/scp106/entrance)
 "tgz" = (
 /obj/effect/turf_decal/ported/border/borderfull,
 /obj/effect/turf_decal/ported/border/color{
@@ -52230,7 +52391,7 @@
 /turf/open/floor/plating,
 /area/site404/administration/communication_satellite/solar/west)
 "tuh" = (
-/turf/open/floor/iron,
+/turf/open/floor/plating/elevatorshaft,
 /area/site404/heavycontainmentzone/hallway/central)
 "tui" = (
 /obj/machinery/airalarm/directional/west,
@@ -52470,6 +52631,10 @@
 /obj/machinery/light/directional/east,
 /turf/open/floor/iron/white/textured_large,
 /area/site404/research/xenoflora)
+"tyx" = (
+/obj/structure/window/reinforced/spawner,
+/turf/open/floor/iron/dark/textured_large,
+/area/site404/heavycontainmentzone/hallway/central)
 "tyI" = (
 /turf/open/floor/carpet/purple,
 /area/site404/administration/office/research)
@@ -53388,15 +53553,6 @@
 /obj/effect/spawner/structure/window/reinforced/prepainted,
 /turf/open/floor/plating,
 /area/site404/entrancezone/maintenance/portbow)
-"tQm" = (
-/obj/machinery/door/firedoor{
-	dir = 4
-	},
-/obj/machinery/door/airlock/maintenance{
-	name = "Docking Bay Maintenance Access"
-	},
-/turf/open/floor/plating,
-/area/site404/entrancezone/dockingbay)
 "tQr" = (
 /turf/open/floor/iron/white,
 /area/site404/medical/surgery/operatingroom3)
@@ -53627,6 +53783,7 @@
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/firedoor,
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/lowerhallway)
 "tVp" = (
@@ -53830,6 +53987,9 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Elevator Shaft Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/administration/maintenance/elevator)
 "tYw" = (
@@ -55274,6 +55434,9 @@
 /obj/machinery/door/firedoor{
 	dir = 4
 	},
+/obj/machinery/door/airlock/maintenance{
+	name = "Entrance Zone Elevator Shaft Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/maintenance/elevator)
 "uDU" = (
@@ -56668,6 +56831,9 @@
 	icon_state = "3"
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance{
+	name = "Administration Zone Maintenance Access"
+	},
 /turf/open/floor/plating,
 /area/site404/service/archive/upper)
 "vhc" = (
@@ -57817,6 +57983,15 @@
 "vCc" = (
 /turf/closed/wall/r_wall/prepainted,
 /area/site404/heavycontainmentzone/humanoidcontainment)
+"vCO" = (
+/obj/structure/cable/yellow{
+	icon_state = "12"
+	},
+/obj/machinery/door/firedoor{
+	dir = 4
+	},
+/turf/open/floor/iron/dark/textured_large,
+/area/site404/containmentchambers/scp106/entrance)
 "vCZ" = (
 /obj/machinery/vending/coffee,
 /obj/structure/cable/yellow{
@@ -58387,7 +58562,7 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/maintenance{
-	name = "Docking Bay Maintenance Access"
+	name = "Administration Zone Maintenance Access"
 	},
 /turf/open/floor/plating,
 /area/site404/entrancezone/dockingbay)
@@ -59249,13 +59424,13 @@
 /area/site404/classdzone/labor/clinic)
 "wgv" = (
 /obj/structure/table/reinforced,
-/obj/machinery/light/directional/east,
 /obj/item/paper_bin{
 	pixel_y = 3
 	},
 /obj/item/pen{
 	pixel_y = 3
 	},
+/obj/machinery/light/cold/no_nightlight/directional/east,
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/upperobservation)
 "wgx" = (
@@ -59388,6 +59563,9 @@
 /turf/open/floor/plating,
 /area/site404/entrancezone/securityoffice/briefingroom)
 "wjy" = (
+/obj/structure/railing{
+	dir = 8
+	},
 /turf/open/openspace,
 /area/site404/containmentchambers/scp106/uppermaintenance)
 "wjB" = (
@@ -61155,6 +61333,10 @@
 	},
 /turf/open/floor/iron/white/textured_large,
 /area/site404/lightcontainmentzone/hallway/north)
+"wRn" = (
+/obj/machinery/door/window/brigdoor,
+/turf/open/floor/iron/dark/textured_large,
+/area/site404/heavycontainmentzone/hallway/central)
 "wRy" = (
 /obj/structure/frame/machine,
 /turf/open/floor/engine,
@@ -61770,7 +61952,7 @@
 /turf/open/floor/iron/showroomfloor,
 /area/site404/classdzone/labor/clinic)
 "xdn" = (
-/obj/machinery/light/directional/east,
+/obj/machinery/light/cold/no_nightlight/directional/east,
 /turf/open/floor/iron/dark,
 /area/site404/containmentchambers/scp106/entrance)
 "xdu" = (
@@ -62439,6 +62621,9 @@
 /obj/structure/cable/multiz,
 /obj/structure/cable/yellow{
 	icon_state = "8"
+	},
+/obj/structure/railing{
+	dir = 8
 	},
 /turf/open/openspace,
 /area/site404/containmentchambers/scp106/uppermaintenance)
@@ -63890,6 +64075,7 @@
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/door/firedoor,
 /turf/open/floor/iron/dark/textured_large,
 /area/site404/containmentchambers/scp106/lowermaintenance)
 "xSv" = (
@@ -64102,6 +64288,13 @@
 	},
 /turf/open/floor/iron/white,
 /area/site404/administration/bridge)
+"xXz" = (
+/obj/structure/lattice,
+/obj/structure/railing{
+	dir = 5
+	},
+/turf/open/openspace,
+/area/site404/containmentchambers/scp106/uppermaintenance)
 "xXF" = (
 /obj/structure/flora/ausbushes/sparsegrass,
 /obj/structure/flora/ausbushes/ppflowers,
@@ -64455,7 +64648,7 @@
 /turf/open/floor/plating,
 /area/site404/entrancezone/maintenance/starboardbow)
 "yfR" = (
-/obj/machinery/light/directional/south,
+/obj/machinery/light/cold/no_nightlight/directional/south,
 /turf/open/floor/iron/smooth,
 /area/site404/containmentchambers/scp106/entrance)
 "yga" = (
@@ -102926,7 +103119,7 @@ sOX
 pLa
 pLa
 dKG
-bfD
+lut
 dKG
 dKG
 dKG
@@ -104190,7 +104383,7 @@ oKo
 oKo
 oKo
 oKo
-cmX
+nCg
 jhI
 oRW
 hAB
@@ -104214,7 +104407,7 @@ vRK
 bfD
 xSv
 dKG
-xOV
+veX
 rUo
 xOV
 xOV
@@ -104442,12 +104635,12 @@ xoA
 ewU
 xoA
 dSo
-kGv
-kGv
-kGv
-xoA
+tuh
+tuh
+tuh
+tuh
 oKo
-cmX
+nwi
 jhI
 wEl
 kYY
@@ -104698,13 +104891,13 @@ oKo
 xoA
 ewU
 xoA
+wRn
 tuh
-kJM
-kJM
-kJM
-kGv
+tuh
+tuh
+sYP
 oKo
-cmX
+jsd
 jhI
 vuF
 kYY
@@ -104955,13 +105148,13 @@ oKo
 xoA
 ewU
 xoA
-dSo
-kGv
-kGv
-kGv
-xoA
+tyx
+tuh
+tuh
+tuh
+tuh
 oKo
-cmX
+nwi
 jhI
 vuF
 kYY
@@ -105218,7 +105411,7 @@ oKo
 oKo
 oKo
 oKo
-cmX
+nCg
 jhI
 oRW
 hAB
@@ -105242,7 +105435,7 @@ cuV
 bfD
 xSv
 dKG
-xOV
+veX
 rUo
 xOV
 xOV
@@ -106524,7 +106717,7 @@ sOX
 pLa
 pLa
 jhI
-aam
+gJn
 jhI
 jhI
 jhI
@@ -107036,7 +107229,7 @@ klr
 xpF
 xpF
 baF
-xpF
+jBP
 tSW
 jKI
 byN
@@ -107291,7 +107484,7 @@ jhI
 jhI
 jhI
 jhI
-frt
+oXW
 jhI
 jhI
 byN
@@ -167688,7 +167881,7 @@ dmj
 fro
 gZt
 cla
-gZt
+xXz
 fro
 roA
 aEN
@@ -168700,9 +168893,9 @@ sHe
 sHe
 sHe
 sHe
-dEa
-cNI
-dEa
+rgL
+vCO
+rgL
 ftP
 jBv
 qan
@@ -169204,7 +169397,7 @@ iEh
 eNp
 roA
 sHe
-yfR
+mXc
 mqL
 mmJ
 nGy
@@ -169977,7 +170170,7 @@ roA
 sHe
 ogt
 ofU
-jmJ
+nwz
 efm
 efm
 efm
@@ -170232,13 +170425,13 @@ eNp
 iEh
 roA
 sHe
-yfR
+mXc
 ofU
 pLO
 efm
 efm
 efm
-efm
+tgy
 sHe
 bEc
 dEa
@@ -171260,7 +171453,7 @@ eNp
 eNp
 roA
 sHe
-yfR
+mXc
 sZq
 mmJ
 nGy
@@ -171784,9 +171977,9 @@ sHe
 sHe
 sHe
 sHe
-dEa
-cNI
-dEa
+rgL
+vCO
+rgL
 ftP
 tIe
 dnQ
@@ -269934,7 +270127,7 @@ jXe
 vqx
 vqx
 vqx
-tQm
+fsx
 vqx
 vqx
 vqx
@@ -269963,7 +270156,7 @@ mtH
 vqx
 vqx
 vqx
-tQm
+fsx
 vqx
 vqx
 vqx

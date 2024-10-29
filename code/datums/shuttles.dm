@@ -530,6 +530,11 @@
 	return SSshuttle.shuttle_purchase_requirements_met[SHUTTLE_UNLOCK_ALIENTECH]
 
 //Site 404 Shuttle Templates
+
+/datum/map_template/shuttle/site404/lift106
+	suffix = "lift106"
+	name = "106 elevator (site404)"
+
 /datum/map_template/shuttle/arrival/site404
 	suffix = "site404"
 	name = "arrival shuttle (site404)"
