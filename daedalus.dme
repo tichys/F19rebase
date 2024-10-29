@@ -2004,6 +2004,7 @@
 #include "code\modular_scp\species.dm"
 #include "code\modular_scp\stagehandler.dm"
 #include "code\modular_scp\turf_selection.dm"
+#include "code\modular_scp\turfs.dm"
 #include "code\modular_scp\virtual_mobs.dm"
 #include "code\modular_scp\vision_cone.dm"
 #include "code\modular_scp\_datastructures\stack.dm"
