@@ -79,7 +79,6 @@
 			M.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(1, 2))
 
 	if (true_dose >= 90)
-		M.add_chemical_effect(CE_HALLUCINATION, -2)
 		M.hallucinating(50, min(true_dose / 2, 50))
 		if (M.getBrainLoss() < 75)
 			M.adjustOrganLoss(ORGAN_SLOT_BRAIN, rand(1, 2))
@@ -104,3 +103,41 @@
 
 /datum/reagent/scp008/affect_touch(mob/living/carbon/M, alien, removed)
 	affect_blood(M, alien, removed * 0.5)
+
+
+/mob/living/carbon/human/proc/zombify()
+	if (!isspecies(src, SPECIES_ZOMBIE))
+		return
+
+	var/turf/T = get_turf(src)
+	new /obj/effect/decal/cleanable/vomit(T)
+	playsound(T, 'sounds/effects/splat.ogg', 20, 1)
+
+	addtimer(CALLBACK(src, PROC_REF(transform_zombie)), 20)
+
+/mob/living/carbon/human/proc/transform_zombie()
+	adjust_jitter(30 SECONDS)
+	adjustBruteLoss(100)
+	sleep(150)
+
+	if (QDELETED(src))
+		return
+
+	if (isspecies(src, SPECIES_ZOMBIE)) //Check again otherwise Consume can run this twice at once
+		return
+
+	ChangeToHusk()
+	visible_message(SPAN_DANGER("\The [src]'s skin decays before your very eyes!"), SPAN_DANGER("Your entire body is ripe with pain as it is consumed down to flesh and bones. You ... hunger. Not only for flesh, but to spread this gift. Use Abilities -> Consume to infect and feed upon your prey."))
+	log_admin("[key_name(src)] has transformed into a zombie!")
+
+	Stun(4)
+	set_dizzy(0)
+
+	resuscitate()
+	set_stat(CONSCIOUS)
+
+
+	species = all_species[SPECIES_ZOMBIE]
+	species.handle_post_spawn(src)
+
+	var/turf/T = get_turf(src)
