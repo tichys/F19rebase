@@ -1,0 +1,42 @@
+{
+	"version": 1,
+	"map_name": "Site 404",
+	"map_path": "map_files/site404",
+	"map_file": "site404.dmm",
+	"webmap_id": "Theseus",
+	"traits": [
+		{
+			"Up": 1,
+			"Linkage": "Self"
+		},
+		{
+			"Up": 1,
+			"Down": -1,
+			"Baseturf": "/turf/open/space/openspace",
+			"Linkage": "Self"
+		},
+		{
+			"Up": 1,
+			"Down": -1,
+			"Baseturf": "/turf/open/space/openspace",
+			"Linkage": "Self"
+		},
+		{
+			"Down": -1,
+			"Baseturf": "/turf/open/space/openspace",
+			"Linkage": "Self"
+		}
+	],
+	"shuttles": {
+		"arrival": "arrival_site404",
+		"cargo": "cargo_box",
+		"ferry": "ferry_fancy",
+		"whiteship": "whiteship_meta",
+		"emergency": "emergency_meta"
+	},
+	"job_changes": {
+		"cook": {
+			"additional_cqc_areas": ["/area/station/service/bar", "/area/station/service/kitchen/coldroom", "/area/station/commons/lounge"]
+		}
+	}
+}

@@ -228,3 +228,9 @@
 
 /area/shuttle/caravan/freighter3
 	name = "Tiny Freighter"
+
+/area/shuttle/site404/lift106
+	name = "SCP-106 Access Elevator"
+
+/area/shuttle/site404/primaryelevator
+	name = "Site 404 Primary Elevator"
