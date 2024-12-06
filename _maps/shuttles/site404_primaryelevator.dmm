@@ -4,10 +4,10 @@
 /turf/open/floor/tiled/small,
 /area/shuttle/site404/primaryelevator)
 "d" = (
-/turf/closed/wall/r_wall,
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/site404/primaryelevator)
 "m" = (
-/obj/machinery/door/airlock/hatch,
+/obj/machinery/door/airlock/shuttle,
 /turf/open/floor/tiled/steel_grid,
 /area/shuttle/site404/primaryelevator)
 "s" = (
@@ -15,7 +15,6 @@
 /turf/open/floor/tiled/small,
 /area/shuttle/site404/primaryelevator)
 "u" = (
-/obj/machinery/door/airlock/hatch,
 /obj/docking_port/mobile{
 	name = "Site 404 - Primary Elevator";
 	id = "primaryelevator";
@@ -24,22 +23,23 @@
 	width = 5;
 	callTime = -5
 	},
+/obj/machinery/door/airlock/shuttle,
 /turf/open/floor/tiled/steel_grid,
 /area/shuttle/site404/primaryelevator)
 "G" = (
 /obj/structure/chair/sofa/bench/left,
-/turf/open/floor/tiled/small,
+/turf/open/floor/tiled/monofloor,
 /area/shuttle/site404/primaryelevator)
 "M" = (
 /obj/structure/chair/sofa/bench/right,
-/turf/open/floor/tiled/small,
+/turf/open/floor/tiled/monofloor,
 /area/shuttle/site404/primaryelevator)
 "S" = (
 /turf/open/floor/tiled/small,
 /area/shuttle/site404/primaryelevator)
 "X" = (
 /obj/machinery/computer/shuttle/site404/primaryelevator,
-/turf/open/floor/tiled/small,
+/turf/open/floor/tiled/monofloor,
 /area/shuttle/site404/primaryelevator)
 
 (1,1,1) = {"
