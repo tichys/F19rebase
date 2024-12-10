@@ -63,16 +63,16 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	delete_after_roundstart = FALSE
 
 /obj/effect/landmark/start/prisoner
-	name = JOB_PRISONER
-	icon_state = JOB_PRISONER
+	name = JOB_DCLASS
+	icon_state = JOB_DCLASS
 
 /obj/effect/landmark/start/janitor
 	name = JOB_JANITOR
 	icon_state = JOB_JANITOR
 
-/obj/effect/landmark/start/cargo_technician
-	name = JOB_DECKHAND
-	icon_state = JOB_DECKHAND
+/obj/effect/landmark/start/logistics_technician
+	name = JOB_LOGISTICS_TECHNICIAN
+	icon_state = JOB_LOGISTICS_TECHNICIAN
 
 /obj/effect/landmark/start/bartender
 	name = JOB_BARTENDER
@@ -82,9 +82,9 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = JOB_CLOWN
 	icon_state = JOB_CLOWN
 
-/obj/effect/landmark/start/quartermaster
-	name = JOB_QUARTERMASTER
-	icon_state = JOB_QUARTERMASTER
+/obj/effect/landmark/start/logistics_officer
+	name = JOB_LOGISTICS_OFFICER
+	icon_state = JOB_LOGISTICS_OFFICER
 
 /obj/effect/landmark/start/atmospheric_technician
 	name = JOB_ATMOSPHERIC_TECHNICIAN
@@ -98,49 +98,45 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = JOB_PROSPECTOR
 	icon_state = JOB_PROSPECTOR
 
-/obj/effect/landmark/start/security_officer
-	name = JOB_SECURITY_OFFICER
-	icon_state = JOB_SECURITY_OFFICER
-
 /obj/effect/landmark/start/botanist
 	name = JOB_BOTANIST
 	icon_state = JOB_BOTANIST
 
 /obj/effect/landmark/start/head_of_security
-	name = JOB_SECURITY_MARSHAL
-	icon_state = JOB_SECURITY_MARSHAL
+	name = JOB_SECURITY_DIRECTOR
+	icon_state = JOB_SECURITY_DIRECTOR
 
 /obj/effect/landmark/start/captain
-	name = JOB_CAPTAIN
-	icon_state = JOB_CAPTAIN
+	name = JOB_SITE_DIRECTOR
+	icon_state = JOB_SITE_DIRECTOR
 
 /obj/effect/landmark/start/detective
-	name = JOB_DETECTIVE
-	icon_state = JOB_DETECTIVE
-
-/obj/effect/landmark/start/warden
-	name = JOB_WARDEN
-	icon_state = JOB_WARDEN
+	name = JOB_INVESTIGATIONS_AGENT
+	icon_state = JOB_INVESTIGATIONS_AGENT
 
 /obj/effect/landmark/start/chief_engineer
-	name = JOB_CHIEF_ENGINEER
-	icon_state = JOB_CHIEF_ENGINEER
+	name = JOB_ENGINEERING_DIRECTOR
+	icon_state = JOB_ENGINEERING_DIRECTOR
 
 /obj/effect/landmark/start/head_of_personnel
-	name = JOB_HEAD_OF_PERSONNEL
-	icon_state = JOB_HEAD_OF_PERSONNEL
+	name = JOB_HUMAN_RESOURCES_DIRECTOR
+	icon_state = JOB_HUMAN_RESOURCES_DIRECTOR
 
-/obj/effect/landmark/start/librarian
-	name = JOB_ARCHIVIST
-	icon_state = JOB_ARCHIVIST
+/obj/effect/landmark/start/it_technician
+	name = JOB_IT_TECHNICIAN
+	icon_state = JOB_IT_TECHNICIAN
 
-/obj/effect/landmark/start/lawyer
-	name = JOB_LAWYER
-	icon_state = JOB_LAWYER
+/obj/effect/landmark/start/senior_engineer
+	name = JOB_SENIOR_ENGINEER
+	icon_state = JOB_SENIOR_ENGINEER
 
-/obj/effect/landmark/start/station_engineer
-	name = JOB_STATION_ENGINEER
-	icon_state = JOB_STATION_ENGINEER
+/obj/effect/landmark/start/engineer
+	name = JOB_ENGINEER
+	icon_state = JOB_ENGINEER
+
+/obj/effect/landmark/start/junior_engineer
+	name = JOB_JUNIOR_ENGINEER
+	icon_state = JOB_JUNIOR_ENGINEER
 
 /obj/effect/landmark/start/medical_doctor
 	name = JOB_MEDICAL_DOCTOR

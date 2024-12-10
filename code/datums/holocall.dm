@@ -352,20 +352,20 @@
 /datum/preset_holoimage/engineer/mod
 	outfit_type = /datum/outfit/job/engineer/mod
 
-/datum/preset_holoimage/engineer/ce
-	outfit_type = /datum/outfit/job/ce
+/datum/preset_holoimage/engineer/engineering_director
+	outfit_type = /datum/outfit/job/engineering_director
 
-/datum/preset_holoimage/engineer/ce/mod
-	outfit_type = /datum/outfit/job/ce/mod
+/datum/preset_holoimage/engineer/engineering_director/mod
+	outfit_type = /datum/outfit/job/engineering_director/mod
 
-/datum/preset_holoimage/engineer/atmos
-	outfit_type = /datum/outfit/job/atmos
+/datum/preset_holoimage/engineer/atmospheric_technician
+	outfit_type = /datum/outfit/job/atmospheric_technician
 
-/datum/preset_holoimage/engineer/atmos/mod
-	outfit_type = /datum/outfit/job/atmos/mod
+/datum/preset_holoimage/engineer/atmospheric_technician/mod
+	outfit_type = /datum/outfit/job/atmospheric_technician/mod
 
-/datum/preset_holoimage/captain
-	outfit_type = /datum/outfit/job/captain
+/datum/preset_holoimage/site_director
+	outfit_type = /datum/outfit/job/site_director
 
 /datum/preset_holoimage/nanotrasenprivatesecurity
 	outfit_type = /datum/outfit/nanotrasensoldiercorpse2
@@ -382,7 +382,7 @@
 /obj/item/disk/holodisk/donutstation/whiteship
 	name = "Blackbox Print-out #DS024"
 	desc = "A holodisk containing the last viable recording of DS024's blackbox."
-	preset_image_type = /datum/preset_holoimage/engineer/ce
+	preset_image_type = /datum/preset_holoimage/engineer/engineering_director
 	preset_record_text = {"
 	NAME Geysr Shorthalt
 	SAY Engine renovations complete and the ships been loaded. We all ready?

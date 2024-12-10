@@ -1,91 +1,53 @@
-// Security equipment, security records, gulag item storage, secbots
-#define ACCESS_SECURITY 1
-/// Brig cells+timers, permabrig, gulag+gulag shuttle, prisoner management console
-#define ACCESS_BRIG 2
-/// Armory, gulag teleporter, execution chamber
-#define ACCESS_ARMORY 3
-///Detective's office, forensics lockers, security+medical records
-#define ACCESS_FORENSICS 4
-/// Medical general access
-#define ACCESS_MEDICAL 5
-/// Morgue access
-#define ACCESS_MORGUE 6
-/// R&D department and R&D console
-#define ACCESS_RND 7
-/// Ordnance lab and burn chamber
-#define ACCESS_ORDNANCE 8
-/// Genetics access
-#define ACCESS_GENETICS 9
-/// Engineering area, power monitor, power flow control console
-#define ACCESS_ENGINE 10
-///APCs, EngiVend/YouTool, engineering equipment lockers
-#define ACCESS_ENGINE_EQUIP 11
-#define ACCESS_MAINT_TUNNELS 12
-#define ACCESS_EXTERNAL_AIRLOCKS 13
-#define ACCESS_CHANGE_IDS 15
-#define ACCESS_AI_UPLOAD 16
-#define ACCESS_TELEPORTER 17
-#define ACCESS_EVA 18
-/// Bridge, EVA storage windoors, gateway shutters, AI integrity restorer, comms console
-#define ACCESS_MANAGEMENT 19
-#define ACCESS_CAPTAIN 20
-#define ACCESS_ALL_PERSONAL_LOCKERS 21
-#define ACCESS_CHAPEL_OFFICE 22
-#define ACCESS_TECH_STORAGE 23
-#define ACCESS_ATMOSPHERICS 24
-#define ACCESS_BAR 25
-#define ACCESS_JANITOR 26
-#define ACCESS_CREMATORIUM 27
-#define ACCESS_KITCHEN 28
-#define ACCESS_ROBOTICS 29
-#define ACCESS_RD 30
-#define ACCESS_CARGO 31
-#define ACCESS_CONSTRUCTION 32
-///Allows access to chemistry factory areas on compatible maps
-#define ACCESS_CHEMISTRY 33
-#define ACCESS_HYDROPONICS 35
-#define ACCESS_LIBRARY 37
-#define ACCESS_LAWYER 38
-#define ACCESS_VIROLOGY 39
-#define ACCESS_CMO 40
-#define ACCESS_QM 41
-#define ACCESS_COURT 42
-#define ACCESS_SURGERY 45
-#define ACCESS_THEATRE 46
-#define ACCESS_RESEARCH 47
-#define ACCESS_MINING 48
-#define ACCESS_MAILSORTING 50
-#define ACCESS_VAULT 53
-#define ACCESS_MINING_STATION 54
-#define ACCESS_XENOBIOLOGY 55
-#define ACCESS_CE 56
-#define ACCESS_HOP 57
-#define ACCESS_HOS 58
-/// Request console announcements
-#define ACCESS_RC_ANNOUNCE 59
-/// Used for events which require at least two people to confirm them
-#define ACCESS_KEYCARD_AUTH 60
-/// has access to the entire telecomms satellite / machinery
-#define ACCESS_TCOMSAT 61
-#define ACCESS_GATEWAY 62
-/// Outer brig doors, department security posts
-#define ACCESS_BRIG_ENTRANCE 63
-/// For releasing minerals from the ORM
-#define ACCESS_MINERAL_STOREROOM 64
-#define ACCESS_MINISAT 65
-/// Weapon authorization for secbots
-#define ACCESS_WEAPONS 66
-/// NTnet diagnostics/monitoring software
-#define ACCESS_NETWORK 67
-/// Pharmacy access (Chemistry room in Medbay)
-#define ACCESS_PHARMACY 69 ///Nice.
-#define ACCESS_PSYCHOLOGY 70
-/// Ordnance gas storage room access
-#define ACCESS_ORDNANCE_STORAGE 71
-/// Room and launching.
-#define ACCESS_AUX_BASE 72
-/// Service access, for service hallway and service consoles
-#define ACCESS_SERVICE 73
+#define ACCESS_SECURITY 1 /// Brig cells+timers, permabrig, gulag+gulag shuttle, prisoner management console. Also Security Records
+#define ACCESS_SECURITY_LVL1 2
+#define ACCESS_SECURITY_LVL2 3
+#define ACCESS_SECURITY_LVL3 4
+#define ACCESS_SECURITY_LVL4 5 /// Armory, gulag teleporter, execution chamber
+#define ACCESS_SECURITY_LVL5 6
+
+#define ACCESS_ADMIN 7
+#define ACCESS_ADMIN_LVL1 8
+#define ACCESS_ADMIN_LVL2 9
+#define ACCESS_ADMIN_LVL3 10 /// Bridge, EVA storage windoors, gateway shutters, AI integrity restorer, comms console, RQ console
+#define ACCESS_ADMIN_LVL4 11
+#define ACCESS_ADMIN_LVL5 12
+
+#define ACCESS_SCIENCE 13
+#define ACCESS_SCIENCE_LVL1 14
+#define ACCESS_SCIENCE_LVL2 15
+#define ACCESS_SCIENCE_LVL3 16
+#define ACCESS_SCIENCE_LVL4 17
+#define ACCESS_SCIENCE_LVL5 18
+
+#define ACCESS_MEDICAL 19
+#define ACCESS_MEDICAL_LVL1 20
+#define ACCESS_MEDICAL_LVL2 21
+#define ACCESS_MEDICAL_LVL3 22
+#define ACCESS_MEDICAL_LVL4 23
+#define ACCESS_MEDICAL_LVL5  24
+
+#define ACCESS_ENGINEERING 25
+#define ACCESS_ENGINEERING_LVL1 26
+#define ACCESS_ENGINEERING_LVL2 27
+#define ACCESS_ENGINEERING_LVL3 28
+#define ACCESS_ENGINEERING_LVL4 29
+#define ACCESS_ENGINEERING_LVL5 30
+
+#define ACCESS_LOGISTICS 31
+#define ACCESS_LOGISTICS_LVL1 32
+#define ACCESS_LOGISTICS_LVL2 33
+#define ACCESS_LOGISTICS_LVL3 34
+#define ACCESS_LOGISTICS_LVL4 35
+#define ACCESS_LOGISTICS_LVL5 36
+
+#define ACCESS_SERVICE 37
+
+#define ACCESS_DCLASS 38
+#define ACCESS_DCLASS_MINING 39
+#define ACCESS_DCLASS_BOTANY 40
+#define ACCESS_DCLASS_JANITORIAL 41
+#define ACCESS_DCLASS_LUXURY 42
+#define ACCESS_DCLASS_MEDICAL 43
 
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
@@ -151,7 +113,7 @@
 #define ACCESS_MECH_ENGINE 304
 
 /// A list of access levels that, when added to an ID card, will warn admins.
-#define ACCESS_ALERT_ADMINS list(ACCESS_CHANGE_IDS)
+#define ACCESS_ALERT_ADMINS list(ACCESS_ADMIN_LVL5)
 
 /// Logging define for ID card access changes
 #define LOG_ID_ACCESS_CHANGE(user, id_card, change_description) \
@@ -172,7 +134,7 @@
 /// Bitflag for Private Command ID card accesses. See PRIVATE_COMMAND_ACCESS.
 #define ACCESS_FLAG_PRV_COMMAND (1 << 2)
 /// Displayed name for Captain ID card accesses.
-#define ACCESS_FLAG_CAPTAIN_NAME "Superintendent"
+#define ACCESS_FLAG_CAPTAIN_NAME "Site Director"
 /// Bitflag for Captain ID card accesses. See CAPTAIN_ACCESS.
 #define ACCESS_FLAG_CAPTAIN (1 << 3)
 /// Displayed name for Centcom ID card accesses.
@@ -235,88 +197,29 @@
 
 /// Departmental/general/common area accesses. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_COMMON)
 #define COMMON_ACCESS list( \
-	ACCESS_MECH_MINING, \
-	ACCESS_MECH_MEDICAL, \
-	ACCESS_MECH_SECURITY, \
-	ACCESS_MECH_SCIENCE, \
-	ACCESS_MECH_ENGINE, \
-	ACCESS_AUX_BASE, \
-	ACCESS_PSYCHOLOGY, \
-	ACCESS_PHARMACY, \
-	ACCESS_NETWORK, \
-	ACCESS_WEAPONS, \
-	ACCESS_MINERAL_STOREROOM, \
-	ACCESS_BRIG_ENTRANCE, \
-	ACCESS_XENOBIOLOGY, \
-	ACCESS_MINING_STATION, \
-	ACCESS_MAILSORTING, \
-	ACCESS_MINING, \
-	ACCESS_RESEARCH, \
-	ACCESS_THEATRE, \
-	ACCESS_SURGERY, \
-	ACCESS_COURT, \
-	ACCESS_QM, \
-	ACCESS_VIROLOGY, \
-	ACCESS_LAWYER, \
-	ACCESS_LIBRARY, \
-	ACCESS_HYDROPONICS, \
-	ACCESS_CHEMISTRY, \
-	ACCESS_CONSTRUCTION, \
-	ACCESS_CARGO, \
-	ACCESS_ROBOTICS, \
-	ACCESS_KITCHEN, \
-	ACCESS_CREMATORIUM, \
-	ACCESS_JANITOR, \
-	ACCESS_BAR, \
-	ACCESS_CHAPEL_OFFICE, \
-	ACCESS_EXTERNAL_AIRLOCKS, \
-	ACCESS_MAINT_TUNNELS, \
-	ACCESS_ENGINE_EQUIP, \
-	ACCESS_ENGINE, \
-	ACCESS_GENETICS, \
-	ACCESS_RND, \
-	ACCESS_MORGUE, \
-	ACCESS_MEDICAL, \
-	ACCESS_FORENSICS, \
-	ACCESS_BRIG, \
-	ACCESS_SECURITY, \
-	ACCESS_ATMOSPHERICS, \
-	ACCESS_ORDNANCE_STORAGE, \
-	ACCESS_ORDNANCE, \
+	ACCESS_ADMIN_LVL1, \
+	ACCESS_SECURITY_LVL1, \
+	ACCESS_MEDICAL_LVL1, \
+	ACCESS_SCIENCE_LVL1, \
+	ACCESS_ENGINEERING_LVL1, \
+	ACCESS_LOGISTICS_LVL1, \
 	ACCESS_SERVICE, \
 )
 
 /// Command staff/secure accesses, think bridge/armoury, AI upload, notably access to modify ID cards themselves. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_COMMAND)
 #define COMMAND_ACCESS list( \
-	ACCESS_MINISAT, \
-	ACCESS_TCOMSAT, \
-	ACCESS_KEYCARD_AUTH, \
-	ACCESS_RC_ANNOUNCE, \
-	ACCESS_VAULT, \
-	ACCESS_TECH_STORAGE, \
-	ACCESS_MANAGEMENT, \
-	ACCESS_TELEPORTER, \
-	ACCESS_ARMORY, \
-	ACCESS_AI_UPLOAD, \
-	ACCESS_CHANGE_IDS, \
-	ACCESS_EVA, \
-	ACCESS_GATEWAY, \
-	ACCESS_ALL_PERSONAL_LOCKERS, \
-)
-
+	ACCESS_ADMIN, \
+	ACCESS_ADMIN_LVL1, \
+	ACCESS_ADMIN_LVL2, \
+	ACCESS_ADMIN_LVL3, \
+	ACCESS_ADMIN_LVL4, \
+	ACCESS_ADMIN_LVL5, \
+	)
 /// Private head of staff offices, usually only granted to most cards by trimming. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_PRV_COMMAND)
-#define PRIVATE_COMMAND_ACCESS list( \
-	ACCESS_HOS, \
-	ACCESS_HOP, \
-	ACCESS_CE, \
-	ACCESS_CMO, \
-	ACCESS_RD, \
-)
+#define PRIVATE_COMMAND_ACCESS list(ACCESS_ADMIN_LVL4)
 
 /// Captains private rooms. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_CAPTAIN)
-#define CAPTAIN_ACCESS list( \
-	ACCESS_CAPTAIN, \
-)
+#define CAPTAIN_ACCESS list(ACCESS_ADMIN_LVL5)
 /// Centcom area stuff. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_CENTCOM)
 #define CENTCOM_ACCESS list( \
 	ACCESS_CENT_BAR, \
@@ -365,109 +268,77 @@
 /// Name for the General region.
 #define REGION_GENERAL "General"
 /// Used to seed the accesses_by_region list in SSid_access. A list of general service accesses that are overseen by the HoP.
-#define REGION_ACCESS_GENERAL list( \
-	ACCESS_KITCHEN, \
-	ACCESS_BAR, \
-	ACCESS_HYDROPONICS, \
-	ACCESS_JANITOR, \
-	ACCESS_CHAPEL_OFFICE, \
-	ACCESS_CREMATORIUM, \
-	ACCESS_LIBRARY, \
-	ACCESS_THEATRE, \
-	ACCESS_LAWYER, \
-	ACCESS_SERVICE, \
-)
+#define REGION_ACCESS_GENERAL list(ACCESS_SERVICE)
 /// Name for the Security region.
 #define REGION_SECURITY "Security"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all security regional accesses that are overseen by the HoS.
 #define REGION_ACCESS_SECURITY list( \
-	ACCESS_BRIG_ENTRANCE, \
-	ACCESS_WEAPONS, \
 	ACCESS_SECURITY, \
-	ACCESS_BRIG, \
-	ACCESS_ARMORY, \
-	ACCESS_FORENSICS, \
-	ACCESS_COURT, \
-	ACCESS_MECH_SECURITY, \
-	ACCESS_HOS, \
-)
+	ACCESS_SECURITY_LVL1, \
+	ACCESS_SECURITY_LVL2, \
+	ACCESS_SECURITY_LVL3, \
+	ACCESS_SECURITY_LVL4, \
+	ACCESS_SECURITY_LVL5, \
+	)
 /// Name for the Medbay region.
 #define REGION_MEDBAY "Medbay"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all medbay regional accesses that are overseen by the CMO.
 #define REGION_ACCESS_MEDBAY list( \
 	ACCESS_MEDICAL, \
-	ACCESS_MORGUE, \
-	ACCESS_CHEMISTRY, \
-	ACCESS_VIROLOGY, \
-	ACCESS_SURGERY, \
-	ACCESS_MECH_MEDICAL, \
-	ACCESS_CMO, \
-	ACCESS_PHARMACY, \
-	ACCESS_PSYCHOLOGY, \
-)
+	ACCESS_MEDICAL_LVL1, \
+	ACCESS_MEDICAL_LVL2, \
+	ACCESS_MEDICAL_LVL3, \
+	ACCESS_MEDICAL_LVL4, \
+	ACCESS_MEDICAL_LVL5, \
+	)
 /// Name for the Research region.
 #define REGION_RESEARCH "Research"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all research regional accesses that are overseen by the RD.
 #define REGION_ACCESS_RESEARCH list( \
-	ACCESS_RESEARCH, \
-	ACCESS_RND, \
-	ACCESS_ORDNANCE, \
-	ACCESS_ORDNANCE_STORAGE, \
-	ACCESS_GENETICS, \
-	ACCESS_ROBOTICS, \
-	ACCESS_XENOBIOLOGY, \
-	ACCESS_MECH_SCIENCE, \
-	ACCESS_MINISAT, \
-	ACCESS_RD, \
-	ACCESS_NETWORK, \
-)
+	ACCESS_SCIENCE, \
+	ACCESS_SCIENCE_LVL1, \
+	ACCESS_SCIENCE_LVL2, \
+	ACCESS_SCIENCE_LVL3, \
+	ACCESS_SCIENCE_LVL4, \
+	ACCESS_SCIENCE_LVL5, \
+	)
 /// Name for the Engineering region.
 #define REGION_ENGINEERING "Engineering"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all engineering regional accesses that are overseen by the CE.
 #define REGION_ACCESS_ENGINEERING list( \
-	ACCESS_CONSTRUCTION, \
-	ACCESS_AUX_BASE, \
-	ACCESS_MAINT_TUNNELS, \
-	ACCESS_ENGINE, \
-	ACCESS_ENGINE_EQUIP, \
-	ACCESS_EXTERNAL_AIRLOCKS, \
-	ACCESS_TECH_STORAGE, \
-	ACCESS_ATMOSPHERICS, \
-	ACCESS_MECH_ENGINE, \
-	ACCESS_TCOMSAT, \
-	ACCESS_MINISAT, \
-	ACCESS_CE, \
-)
+	ACCESS_ENGINEERING, \
+	ACCESS_ENGINEERING_LVL1, \
+	ACCESS_ENGINEERING_LVL2, \
+	ACCESS_ENGINEERING_LVL3, \
+	ACCESS_ENGINEERING_LVL4, \
+	ACCESS_ENGINEERING_LVL5, \
+	)
 /// Name for the Supply region.
 #define REGION_SUPPLY "Supply"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all cargo regional accesses that are overseen by the HoP.
 #define REGION_ACCESS_SUPPLY list( \
-	ACCESS_MAILSORTING, \
-	ACCESS_MINING, \
-	ACCESS_MINING_STATION, \
-	ACCESS_MECH_MINING, \
-	ACCESS_MINERAL_STOREROOM, \
-	ACCESS_CARGO, \
-	ACCESS_QM, \
-	ACCESS_VAULT, \
-)
+	ACCESS_LOGISTICS, \
+	ACCESS_LOGISTICS_LVL1, \
+	ACCESS_LOGISTICS_LVL2, \
+	ACCESS_LOGISTICS_LVL3, \
+	ACCESS_LOGISTICS_LVL4, \
+	ACCESS_LOGISTICS_LVL5, \
+	)
 /// Name for the Command region.
 #define REGION_COMMAND "Command"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all command regional accesses that are overseen by the Captain.
 #define REGION_ACCESS_COMMAND list( \
-	ACCESS_MANAGEMENT, \
-	ACCESS_RC_ANNOUNCE, \
-	ACCESS_KEYCARD_AUTH, \
-	ACCESS_CHANGE_IDS, \
-	ACCESS_AI_UPLOAD, \
-	ACCESS_TELEPORTER, \
-	ACCESS_EVA, \
-	ACCESS_GATEWAY, \
-	ACCESS_ALL_PERSONAL_LOCKERS, \
-	ACCESS_HOP, \
-	ACCESS_CAPTAIN, \
-	ACCESS_VAULT, \
-)
+	ACCESS_ADMIN, \
+	ACCESS_ADMIN_LVL1, \
+	ACCESS_ADMIN_LVL2, \
+	ACCESS_ADMIN_LVL3, \
+	ACCESS_ADMIN_LVL4, \
+	ACCESS_ADMIN_LVL5, \
+	ACCESS_SCIENCE_LVL5, \
+	ACCESS_MEDICAL_LVL5, \
+	ACCESS_ENGINEERING_LVL5, \
+	ACCESS_LOGISTICS_LVL5, \
+	)
 /// Name for the Centcom region.
 #define REGION_CENTCOM "Central Command"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all CENTCOM_ACCESS regional accesses.
@@ -476,7 +347,7 @@
 /**
  * A list of PDA paths that can be painted as well as the regional heads which should be able to paint them.
  * If a PDA is not in this list, it cannot be painted using the PDA & ID Painter.
- * If a PDA is in this list, it can always be painted with ACCESS_CHANGE_IDS.
+ * If a PDA is in this list, it can always be painted with ACCESS_ADMIN_LVL5.
  * Used to see pda_region in [/datum/controller/subsystem/id_access/proc/setup_tgui_lists]
  */
 /* PARIAH EDIT

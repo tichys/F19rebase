@@ -1,6 +1,6 @@
 /obj/item/electronics/airlock
 	name = "airlock electronics"
-	req_access = list(ACCESS_MAINT_TUNNELS)
+	req_access = list(ACCESS_ENGINEERING_LVL1)
 	/// A list of all granted accesses
 	var/list/accesses = list()
 	/// If the airlock should require ALL or only ONE of the listed accesses

@@ -864,7 +864,7 @@ DEFINE_BITFIELD(turret_flags, list(
 	icon_state = "control_standby"
 	base_icon_state = "control"
 	density = FALSE
-	req_access = list(ACCESS_AI_UPLOAD)
+	req_access = list(ACCESS_SCIENCE_LVL5)
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	/// Variable dictating if linked turrets are active and will shoot targets
 	var/enabled = TRUE
@@ -1094,7 +1094,7 @@ DEFINE_BITFIELD(turret_flags, list(
 	. = ..()
 
 /obj/machinery/porta_turret/lasertag
-	req_access = list(ACCESS_MAINT_TUNNELS, ACCESS_THEATRE)
+	req_access = list(ACCESS_ENGINEERING_LVL1, ACCESS_SERVICE)
 	turret_flags = TURRET_FLAG_AUTH_WEAPONS
 	var/team_color
 

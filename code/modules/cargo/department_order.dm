@@ -188,7 +188,7 @@ GLOBAL_LIST_INIT(department_order_cooldowns, list(
 	name = "service order console"
 	circuit = /obj/item/circuitboard/computer/service_orders
 	department_delivery_areas = list(/area/station/hallway/secondary/service, /area/station/service/bar/atrium)
-	override_access = ACCESS_HOP
+	override_access = ACCESS_ADMIN_LVL5
 	req_one_access = ACCESS_SERVICE
 	dep_groups = list("Service", "Food & Hydroponics", "Livestock", "Costumes & Toys")
 
@@ -196,7 +196,7 @@ GLOBAL_LIST_INIT(department_order_cooldowns, list(
 	name = "engineering order console"
 	circuit = /obj/item/circuitboard/computer/engineering_orders
 	department_delivery_areas = list(/area/station/engineering/main)
-	override_access = ACCESS_CE
+	override_access = ACCESS_ENGINEERING_LVL5
 	req_one_access = REGION_ACCESS_ENGINEERING
 	dep_groups = list("Engineering", "Engine Construction", "Materials")
 
@@ -204,7 +204,7 @@ GLOBAL_LIST_INIT(department_order_cooldowns, list(
 	name = "science order console"
 	circuit = /obj/item/circuitboard/computer/science_orders
 	department_delivery_areas = list(/area/station/science/research)
-	override_access = ACCESS_RD
+	override_access = ACCESS_SCIENCE_LVL5
 	req_one_access = REGION_ACCESS_RESEARCH
 	dep_groups = list("Science", "Livestock")
 
@@ -212,7 +212,7 @@ GLOBAL_LIST_INIT(department_order_cooldowns, list(
 	name = "security order console"
 	circuit = /obj/item/circuitboard/computer/security_orders
 	department_delivery_areas = list(/area/station/security/brig)
-	override_access = ACCESS_HOS
+	override_access = ACCESS_SECURITY_LVL5
 	req_one_access = REGION_ACCESS_SECURITY
 	dep_groups = list("Security", "Armory")
 
@@ -220,6 +220,6 @@ GLOBAL_LIST_INIT(department_order_cooldowns, list(
 	name = "medical order console"
 	circuit = /obj/item/circuitboard/computer/medical_orders
 	department_delivery_areas = list(/area/station/medical/medbay/central)
-	override_access = ACCESS_CMO
+	override_access = ACCESS_MEDICAL_LVL5
 	req_one_access = REGION_ACCESS_MEDBAY
 	dep_groups = list("Medical", "Reagents")

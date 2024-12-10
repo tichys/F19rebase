@@ -95,16 +95,16 @@ GLOBAL_DATUM_INIT(crewmonitor, /datum/crewmonitor, new)
 	var/list/jobs = list(
 		// Note that jobs divisible by 10 are considered heads of staff, and bolded
 		// 00: Captain
-		JOB_CAPTAIN = 00,
+		JOB_SITE_DIRECTOR = 00,
 		// 10-19: Security
-		JOB_SECURITY_MARSHAL = 10,
+		JOB_SECURITY_DIRECTOR = 10,
 		JOB_WARDEN = 11,
 		JOB_SECURITY_OFFICER = 12,
 		JOB_SECURITY_OFFICER_MEDICAL = 13,
 		JOB_SECURITY_OFFICER_ENGINEERING = 14,
 		JOB_SECURITY_OFFICER_SCIENCE = 15,
 		JOB_SECURITY_OFFICER_SUPPLY = 16,
-		JOB_DETECTIVE = 17,
+		JOB_INVESTIGATIONS_AGENT = 17,
 		// 20-29: Medbay
 		JOB_MEDICAL_DIRECTOR = 20,
 		JOB_CHEMIST = 21,
@@ -112,7 +112,7 @@ GLOBAL_DATUM_INIT(crewmonitor, /datum/crewmonitor, new)
 		JOB_MEDICAL_DOCTOR = 23,
 		JOB_PARAMEDIC = 24,
 		// 40-49: Engineering
-		JOB_CHIEF_ENGINEER = 40,
+		JOB_ENGINEERING_DIRECTOR = 40,
 		JOB_STATION_ENGINEER = 41,
 		JOB_ATMOSPHERIC_TECHNICIAN = 42,
 		// 50-59: Cargo
@@ -120,7 +120,7 @@ GLOBAL_DATUM_INIT(crewmonitor, /datum/crewmonitor, new)
 		JOB_PROSPECTOR = 51,
 		JOB_DECKHAND = 52,
 		// 60+: Civilian/other
-		JOB_HEAD_OF_PERSONNEL = 60,
+		JOB_HUMAN_RESOURCES_DIRECTOR = 60,
 		JOB_BARTENDER = 61,
 		JOB_COOK = 62,
 		JOB_BOTANIST = 63,

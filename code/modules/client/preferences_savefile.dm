@@ -48,11 +48,11 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	// Job name update 1
 	if(current_version < 44)
 		var/list/migrate_jobs = list(
-			"Head of Security" = JOB_SECURITY_MARSHAL,
-			"Detective" = JOB_DETECTIVE,
+			"Head of Security" = JOB_SECURITY_DIRECTOR,
+			"Detective" = JOB_INVESTIGATIONS_AGENT,
 			"Medical Doctor" = JOB_MEDICAL_DOCTOR,
-			"Curator" = JOB_ARCHIVIST,
-			"Cargo Technician" = JOB_DECKHAND,
+			"Curator" = JOB_IT_TECHNICIAN,
+			"Cargo Technician" = JOB_LOGISTICS_TECHNICIAN,
 		)
 
 		var/list/job_prefs = read_preference(/datum/preference/blob/job_priority)

@@ -9,8 +9,8 @@
 	armor = list(BLUNT = 25, PUNCTURE = 20, SLASH = 0, LASER = 30, ENERGY = 15, BOMB = 0, BIO = 0, FIRE = 100, ACID = 100)
 	max_temperature = 15000
 	wreckage = /obj/structure/mecha_wreckage/reticence
-	operation_req_access = list(ACCESS_THEATRE)
-	internals_req_access = list(ACCESS_MECH_SCIENCE, ACCESS_THEATRE)
+	operation_req_access = list(ACCESS_SERVICE)
+	internals_req_access = list(ACCESS_MECH_SCIENCE, ACCESS_SERVICE)
 	mecha_flags = CANSTRAFE | IS_ENCLOSED | HAS_LIGHTS | QUIET_STEPS | QUIET_TURNS | MMI_COMPATIBLE
 	max_equip_by_category = list(
 		MECHA_UTILITY = 1,

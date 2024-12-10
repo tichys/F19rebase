@@ -8,7 +8,7 @@
 
 	server.server_name = "SCiPnet Chatroom"
 
-	server.req_accesses_sysadmin = list(ACCESS_NETWORK)
+	server.req_accesses_sysadmin = list(ACCESS_ENGINEERING)
 
 	for(var/thing in subtypesof(/datum/chatserver_channel/template))
 		var/datum/chatserver_channel/template/channel = new thing(server)
@@ -23,30 +23,30 @@
 
 /datum/chatserver_channel/template/common
 	title = "Site-wide"
-	req_accesses_admin = list(ACCESS_NETWORK)
+	req_accesses_admin = list(ACCESS_ENGINEERING)
 
 /datum/chatserver_channel/template/admin
 	title = "Admin"
 	req_accesses_user = list(ACCESS_ADMIN_LVL2)
-	req_accesses_admin = list(ACCESS_NETWORK)
+	req_accesses_admin = list(ACCESS_ENGINEERING)
 
 /datum/chatserver_channel/template/engineering
 	title = "Engineering"
 	req_accesses_user = list(ACCESS_ENGINEERING_LVL1)
-	req_accesses_admin = list(ACCESS_NETWORK)
+	req_accesses_admin = list(ACCESS_ENGINEERING)
 
 /datum/chatserver_channel/template/medical
 	title = "Medical"
 	req_accesses_user = list(ACCESS_MEDICAL_LVL1)
-	req_accesses_admin = list(ACCESS_NETWORK)
+	req_accesses_admin = list(ACCESS_ENGINEERING)
 
 /datum/chatserver_channel/template/science
 	title = "Science"
 	req_accesses_user = list(ACCESS_SCIENCE_LVL1)
-	req_accesses_admin = list(ACCESS_NETWORK)
+	req_accesses_admin = list(ACCESS_ENGINEERING)
 
 /datum/chatserver_channel/template/security
 	title = "Security"
 	req_accesses_user = list(ACCESS_SECURITY_LVL1)
-	req_accesses_admin = list(ACCESS_NETWORK)
+	req_accesses_admin = list(ACCESS_ENGINEERING)
 

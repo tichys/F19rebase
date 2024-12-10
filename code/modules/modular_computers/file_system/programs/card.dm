@@ -4,7 +4,7 @@
 	category = PROGRAM_CATEGORY_CREW
 	program_icon_state = "id"
 	extended_desc = "Program for programming employee ID cards to access parts of the station."
-	transfer_access = list(ACCESS_MANAGEMENT)
+	transfer_access = list(ACCESS_ADMIN_LVL3)
 	requires_ntnet = 0
 	size = 8
 	tgui_id = "NtosCard"
@@ -45,8 +45,8 @@
 	valid_access.Cut()
 	job_templates.Cut()
 
-	// If the program isn't locked to a specific department or is_centcom and we have ACCESS_CHANGE_IDS in our auth card, we're not minor.
-	if((!target_dept || is_centcom) && (ACCESS_CHANGE_IDS in id_card.access))
+	// If the program isn't locked to a specific department or is_centcom and we have ACCESS_ADMIN_LVL5 in our auth card, we're not minor.
+	if((!target_dept || is_centcom) && (ACCESS_ADMIN_LVL5 in id_card.access))
 		minor = FALSE
 		authenticated_card = "[id_card.name]"
 		authenticated_user = id_card.registered_name ? id_card.registered_name : "Unknown"

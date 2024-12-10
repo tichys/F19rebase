@@ -27,7 +27,7 @@
 
 /// Trim for the oldstation ruin/Charlie station
 /datum/id_trim/away/old/apc
-	access = list(ACCESS_ENGINE_EQUIP)
+	access = list(ACCESS_ENGINEERING_LVL1)
 
 /// Trim for the cat surgeon ruin.
 /datum/id_trim/away/cat_surgeon
@@ -39,7 +39,7 @@
 /datum/id_trim/away/hilbert
 	assignment = "Head Researcher"
 	trim_state = "trim_researchdirector"
-	access = list(ACCESS_AWAY_GENERIC3, ACCESS_RESEARCH)
+	access = list(ACCESS_AWAY_GENERIC3, ACCESS_SCIENCE)
 
 /// Trim for beach bum lifeguards.
 /datum/id_trim/lifeguard
@@ -49,7 +49,7 @@
 /datum/id_trim/space_bartender
 	assignment = "Space Bartender"
 	trim_state = "trim_bartender"
-	access = list(ACCESS_BAR)
+	access = list(ACCESS_SERVICE)
 
 /// Trim for various Centcom corpses.
 /datum/id_trim/centcom/corpse/bridge_officer
@@ -79,7 +79,7 @@
 /datum/id_trim/engioutpost
 	assignment = "Senior Station Engineer"
 	trim_state = "trim_stationengineer"
-	access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_ENGINE, ACCESS_ENGINE, ACCESS_ENGINE_EQUIP, ACCESS_MAINT_TUNNELS)
+	access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_ENGINE, ACCESS_ENGINEERING, ACCESS_ENGINEERING_LVL1, ACCESS_ENGINEERING_LVL1)
 
 /// Trim for various various ruins.
 /datum/id_trim/job/station_engineer/gunner

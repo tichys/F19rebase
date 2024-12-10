@@ -181,8 +181,8 @@
 				pack.generate(pick_n_take(empty_shuttle_turfs))
 
 				shuttle_spawns.Add(/obj/effect/mob_spawn/corpse/human/bee_terrorist)
-				shuttle_spawns.Add(/obj/effect/mob_spawn/corpse/human/cargo_tech)
-				shuttle_spawns.Add(/obj/effect/mob_spawn/corpse/human/cargo_tech)
+				shuttle_spawns.Add(/obj/effect/mob_spawn/corpse/human/logistics_technician)
+				shuttle_spawns.Add(/obj/effect/mob_spawn/corpse/human/logistics_technician)
 				shuttle_spawns.Add(/obj/effect/mob_spawn/corpse/human/nanotrasensoldier)
 				shuttle_spawns.Add(/obj/item/gun/ballistic/automatic/pistol/no_mag)
 				shuttle_spawns.Add(/obj/item/gun/ballistic/automatic/pistol/m1911/no_mag)

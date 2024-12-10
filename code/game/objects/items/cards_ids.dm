@@ -784,7 +784,7 @@
 	wildcard_slots = WILDCARD_LIMIT_SILVER
 
 /datum/id_trim/maint_reaper
-	access = list(ACCESS_MAINT_TUNNELS)
+	access = list(ACCESS_ENGINEERING_LVL1)
 	trim_state = "trim_janitor"
 	assignment = "Reaper"
 
@@ -804,13 +804,13 @@
 /obj/item/card/id/advanced/gold/captains_spare
 	name = "superintendent's spare ID"
 	desc = "The spare ID of the High Lord himself."
-	registered_name = JOB_CAPTAIN
-	trim = /datum/id_trim/job/captain
+	registered_name = JOB_SITE_DIRECTOR
+	trim = /datum/id_trim/job/site_director
 	registered_age = null
 
 /obj/item/card/id/advanced/gold/captains_spare/update_label() //so it doesn't change to Captain's ID card (Captain) on a sneeze
-	if(registered_name == JOB_CAPTAIN)
-		name = "[initial(name)][(!assignment || assignment == JOB_CAPTAIN) ? "" : " ([assignment])"]"
+	if(registered_name == JOB_SITE_DIRECTOR)
+		name = "[initial(name)][(!assignment || assignment == JOB_SITE_DIRECTOR) ? "" : " ([assignment])"]"
 		update_appearance(UPDATE_ICON)
 	else
 		..()
@@ -952,7 +952,7 @@
 /obj/item/card/id/advanced/prisoner/attackby(obj/item/card/id/C, mob/user)
 	..()
 	var/list/id_access = C.GetAccess()
-	if(!(ACCESS_BRIG in id_access))
+	if(!(ACCESS_SECURITY in id_access))
 		return FALSE
 	if(loc != user)
 		to_chat(user, span_warning("You must be holding the ID to continue!"))

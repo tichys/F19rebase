@@ -40,7 +40,7 @@ Possible to do for anyone motivated enough:
 	base_icon_state = "holopad"
 	layer = LOW_OBJ_LAYER
 	plane = FLOOR_PLANE
-	req_access = list(ACCESS_KEYCARD_AUTH) //Used to allow for forced connecting to other (not secure) holopads. Anyone can make a call, though.
+	req_access = list(ACCESS_ADMIN_LVL4) //Used to allow for forced connecting to other (not secure) holopads. Anyone can make a call, though.
 	max_integrity = 300
 	armor = list(BLUNT = 50, PUNCTURE = 20, SLASH = 90, LASER = 20, ENERGY = 20, BOMB = 0, BIO = 0, FIRE = 50, ACID = 0)
 	circuit = /obj/item/circuitboard/machine/holopad

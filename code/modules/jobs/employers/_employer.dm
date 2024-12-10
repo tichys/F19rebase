@@ -3,25 +3,25 @@
 	var/short_name = ""
 	var/creator_info = ""
 
-/datum/employer/government
-	name = "The Government"
-	short_name = "Government"
-	creator_info = "The Core Worlds has sent out many agents to secure as many capable space stations as possible to provide relief from the ongoing resource scarcity back home. Regardless of what the inhabitants think."
+/datum/employer/scp
+	name = "The S.C.P. Foundation"
+	short_name = "Foundation"
+	creator_info = "A foundation for containing anomalous entities the world would be better off not knowing about."
 
-/datum/employer/daedalus
-	name = "Daedalus Industries"
-	short_name = "Daedalus"
-	creator_info = "The most famous space station engineers in the Great Pool. Creators of the Resonance Drive and Resonance Gate."
+/datum/employer/goc
+	name = "The Global Occult Coalition"
+	short_name = "G.O.C."
+	creator_info = "The GOC was created in the aftermath of WWII, from the remnants of defecting occultists, psychics, priests, and scientists from Nazi, Soviet, and Allied states, brought together and formed by the Allies. As the world stage broadened, so too did the number of countries that had their hands in the GOC, until it became what it is today."
 
-/datum/employer/mars_exec
-	name = "Mars People's Coalition"
-	short_name = "MPC"
-	creator_info = "A hastily put together band of peacekeepers formed by the Red Sand Republic during it's formation shortly before the Mars Revolution. After the conclusion of the war, the MPC acts as the police force on the planet, as well as a cheap peacekeeping corps for hire. All proceeds go to various charities on Mars."
+/datum/employer/uiu
+	name = "The Unusual Incidents Unit"
+	short_name = "U.I.U."
+	creator_info = "The Unusual Incidents Unit was formed after the onset of the Cold War, when many aspects of the American Government were focused on utilizing the anomalous and preventing the communists from doing the same. This led to the creation of a special FBI division devoted to rapid response to paranormal events and crimes."
 
-/datum/employer/aether
-	name = "The Aether Association"
-	short_name = "Aether"
-	creator_info = "A mysterious society of doctors, pharmacists, and surgeons, intent on providing healthcare to every being in the Great Pool."
+/datum/employer/goldbaker
+	name = "Goldbaker-Reinz Ltd."
+	short_name = "Goldbaker-Reinz"
+	creator_info = "Goldbaker-Reinz Ltd. is one of the foremost insurance providers for the anomalous world. It provides insurance to both individuals and institutions, as well as reinsurance, data vending, risk analysis, and forensic & enforcement services. It is known throughout the anomalous world for always honoring the letter of its contracts in good faith."
 
 /datum/employer/hermes
 	name = "Hermes Galactic Freight"

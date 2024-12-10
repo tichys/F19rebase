@@ -6,7 +6,7 @@
 	icon_deny = "robotics-deny"
 	panel_type = "panel14"
 	light_mask = "robotics-light-mask"
-	req_access = list(ACCESS_ROBOTICS)
+	req_access = list(ACCESS_SCIENCE_LVL2)
 	products = list(
 		/obj/item/clothing/suit/toggle/labcoat = 4,
 		/obj/item/clothing/under/rank/rnd/roboticist = 4,
@@ -28,7 +28,7 @@
 	default_price = PAYCHECK_HARD
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_ROBOTICS
+	discount_access = ACCESS_SCIENCE_LVL2
 
 /obj/item/vending_refill/robotics
 	machine_name = "Robotech Deluxe"

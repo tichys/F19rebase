@@ -711,7 +711,7 @@
 /mob/living/carbon/human/singularity_act()
 	. = 20
 	switch(mind?.assigned_role.title)
-		if(JOB_CHIEF_ENGINEER, JOB_STATION_ENGINEER)
+		if(JOB_ENGINEERING_DIRECTOR, JOB_SENIOR_ENGINEER, JOB_ENGINEER, JOB_JUNIOR_ENGINEER)
 			. = 100
 		if(JOB_CLOWN)
 			if(!mind.miming)

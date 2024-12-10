@@ -116,41 +116,41 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/noticeboard, 32)
 /obj/structure/noticeboard/captain
 	name = "Captain's Notice Board"
 	desc = "Important notices from the Captain."
-	req_access = list(ACCESS_CAPTAIN)
+	req_access = list(ACCESS_ADMIN_LVL5)
 
 /obj/structure/noticeboard/hop
 	name = "Head of Personnel's Notice Board"
 	desc = "Important notices from the Head of Personnel."
-	req_access = list(ACCESS_HOP)
+	req_access = list(ACCESS_ADMIN_LVL5)
 
 /obj/structure/noticeboard/ce
 	name = "Chief Engineer's Notice Board"
 	desc = "Important notices from the Chief Engineer."
-	req_access = list(ACCESS_CE)
+	req_access = list(ACCESS_ENGINEERING_LVL5)
 
 /obj/structure/noticeboard/hos
 	name = "Security Marshal's Notice Board"
 	desc = "Important notices from the Security Marshal."
-	req_access = list(ACCESS_HOS)
+	req_access = list(ACCESS_SECURITY_LVL5)
 
 /obj/structure/noticeboard/cmo
 	name = "Medical Director's Notice Board"
 	desc = "Important notices from the Medical Director."
-	req_access = list(ACCESS_CMO)
+	req_access = list(ACCESS_MEDICAL_LVL5)
 
 /obj/structure/noticeboard/rd
 	name = "Research Director's Notice Board"
 	desc = "Important notices from the Research Director."
-	req_access = list(ACCESS_RD)
+	req_access = list(ACCESS_SCIENCE_LVL5)
 
 /obj/structure/noticeboard/qm
 	name = "Quartermaster's Notice Board"
 	desc = "Important notices from the Quartermaster."
-	req_access = list(ACCESS_QM)
+	req_access = list(ACCESS_LOGISTICS_LVL5)
 
 /obj/structure/noticeboard/staff
 	name = "Staff Notice Board"
 	desc = "Important notices from the heads of staff."
-	req_access = list(ACCESS_MANAGEMENT)
+	req_access = list(ACCESS_ADMIN_LVL3)
 
 #undef MAX_NOTICES

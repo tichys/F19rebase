@@ -8,12 +8,12 @@
 /// Trim for Syndicate mobs, outfits and corpses.
 /datum/id_trim/syndicom/crew
 	assignment = "Syndicate Operative"
-	access = list(ACCESS_SYNDICATE, ACCESS_ROBOTICS)
+	access = list(ACCESS_SYNDICATE, ACCESS_SCIENCE_LVL2)
 
 /// Trim for Syndicate mobs, outfits and corpses.
 /datum/id_trim/syndicom/captain
 	assignment = "Syndicate Ship Captain"
-	access = list(ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER, ACCESS_ROBOTICS)
+	access = list(ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER, ACCESS_SCIENCE_LVL2)
 
 /// Trim for Syndicate mobs, outfits and corpses.
 /datum/id_trim/battlecruiser
@@ -29,7 +29,7 @@
 /// Trim for Chameleon ID cards. Many outfits, nuke ops and some corpses hold Chameleon ID cards.
 /datum/id_trim/chameleon
 	assignment = "Unknown"
-	access = list(ACCESS_SYNDICATE, ACCESS_MAINT_TUNNELS)
+	access = list(ACCESS_SYNDICATE, ACCESS_ENGINEERING_LVL1)
 
 /// Trim for Chameleon ID cards. Many outfits, nuke ops and some corpses hold Chameleon ID cards.
 /datum/id_trim/chameleon/operative
@@ -43,9 +43,9 @@
 /// Trim for Chameleon ID cards. Many outfits, nuke ops and some corpses hold Chameleon ID cards.
 /datum/id_trim/chameleon/operative/clown_leader
 	assignment = "Syndicate Entertainment Operative Leader"
-	access = list(ACCESS_MAINT_TUNNELS, ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER)
+	access = list(ACCESS_ENGINEERING_LVL1, ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER)
 
 /// Trim for Chameleon ID cards. Many outfits, nuke ops and some corpses hold Chameleon ID cards.
 /datum/id_trim/chameleon/operative/nuke_leader
 	assignment = "Syndicate Operative Leader"
-	access = list(ACCESS_MAINT_TUNNELS, ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER)
+	access = list(ACCESS_ENGINEERING_LVL1, ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER)

@@ -28,38 +28,77 @@
  */
 
 //No department
+
 #define JOB_ASSISTANT "Civilian"
-#define JOB_PRISONER "Prisoner"
+#define JOB_DCLASS "D-Class"
+
 //Command
-#define JOB_CAPTAIN "Superintendent"
-#define JOB_HEAD_OF_PERSONNEL "Delegate"
-#define JOB_SECURITY_CONSULTANT "Security Consultant"
+
+#define JOB_SITE_DIRECTOR "Site Director"
+#define JOB_HUMAN_RESOURCES_DIRECTOR "Human Resources Director"
+#define JOB_INTERNAL_TRIBUNAL_DEPARTMENT_OFFICER "Internal Tribunal Department Officer"
+#define JOB_ETHICS_COMMITTEE_LIAISON "Ethics Committee Liaison"
+
 //Silicon
+
 #define JOB_AI "AI"
 #define JOB_CYBORG "Cyborg"
 #define JOB_PERSONAL_AI "Personal AI"
+
 //Security
-#define JOB_SECURITY_MARSHAL "Security Marshal"
-#define JOB_WARDEN "Brig Lieutenant"
-#define JOB_DETECTIVE "Private Investigator"
-#define JOB_SECURITY_OFFICER "Security Officer"
-#define JOB_SECURITY_OFFICER_MEDICAL "Security Officer (Medical)"
-#define JOB_SECURITY_OFFICER_ENGINEERING "Security Officer (Engineering)"
-#define JOB_SECURITY_OFFICER_SCIENCE "Security Officer (Science)"
-#define JOB_SECURITY_OFFICER_SUPPLY "Security Officer (Cargo)"
-//Engineering
-#define JOB_CHIEF_ENGINEER "Chief Engineer"
-#define JOB_STATION_ENGINEER "Station Engineer"
-#define JOB_ATMOSPHERIC_TECHNICIAN "Atmospheric Technician"
+
+#define JOB_SECURITY_DIRECTOR "Security Director"
+
+#define JOB_EZ_COMMANDER "EZ Commander"
+#define JOB_SENIOR_EZ_GUARD "EZ Senior Guard"
+#define JOB_EZ_GUARD "EZ Guard"
+#define JOB_JUNIOR_EZ_GUARD "EZ Junior Guard"
+
+#define JOB_RAISA_AGENT "RAISA Agent"
+#define JOB_INVESTIGATIONS_AGENT "Investigations Agent"
+
+#define JOB_LCZ_COMMANDER "LCZ Commander"
+#define JOB_SENIOR_LCZ_GUARD "Senior LCZ Guard"
+#define JOB_LCZ_GUARD "LCZ Guard"
+#define JOB_JUNIOR_LCZ_GUARD "Junior LCZ Guard"
+
+#define JOB_HCZ_COMMANDER "HCZ Commander"
+#define JOB_SENIOR_HCZ_GUARD "HCZ Senior Guard"
+#define JOB_HCZ_GUARD "HCZ Guard"
+#define JOB_JUNIOR_HCZ_GUARD "HCZ Junior Guard"
+
+//Researcher
+#define JOB_RESEARCH_DIRECTOR "Research Director"
+#define JOB_ASSISTANT_RESEARCH_DIRECTOR "Assistant Research Director"
+#define JOB_SENIOR_RESEARCHER "Senior Researcher"
+#define JOB_RESEARCHER "Researcher"
+#define JOB_JUNIOR_RESEARCHER "Junior Researcher"
+
 //Medical
 #define JOB_MEDICAL_DIRECTOR "Medical Director"
-#define JOB_MEDICAL_DOCTOR "General Practitioner"
+#define JOB_ASSISTANT_MEDICAL_DIRECTOR "Assistant Medical Director"
+#define JOB_MEDICAL_DOCTOR "Physician"
+#define JOB_SURGEON "Surgeon"
 #define JOB_PARAMEDIC "Paramedic"
 #define JOB_CHEMIST "Chemist"
+#define JOB_TRAINEE_DOCTOR "Medical Resident"
 #define JOB_VIROLOGIST "Virologist"
+#define JOB_PSYCHOLOGIST "Psychologist"
+
+//Engineering
+#define JOB_ENGINEERING_DIRECTOR "Engineering Director"
+#define JOB_ASSISTANT_ENGINEERING_DIRECTOR "Assistant Engineering Director"
+#define JOB_CONTAINMENT_ENGINEER "Containment Engineer"
+#define JOB_IT_TECHNICIAN "IT Technician"
+#define JOB_COMMS_PROGRAMMER "Communications Programmer"
+#define JOB_SENIOR_ENGINEER "Senior Engineer"
+#define JOB_ENGINEER "Engineer"
+#define JOB_JUNIOR_ENGINEER "Junior Engineer"
+#define JOB_ATMOSPHERIC_TECHNICIAN "Atmospheric Technician"
+
 //Supply
-#define JOB_QUARTERMASTER "Quartermaster"
-#define JOB_DECKHAND "Deckhand"
+#define JOB_LOGISTICS_OFFICER "Logistics Officer"
+#define JOB_LOGISTICS_TECHNICIAN "Logistics Technician"
 #define JOB_PROSPECTOR "Prospector"
 //Service
 #define JOB_BARTENDER "Bartender"
@@ -67,10 +106,7 @@
 #define JOB_COOK "Cook"
 #define JOB_JANITOR "Janitor"
 #define JOB_CLOWN "Clown"
-#define JOB_ARCHIVIST "Archivist"
-#define JOB_LAWYER "Lawyer"
 #define JOB_CHAPLAIN "Chaplain"
-#define JOB_PSYCHOLOGIST "Psychologist"
 //ERTs
 #define JOB_ERT_DEATHSQUAD "Death Commando"
 #define JOB_ERT_COMMANDER "Emergency Response Team Commander"

@@ -21,7 +21,7 @@
 /obj/structure/closet/secure_closet/medical2
 	name = "anesthetic closet"
 	desc = "Used to knock people out."
-	req_access = list(ACCESS_SURGERY)
+	req_access = list(ACCESS_MEDICAL_LVL3)
 
 /obj/structure/closet/secure_closet/medical2/PopulateContents()
 	..()
@@ -32,7 +32,7 @@
 
 /obj/structure/closet/secure_closet/medical3
 	name = "'s locker"
-	req_access = list(ACCESS_SURGERY)
+	req_access = list(ACCESS_MEDICAL_LVL3)
 	icon_state = "med_secure"
 
 /obj/structure/closet/secure_closet/medical3/PopulateContents()
@@ -46,7 +46,7 @@
 
 /obj/structure/closet/secure_closet/psychology
 	name = "psychology locker"
-	req_access = list(ACCESS_PSYCHOLOGY)
+	req_access = list(ACCESS_MEDICAL_LVL2)
 	icon_state = "cabinet"
 	open_sound = 'sound/machines/wooden_closet_open.ogg'
 	close_sound = 'sound/machines/wooden_closet_close.ogg'
@@ -67,7 +67,7 @@
 
 /obj/structure/closet/secure_closet/chief_medical
 	name = "\proper medical director's locker"
-	req_access = list(ACCESS_CMO)
+	req_access = list(ACCESS_MEDICAL_LVL5)
 	icon_state = "cmo"
 
 /obj/structure/closet/secure_closet/chief_medical/PopulateContents()
@@ -92,7 +92,7 @@
 
 /obj/structure/closet/secure_closet/animal
 	name = "animal control"
-	req_access = list(ACCESS_SURGERY)
+	req_access = list(ACCESS_MEDICAL_LVL3)
 
 /obj/structure/closet/secure_closet/animal/PopulateContents()
 	..()
@@ -103,7 +103,7 @@
 /obj/structure/closet/secure_closet/chemical
 	name = "chemical closet"
 	desc = "Store dangerous chemicals in here."
-	req_access = list(ACCESS_PHARMACY)
+	req_access = list(ACCESS_MEDICAL_LVL3)
 	icon_door = "chemical"
 
 /obj/structure/closet/secure_closet/chemical/PopulateContents()
@@ -116,7 +116,7 @@
 
 /obj/structure/closet/secure_closet/chemical/heisenberg //contains one of each beaker, syringe etc.
 	name = "advanced chemical closet"
-	req_access = list(ACCESS_CHEMISTRY)
+	req_access = list(ACCESS_MEDICAL_LVL3)
 
 /obj/structure/closet/secure_closet/chemical/heisenberg/PopulateContents()
 	..()
@@ -129,7 +129,7 @@
 /obj/structure/closet/secure_closet/chemical/cartridge
 	name = "cartridge closet"
 	desc = "Store dangerous chemical cartridges in here."
-	req_access = list(ACCESS_PHARMACY)
+	req_access = list(ACCESS_MEDICAL_LVL3)
 	icon_door = "chemical"
 
 /obj/structure/closet/secure_closet/chemical/cartridge/PopulateContents()

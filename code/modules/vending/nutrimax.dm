@@ -28,7 +28,7 @@
 	extra_price = PAYCHECK_HARD * 0.8
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_HYDROPONICS
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/hydronutrients
 	machine_name = "NutriMax"

@@ -44,11 +44,11 @@ SUBSYSTEM_DEF(job)
 	 * See [/datum/controller/subsystem/ticker/proc/equip_characters]
 	 */
 	var/list/chain_of_command = list(
-		JOB_CAPTAIN = 1,
-		JOB_HEAD_OF_PERSONNEL = 2,
-		JOB_CHIEF_ENGINEER = 3,
+		JOB_SITE_DIRECTOR = 1,
+		JOB_HUMAN_RESOURCES_DIRECTOR = 2,
+		JOB_ENGINEERING_DIRECTOR = 3,
 		JOB_MEDICAL_DIRECTOR = 4,
-		JOB_SECURITY_MARSHAL = 5,
+		JOB_SECURITY_DIRECTOR = 5,
 		JOB_QUARTERMASTER = 6,
 	)
 
@@ -651,7 +651,7 @@ SUBSYSTEM_DEF(job)
 		return C.holder.auto_deadmin()
 
 /datum/controller/subsystem/job/proc/setup_officer_positions()
-	var/datum/job/J = SSjob.GetJob(JOB_SECURITY_OFFICER)
+	var/datum/job/J = SSjob.GetJob(JOB_EZ_GUARD)
 	if(!J)
 		CRASH("setup_officer_positions(): Security officer job is missing")
 
@@ -932,8 +932,8 @@ SUBSYSTEM_DEF(job)
 	var/obj/item/id_slot = new_captain.get_item_by_slot(ITEM_SLOT_ID)
 	if(id_slot)
 		var/obj/item/card/id/id_card = id_slot.GetID(TRUE) || locate() in id_slot
-		if(id_card && !(ACCESS_MANAGEMENT in id_card.access))
-			id_card.add_wildcards(list(ACCESS_MANAGEMENT), mode=FORCE_ADD_ALL)
+		if(id_card && !(ACCESS_ADMIN_LVL3 in id_card.access))
+			id_card.add_wildcards(list(ACCESS_ADMIN_LVL3), mode=FORCE_ADD_ALL)
 
 	assigned_captain = TRUE
 

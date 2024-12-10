@@ -19,19 +19,22 @@
 #define VENDING_DISCOUNT 0
 
 #define ACCOUNT_ENG "ENG"
-#define ACCOUNT_ENG_NAME "Daedalus Industries Funds"
+#define ACCOUNT_ENG_NAME "Foundation Engineering Division Funds"
 #define ACCOUNT_MED "MED"
-#define ACCOUNT_MED_NAME "Aether Pharmaceuticals Funds"
+#define ACCOUNT_MED_NAME "Foundation Medical Division Funds"
+#define ACCOUNT_SCI "SCI"
+#define ACCOUNT_SCI_NAME "Foundation Research Division Funds"
 #define ACCOUNT_SRV "SRV"
+#define ACCOUNT_SRV_NAME "Foundation Service Division Funds"
 #define ACCOUNT_CAR "CAR"
-#define ACCOUNT_CAR_NAME "Hermes Galactic Freight Funds"
+#define ACCOUNT_CAR_NAME "Foundation Logistics Division Funds"
 #define ACCOUNT_SEC "SEC"
-#define ACCOUNT_SEC_NAME "Mars People's Coalition Budget"
+#define ACCOUNT_SEC_NAME "Foundation Security Division Funds"
 
 #define ACCOUNT_STATION_MASTER "STA"
-#define ACCOUNT_STATION_MASTER_NAME "Station Budget"
+#define ACCOUNT_STATION_MASTER_NAME "Site Budget"
 
-#define ACCOUNT_GOV "GOV"
+#define ACCOUNT_GOV "FND"
 #define ACCOUNT_GOV_NAME "Special Order Budget"
 
 #define NO_FREEBIES "commies go home"

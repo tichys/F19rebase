@@ -12,11 +12,7 @@ Assistant
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
-		/datum/employer/daedalus,
-		/datum/employer/aether,
-		/datum/employer/mars_exec,
-		/datum/employer/hermes,
-		/datum/employer/none
+		/datum/employer/scp
 	)
 
 	outfits = list(

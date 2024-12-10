@@ -29,7 +29,7 @@
 	extra_price = PAYCHECK_HARD
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_ROBOTICS
+	discount_access = ACCESS_SCIENCE_LVL2
 
 /obj/item/vending_refill/modularpc
 	machine_name = "Deluxe Silicate Selections"

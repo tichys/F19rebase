@@ -59,7 +59,7 @@
 /datum/job_department/security
 	department_name = DEPARTMENT_SECURITY
 	department_bitflags = DEPARTMENT_BITFLAG_SECURITY
-	department_head = /datum/job/head_of_security
+	department_head = /datum/job/security_director
 	department_experience_type = EXP_TYPE_SECURITY
 	display_order = 2
 	label_class = "security"
@@ -71,7 +71,7 @@
 /datum/job_department/engineering
 	department_name = DEPARTMENT_ENGINEERING
 	department_bitflags = DEPARTMENT_BITFLAG_ENGINEERING
-	department_head = /datum/job/chief_engineer
+	department_head = /datum/job/engineering_director
 	department_experience_type = EXP_TYPE_ENGINEERING
 	display_order = 3
 	label_class = "engineering"
@@ -83,7 +83,7 @@
 /datum/job_department/medical
 	department_name = DEPARTMENT_MEDICAL
 	department_bitflags = DEPARTMENT_BITFLAG_MEDICAL
-	department_head = /datum/job/chief_medical_officer
+	department_head = /datum/job/medical_director
 	department_experience_type = EXP_TYPE_MEDICAL
 	display_order = 4
 	label_class = "medical"
@@ -91,6 +91,18 @@
 	nation_prefixes = list("Mede", "Healtha", "Recova", "Chemi", "Viro", "Psych")
 	manifest_key = DATACORE_RECORDS_AETHER
 	budget_id = ACCOUNT_MED
+
+/datum/job_department/science
+	department_name = DEPARTMENT_SCIENCE
+	department_bitflags = DEPARTMENT_BITFLAG_SCIENCE
+	department_head = /datum/job/research_director
+	department_experience_type = EXP_TYPE_SCIENCE
+	display_order = 5
+	label_class = "medical"
+	latejoin_color = "#ffddf0"
+	nation_prefixes = list("Sci", "Researcha")
+	manifest_key = DATACORE_RECORDS_AETHER
+	budget_id = ACCOUNT_SCI
 
 /datum/job_department/cargo
 	department_name = DEPARTMENT_CARGO
