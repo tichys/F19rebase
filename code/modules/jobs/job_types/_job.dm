@@ -340,7 +340,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	/// If this job uses the Jumpskirt/Jumpsuit pref
 	var/allow_jumpskirt = TRUE
 	uniform = /obj/item/clothing/under/color/grey
-	id = /obj/item/card/id/advanced
+	id = /obj/item/card/id/advanced/white_blank
 	ears = /obj/item/radio/headset
 	belt = /obj/item/modular_computer/tablet/pda
 	back = /obj/item/storage/backpack

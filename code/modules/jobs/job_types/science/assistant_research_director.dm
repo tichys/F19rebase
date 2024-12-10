@@ -40,7 +40,7 @@
 	name = "Assistant Research Director"
 	jobtype = /datum/job/assistant_research_director
 
-	id = /obj/item/card/id/advanced
+	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/assistant_research_director
 	uniform = /obj/item/clothing/under/rank/medical/paramedic
 	suit = /obj/item/clothing/suit/toggle/labcoat/paramedic

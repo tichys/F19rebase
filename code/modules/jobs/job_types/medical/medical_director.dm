@@ -57,7 +57,7 @@
 	name = "Medical Director"
 	jobtype = /datum/job/medical_director
 
-	id = /obj/item/card/id/advanced/silver
+	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/medical_director
 	uniform = /obj/item/clothing/under/rank/medical/chief_medical_officer
 	backpack_contents = list(

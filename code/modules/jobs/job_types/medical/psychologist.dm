@@ -45,7 +45,6 @@
 	name = "Psychologist"
 	jobtype = /datum/job/psychologist
 
-	id = /obj/item/card/id/advanced
 	id_trim = /datum/id_trim/job/psychologist
 	uniform = /obj/item/clothing/under/suit/black
 	backpack_contents = list(

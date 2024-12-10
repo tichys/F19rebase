@@ -67,7 +67,7 @@
 	name = JOB_SECURITY_DIRECTOR
 	jobtype = /datum/job/security_director
 
-	id = /obj/item/card/id/advanced/silver
+	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/security_director
 	uniform = /obj/item/clothing/under/rank/security/marshal
 	suit = /obj/item/clothing/suit/armor/vest/ballistic

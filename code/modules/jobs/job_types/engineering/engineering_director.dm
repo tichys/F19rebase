@@ -60,7 +60,7 @@
 	name = "Engineering Director"
 	jobtype = /datum/job/engineering_director
 
-	id = /obj/item/card/id/advanced/silver
+	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/engineering_director
 	uniform = /obj/item/clothing/under/rank/engineering/chief_engineer
 	backpack_contents = list(

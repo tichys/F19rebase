@@ -44,7 +44,6 @@
 	name = "Junior Researcher"
 	jobtype = /datum/job/junior_researcher
 
-	id = /obj/item/card/id/advanced
 	id_trim = /datum/id_trim/job/junior_researcher
 	uniform = /obj/item/clothing/under/suit/black
 	backpack_contents = list()
@@ -117,7 +116,6 @@
 	name = "Researcher"
 	jobtype = /datum/job/researcher
 
-	id = /obj/item/card/id/advanced
 	id_trim = /datum/id_trim/job/researcher
 	uniform = /obj/item/clothing/under/suit/black
 	backpack_contents = list()
@@ -190,7 +188,6 @@
 	name = "Senior_Researcher"
 	jobtype = /datum/job/senior_researcher
 
-	id = /obj/item/card/id/advanced
 	id_trim = /datum/id_trim/job/senior_researcher
 	uniform = /obj/item/clothing/under/suit/black
 	backpack_contents = list()

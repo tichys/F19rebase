@@ -60,7 +60,7 @@
 	jobtype = /datum/job/captain
 	allow_jumpskirt = FALSE
 
-	id = /obj/item/card/id/advanced/gold
+	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/site_director
 	uniform = /obj/item/clothing/under/suit/charcoal
 	backpack_contents = list(

@@ -32,7 +32,7 @@
 	liver_traits = list(TRAIT_ROYAL_METABOLISM)
 
 	mail_goodies = list(
-		/obj/item/card/id/advanced/silver = 10,
+		/obj/item/card/id/advanced/black_blank = 10,
 		/obj/item/stack/sheet/bone = 5
 	)
 
@@ -51,7 +51,7 @@
 	name = JOB_HUMAN_RESOURCES_DIRECTOR
 	jobtype = /datum/job/human_resources_director
 
-	id = /obj/item/card/id/advanced/silver
+	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/human_resources_director
 	uniform = /obj/item/clothing/under/suit/navy
 	suit = /obj/item/clothing/suit/toggle/lawyer

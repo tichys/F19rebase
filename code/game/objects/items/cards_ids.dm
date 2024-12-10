@@ -775,6 +775,20 @@
 /obj/item/card/id/advanced/get_trim_sechud_icon_state()
 	return sechud_icon_state_override || ..()
 
+// ============== SCP IDs Begin ==============
+
+/obj/item/card/id/advanced/white_blank
+	name = "basic identification card"
+	desc = "A basic, plastic identification card with some electronics sandwiched inside."
+	icon_state = "white_blank"
+
+/obj/item/card/id/advanced/black_blank
+	name = "fancy identification card"
+	desc = "A fancy, plastic identification card with some electronics sandwiched inside."
+	icon_state = "black_blank"
+
+// ============== SCP IDs End ==============
+
 /obj/item/card/id/advanced/silver
 	name = "silver identification card"
 	desc = "A silver card which shows honour and dedication."
