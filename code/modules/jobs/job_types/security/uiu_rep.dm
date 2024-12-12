@@ -6,11 +6,11 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the Federal Bureau of Investigation"
-	selection_color = "#131E41"
+	selection_color = "#490A0D"
 	minimal_player_age = 14
 	exp_requirements = 180
 	exp_required_type = EXP_TYPE_CREW
-	exp_required_type_department = EXP_TYPE_COMMAND
+	exp_required_type_department = EXP_TYPE_SECURITY
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
@@ -19,51 +19,57 @@
 
 	outfits = list(
 		"Default" = list(
-			SPECIES_HUMAN = /datum/outfit/job/ethics_committee_liaison,
+			SPECIES_HUMAN = /datum/outfit/job/uiu_rep,
 		),
 	)
 
 	paycheck = PAYCHECK_COMMAND
-	paycheck_department = ACCOUNT_STATION_MASTER
 
-	liver_traits = list(TRAIT_ROYAL_METABOLISM)
+	liver_traits = list(TRAIT_LAW_ENFORCEMENT_METABOLISM)
 
 	departments_list = list(
 		/datum/job_department/command,
 	)
 
 
-	family_heirlooms = list(/obj/item/reagent_containers/food/drinks/flask/gold, /obj/item/toy/captainsaid/collector)
+	family_heirlooms = list(/obj/item/reagent_containers/food/drinks/bottle/whiskey)
+
 
 	mail_goodies = list(
-		/obj/item/clothing/mask/cigarette/cigar/havana = 20,
-		/obj/item/storage/fancy/cigarettes/cigars/havana = 15,
-		/obj/item/reagent_containers/food/drinks/bottle/champagne = 10,
-		/obj/item/toy/captainsaid/collector = 20
+		/obj/item/storage/fancy/cigarettes = 25,
+		/obj/item/ammo_box/c38 = 25,
+		/obj/item/ammo_box/c38/dumdum = 5,
+		/obj/item/ammo_box/c38/hotshot = 5,
+		/obj/item/ammo_box/c38/iceblox = 5,
+		/obj/item/ammo_box/c38/match = 5,
+		/obj/item/ammo_box/c38/trac = 5,
 	)
 
+	rpg_title = "Thiefcatcher"
 	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
-	rpg_title = "Star Duke"
-
-	voice_of_god_power = 1.4 //Command staff has authority
 
 /datum/outfit/job/uiu_rep
 	name = JOB_UIU_REP
 	jobtype = /datum/job/uiu_rep
 	allow_jumpskirt = FALSE
 
-	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/uiu_rep
-	uniform = /obj/item/clothing/under/suit/charcoal
-	backpack_contents = list(
-		/obj/item/assembly/flash/handheld = 1
-	)
-	belt = /obj/item/modular_computer/tablet/pda
-	ears = /obj/item/radio/headset/heads/captain
-	glasses = /obj/item/clothing/glasses/sunglasses
-	gloves = /obj/item/clothing/gloves/color/white
-	r_pocket = /obj/item/encryptionkey/heads/hos
+	uniform = /obj/item/clothing/under/rank/security/detective
+	suit = /obj/item/clothing/suit/irs
+	belt = /obj/item/modular_computer/tablet/pda/detective
+	ears = /obj/item/radio/headset/heads/hos
+	gloves = /obj/item/clothing/gloves/forensic
+	neck = /obj/item/clothing/neck/tie/detective
 	shoes = /obj/item/clothing/shoes/laceup
+	l_pocket = /obj/item/toy/crayon/white
+	r_pocket = /obj/item/storage/fancy/cigarettes/dromedaryco
+
+	l_hand = /obj/item/storage/briefcase/crimekit
+
+	chameleon_extras = list(
+		/obj/item/clothing/glasses/sunglasses,
+		/obj/item/gun/ballistic/revolver/detective,
+		)
 
 	backpack = /obj/item/storage/backpack
 	satchel = /obj/item/storage/backpack/satchel

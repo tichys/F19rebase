@@ -220,27 +220,13 @@
 		ACCESS_ADMIN_LVL1,
 		ACCESS_ADMIN_LVL2,
 		ACCESS_ADMIN_LVL3,
+		ACCESS_MEDICAL,
 		ACCESS_MEDICAL_LVL1,
+		ACCESS_SECURITY,
 		)
 	config_job = "goc rep"
-	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
+	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
 	job = /datum/job/goldbaker_rep
-
-/datum/id_trim/job/mcd_rep
-	assignment = JOB_MCD_REP
-	trim_state = "adminlvl3"
-	sechud_icon_state = SECHUD_GOI_REP
-	extra_access = list()
-	minimal_access = list(
-		ACCESS_ADMIN,
-		ACCESS_ADMIN_LVL1,
-		ACCESS_ADMIN_LVL2,
-		ACCESS_ADMIN_LVL3,
-		ACCESS_LOGISTICS_LVL1,
-		)
-	config_job = "mcd rep"
-	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
-	job = /datum/job/mcd_rep
 
 /datum/id_trim/job/uiu_rep
 	assignment = JOB_UIU_REP
@@ -252,7 +238,9 @@
 		ACCESS_ADMIN_LVL1,
 		ACCESS_ADMIN_LVL2,
 		ACCESS_ADMIN_LVL3,
+		ACCESS_SECURITY,
 		ACCESS_SECURITY_LVL1,
+		ACCESS_SECURITY_LVL2,
 		)
 	config_job = "uiu rep"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
@@ -833,24 +821,6 @@
 	config_job = "engineering_director"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_ENGINEERING_LVL4, ACCESS_ENGINEERING_LVL5)
 	job = /datum/job/it_technician
-
-/datum/id_trim/job/comms_programmer
-	assignment = JOB_COMMS_PROGRAMMER
-	trim_state = "sciencelvl3"
-	sechud_icon_state = SECHUD_ENGINEERING_DIRECTOR
-	extra_access = list()
-	minimal_access = list(
-		ACCESS_ENGINEERING,
-		ACCESS_ENGINEERING_LVL1,
-		ACCESS_ENGINEERING_LVL2,
-		ACCESS_ENGINEERING_LVL3,
-		ACCESS_SCIENCE,
-		ACCESS_SCIENCE_LVL1,
-		ACCESS_SCIENCE_LVL2,
-	)
-	config_job = "engineering_director"
-	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_ENGINEERING_LVL4, ACCESS_ENGINEERING_LVL5)
-	job = /datum/job/comms_programmer
 
 /datum/id_trim/job/junior_engineer
 	assignment = JOB_JUNIOR_ENGINEER
