@@ -116,7 +116,7 @@ SUBSYSTEM_DEF(id_access)
 	accesses_by_region[REGION_GENERAL] = REGION_ACCESS_GENERAL
 	accesses_by_region[REGION_SECURITY] = REGION_ACCESS_SECURITY
 	accesses_by_region[REGION_MEDBAY] = REGION_ACCESS_MEDBAY
-	accesses_by_region[REGION_RESEARCH] = REGION_ACCESS_RESEARCH
+	accesses_by_region[REGION_SCIENCE] = REGION_ACCESS_SCIENCE
 	accesses_by_region[REGION_ENGINEERING] = REGION_ACCESS_ENGINEERING
 	accesses_by_region[REGION_SUPPLY] = REGION_ACCESS_SUPPLY
 	accesses_by_region[REGION_COMMAND] = REGION_ACCESS_COMMAND
@@ -152,31 +152,37 @@ SUBSYSTEM_DEF(id_access)
 		))
 
 	sub_department_managers_tgui = list(
-		"[ACCESS_ADMIN]" = list(
+		"[ACCESS_ADMIN_HEAD]" = list(
 			"regions" = list(REGION_COMMAND),
 			"head" = JOB_SITE_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_SERVICE]" = list(
+		"[ACCESS_SERVICE_HEAD]" = list(
 			"regions" = list(REGION_GENERAL, REGION_SUPPLY),
 			"head" = JOB_HUMAN_RESOURCES_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_SECURITY]" = list(
+		"[ACCESS_SECURITY_HEAD]" = list(
 			"regions" = list(REGION_SECURITY),
 			"head" = JOB_SECURITY_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_MEDICAL]" = list(
+		"[ACCESS_MEDICAL_HEAD]" = list(
 			"regions" = list(REGION_MEDBAY),
 			"head" = JOB_MEDICAL_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_ENGINEERING]" = list(
+		"[ACCESS_SCIENCE_HEAD]" = list(
+			"regions" = list(REGION_SCIENCE),
+			"head" = JOB_RESEARCH_DIRECTOR,
+			"templates" = list(),
+			"pdas" = list(),
+		),
+		"[ACCESS_ENGINEERING_HEAD]" = list(
 			"regions" = list(REGION_ENGINEERING),
 			"head" = JOB_ENGINEERING_DIRECTOR,
 			"templates" = list(),

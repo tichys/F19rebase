@@ -6,7 +6,7 @@
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
-	selection_color = "#026865"
+	selection_color = "#7C4D7C"
 	req_admin_notify = 1
 	minimal_player_age = 7
 	exp_requirements = 180

@@ -6,8 +6,8 @@
 	faction = FACTION_STATION
 	total_positions = 5
 	spawn_positions = 3
-	supervisors = "the Medical Director."
-	selection_color = "#013d3b"
+	supervisors = "the Medical Director"
+	selection_color = "#092527"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
@@ -89,15 +89,15 @@
 // Trainee Doctor
 
 /datum/job/trainee_doctor
-	title = JOB_MEDICAL_DOCTOR
+	title = JOB_TRAINEE_DOCTOR
 	description = "Save lives, run around the station looking for victims, \
 		scan everyone in sight"
 	department_head = list(JOB_MEDICAL_DIRECTOR)
 	faction = FACTION_STATION
 	total_positions = 5
 	spawn_positions = 3
-	supervisors = "the medical director"
-	selection_color = "#013d3b"
+	supervisors = "the Medical Director"
+	selection_color = "#092527"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(

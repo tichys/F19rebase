@@ -38,21 +38,27 @@
 #define JOB_HUMAN_RESOURCES_DIRECTOR "Human Resources Director"
 #define JOB_INTERNAL_TRIBUNAL_DEPARTMENT_OFFICER "Internal Tribunal Department Officer"
 #define JOB_ETHICS_COMMITTEE_LIAISON "Ethics Committee Liaison"
+#define JOB_COMMUNICATIONS_DIRECTOR "Communications Director"
+
+#define JOB_GOC_REP "Global Occult Coalition Representative"
+#define JOB_GOLDBAKER_REP "Goldbaker-Reinz Corporate Representative"
+#define JOB_MCD_REP "Marshal, Carter & Dark Corporate Representative"
+#define JOB_UIU_REP "Unusual Incidents Unit Representative"
 
 //Silicon
 
-#define JOB_AI "AI"
+#define JOB_AI "AIC"
 #define JOB_CYBORG "Cyborg"
-#define JOB_PERSONAL_AI "Personal AI"
+#define JOB_PERSONAL_AI "Personal AIC"
 
 //Security
 
 #define JOB_SECURITY_DIRECTOR "Security Director"
 
 #define JOB_EZ_COMMANDER "EZ Commander"
-#define JOB_SENIOR_EZ_GUARD "EZ Senior Guard"
+#define JOB_SENIOR_EZ_GUARD "Senior Guard"
 #define JOB_EZ_GUARD "EZ Guard"
-#define JOB_JUNIOR_EZ_GUARD "EZ Junior Guard"
+#define JOB_JUNIOR_EZ_GUARD "Junior Guard"
 
 #define JOB_RAISA_AGENT "RAISA Agent"
 #define JOB_INVESTIGATIONS_AGENT "Investigations Agent"
@@ -63,9 +69,9 @@
 #define JOB_JUNIOR_LCZ_GUARD "Junior LCZ Guard"
 
 #define JOB_HCZ_COMMANDER "HCZ Commander"
-#define JOB_SENIOR_HCZ_GUARD "HCZ Senior Guard"
+#define JOB_SENIOR_HCZ_GUARD "Senior HCZ Guard"
 #define JOB_HCZ_GUARD "HCZ Guard"
-#define JOB_JUNIOR_HCZ_GUARD "HCZ Junior Guard"
+#define JOB_JUNIOR_HCZ_GUARD "Junior HCZ Guard"
 
 //Researcher
 #define JOB_RESEARCH_DIRECTOR "Research Director"
@@ -77,7 +83,7 @@
 //Medical
 #define JOB_MEDICAL_DIRECTOR "Medical Director"
 #define JOB_ASSISTANT_MEDICAL_DIRECTOR "Assistant Medical Director"
-#define JOB_MEDICAL_DOCTOR "Physician"
+#define JOB_MEDICAL_DOCTOR "Medical Doctor"
 #define JOB_SURGEON "Surgeon"
 #define JOB_PARAMEDIC "Paramedic"
 #define JOB_CHEMIST "Chemist"
@@ -96,17 +102,17 @@
 #define JOB_JUNIOR_ENGINEER "Junior Engineer"
 #define JOB_ATMOSPHERIC_TECHNICIAN "Atmospheric Technician"
 
-//Supply
+//Logistics
 #define JOB_LOGISTICS_OFFICER "Logistics Officer"
 #define JOB_LOGISTICS_TECHNICIAN "Logistics Technician"
-#define JOB_PROSPECTOR "Prospector"
+
 //Service
-#define JOB_BARTENDER "Bartender"
 #define JOB_BOTANIST "Botanist"
 #define JOB_COOK "Cook"
 #define JOB_JANITOR "Janitor"
-#define JOB_CLOWN "Clown"
+#define JOB_CLOWN "Morale Officer"
 #define JOB_CHAPLAIN "Chaplain"
+
 //ERTs
 #define JOB_ERT_DEATHSQUAD "Death Commando"
 #define JOB_ERT_COMMANDER "Emergency Response Team Commander"
@@ -116,6 +122,7 @@
 #define JOB_ERT_CHAPLAIN "Religious Response Officer"
 #define JOB_ERT_JANITOR "Janitorial Response Officer"
 #define JOB_ERT_CLOWN "Entertainment Response Officer"
+
 //CentCom
 #define JOB_CENTCOM "Central Command"
 #define JOB_CENTCOM_OFFICIAL "CentCom Official"
@@ -133,25 +140,25 @@
 #define DEPARTMENT_UNASSIGNED "No department assigned"
 
 #define DEPARTMENT_BITFLAG_SECURITY (1<<0)
-#define DEPARTMENT_SECURITY "Mars Private Security"
+#define DEPARTMENT_SECURITY "Foundation Security"
 #define DEPARTMENT_BITFLAG_MANAGEMENT (1<<1)
-#define DEPARTMENT_MANAGEMENT "Management"
+#define DEPARTMENT_MANAGEMENT "Foundation Administration"
 #define DEPARTMENT_BITFLAG_SERVICE (1<<2)
-#define DEPARTMENT_SERVICE "Independant"
+#define DEPARTMENT_SERVICE "Foundation Service"
 #define DEPARTMENT_BITFLAG_CARGO (1<<3)
-#define DEPARTMENT_CARGO "Hermes Galactic Freight"
+#define DEPARTMENT_CARGO "Foundation Logistics"
 #define DEPARTMENT_BITFLAG_ENGINEERING (1<<4)
-#define DEPARTMENT_ENGINEERING "Daedalus Industries"
+#define DEPARTMENT_ENGINEERING "Foundation Engineering"
 #define DEPARTMENT_BITFLAG_SCIENCE (1<<5)
-#define DEPARTMENT_SCIENCE "Science"
+#define DEPARTMENT_SCIENCE "Foundation Research"
 #define DEPARTMENT_BITFLAG_MEDICAL (1<<6)
-#define DEPARTMENT_MEDICAL "Aether Pharmaceuticals"
+#define DEPARTMENT_MEDICAL "Foundation Medical"
 #define DEPARTMENT_BITFLAG_SILICON (1<<7)
-#define DEPARTMENT_SILICON "Silicon"
+#define DEPARTMENT_SILICON "Artifical Intelligence Applications"
 #define DEPARTMENT_BITFLAG_ASSISTANT (1<<8)
 #define DEPARTMENT_ASSISTANT "Civilian"
 #define DEPARTMENT_BITFLAG_CAPTAIN (1<<9)
-#define DEPARTMENT_CAPTAIN "Captain"
+#define DEPARTMENT_CAPTAIN "Site Director"
 #define DEPARTMENT_BITFLAG_COMPANY_LEADER (1<<10)
 #define DEPARTMENT_COMPANY_LEADER "Company Leader"
 
@@ -174,4 +181,4 @@
 #define JOB_CAN_BE_INTERN (1<<7)
 
 #define FACTION_NONE "None"
-#define FACTION_STATION "Station"
+#define FACTION_STATION "Site"

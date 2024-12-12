@@ -30,7 +30,7 @@
 	icon_state = "corpseclown"
 
 /obj/effect/mob_spawn/corpse/human/miner
-	name = JOB_PROSPECTOR
+	name = JOB_LOGISTICS_TECHNICIAN
 	outfit = /datum/outfit/job/miner
 	icon_state = "corpseminer"
 

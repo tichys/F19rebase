@@ -86,7 +86,7 @@
 /datum/objective_item/steal/low_risk/bartender_shotgun
 	name = "the bartender's shotgun"
 	targetitem = /obj/item/gun/ballistic/shotgun/doublebarrel
-	excludefromjob = list(JOB_BARTENDER)
+	excludefromjob = list(JOB_COOK)
 	exists_on_map = TRUE
 
 /obj/item/gun/ballistic/shotgun/doublebarrel/add_stealing_item_objective()

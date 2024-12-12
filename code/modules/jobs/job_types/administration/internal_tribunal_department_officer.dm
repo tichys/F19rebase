@@ -6,8 +6,8 @@
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "the 0-5 Council."
-	selection_color = "#2f2f7f"
+	supervisors = "the 0-5 Council"
+	selection_color = "#131E41"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	exp_requirements = 180

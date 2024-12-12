@@ -4,10 +4,10 @@
 		scan everyone in sight"
 	department_head = list(JOB_MEDICAL_DIRECTOR)
 	faction = FACTION_STATION
-	total_positions = 5
-	spawn_positions = 3
-	supervisors = "the Medical Director."
-	selection_color = "#013d3b"
+	total_positions = 3
+	spawn_positions = 2
+	supervisors = "the Medical Director"
+	selection_color = "#092527"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(

@@ -4,20 +4,22 @@
 	faction = FACTION_STATION
 	total_positions = 2
 	spawn_positions = 2
+	supervisors = "the Human Resources Director"
+	selection_color = "#092B0D"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
-		/datum/employer/none
+		/datum/employer/scp
 	)
 
-	alt_titles = list(JOB_CLOWN, "Mime")
+	alt_titles = list(JOB_CLOWN, "Morale Agent")
 	outfits = list(
 		"Default" = list(
 			SPECIES_HUMAN = /datum/outfit/job/clown,
 			SPECIES_PLASMAMAN = /datum/outfit/job/clown/plasmaman,
 		),
 
-		"Mime" = list(
+		"Morale Agent" = list(
 			SPECIES_HUMAN = /datum/outfit/job/mime,
 			SPECIES_PLASMAMAN = /datum/outfit/job/mime/plasmaman,
 		),

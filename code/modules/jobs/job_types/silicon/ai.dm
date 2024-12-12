@@ -9,7 +9,6 @@
 	spawn_positions = 1
 
 	supervisors = "your laws"
-	selection_color = "#3f823f"
 	spawn_type = /mob/living/silicon/ai
 
 	req_admin_notify = TRUE

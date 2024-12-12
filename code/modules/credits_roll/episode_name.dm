@@ -198,7 +198,7 @@
 			chefcount++
 		if(H.is_wearing_item_of_type(/obj/item/clothing/under/rank/civilian/lawyer))
 			lawyercount++
-		if(H.mind && H.mind.assigned_role.title == JOB_PROSPECTOR)
+		if(H.mind && H.mind.assigned_role.title == JOB_LOGISTICS_TECHNICIAN)
 			minercount++
 		if(H.mind && H.mind.assigned_role.title == "Chaplain")
 			chaplaincount++
@@ -277,7 +277,7 @@
 					if(H.is_wearing_item_of_type(/obj/item/clothing/under/rank/security/detective))
 						chance += 250
 					episode_names += new /datum/episode_name/rare("[uppertext(H.real_name)]: LOOSE CANNON", "The Detective was the only survivor in the shuttle.", chance)
-				if(JOB_PROSPECTOR)
+				if(JOB_LOGISTICS_TECHNICIAN)
 					var/chance = 250
 					if(H.is_wearing_item_of_type(/obj/item/pickaxe))
 						chance += 1000

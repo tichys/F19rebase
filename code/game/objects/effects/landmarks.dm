@@ -74,10 +74,6 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = JOB_LOGISTICS_TECHNICIAN
 	icon_state = JOB_LOGISTICS_TECHNICIAN
 
-/obj/effect/landmark/start/bartender
-	name = JOB_BARTENDER
-	icon_state = JOB_BARTENDER
-
 /obj/effect/landmark/start/clown
 	name = JOB_CLOWN
 	icon_state = JOB_CLOWN
@@ -93,10 +89,6 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 /obj/effect/landmark/start/cook
 	name = JOB_COOK
 	icon_state = JOB_COOK
-
-/obj/effect/landmark/start/shaft_miner
-	name = JOB_PROSPECTOR
-	icon_state = JOB_PROSPECTOR
 
 /obj/effect/landmark/start/botanist
 	name = JOB_BOTANIST

@@ -6,8 +6,8 @@
 	faction = FACTION_STATION
 	total_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
 	spawn_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
-	supervisors = "the Security Director."
-	selection_color = "#602f1c"
+	supervisors = "the EZ Commander"
+	selection_color = "#490A0D"
 	minimal_player_age = 7
 	exp_requirements = 300
 	exp_required_type = EXP_TYPE_CREW
@@ -109,8 +109,8 @@
 	faction = FACTION_STATION
 	total_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
 	spawn_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
-	supervisors = "the Security Director."
-	selection_color = "#602f1c"
+	supervisors = "the EZ Commander"
+	selection_color = "#490A0D"
 	minimal_player_age = 7
 	exp_requirements = 300
 	exp_required_type = EXP_TYPE_CREW
@@ -212,8 +212,8 @@
 	faction = FACTION_STATION
 	total_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
 	spawn_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
-	supervisors = "the Security Director."
-	selection_color = "#602f1c"
+	supervisors = "the EZ Commander"
+	selection_color = "#490A0D"
 	minimal_player_age = 7
 	exp_requirements = 300
 	exp_required_type = EXP_TYPE_CREW
@@ -308,15 +308,15 @@
 // EZ Commander
 
 /datum/job/ez_commander
-	title = JOB_LCZ_COMMANDER
+	title = JOB_EZ_COMMANDER
 	description = "Oversee EZ security, protect members of Command, assist the Containment Areas when required."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SECURITY
 	department_head = list(JOB_SECURITY_DIRECTOR)
 	faction = FACTION_STATION
 	total_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
 	spawn_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
-	supervisors = "the Security Director."
-	selection_color = "#602f1c"
+	supervisors = "the Security Director"
+	selection_color = "#FF0000"
 	minimal_player_age = 7
 	exp_requirements = 300
 	exp_required_type = EXP_TYPE_CREW

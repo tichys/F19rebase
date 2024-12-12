@@ -5,8 +5,8 @@
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "the Site Director."
-	selection_color = "#1d1d4f"
+	supervisors = "the Site Director"
+	selection_color = "#131E41"
 	req_admin_notify = 1
 	minimal_player_age = 10
 	exp_granted_type = EXP_TYPE_CREW

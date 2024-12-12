@@ -781,11 +781,15 @@
 	name = "basic identification card"
 	desc = "A basic, plastic identification card with some electronics sandwiched inside."
 	icon_state = "white_blank"
+	assigned_icon_state = "assigned_base"
+	wildcard_slots = WILDCARD_LIMIT_GOLD
 
 /obj/item/card/id/advanced/black_blank
 	name = "fancy identification card"
 	desc = "A fancy, plastic identification card with some electronics sandwiched inside."
 	icon_state = "black_blank"
+	assigned_icon_state = "assigned_admin"
+	wildcard_slots = WILDCARD_LIMIT_GOLD
 
 // ============== SCP IDs End ==============
 

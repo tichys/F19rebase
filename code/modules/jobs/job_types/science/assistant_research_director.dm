@@ -5,8 +5,8 @@
 	faction = FACTION_STATION
 	total_positions = 2
 	spawn_positions = 2
-	supervisors = "the Research Director."
-	selection_color = "#013d3b"
+	supervisors = "the Research Director"
+	selection_color = "#281E2D"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(

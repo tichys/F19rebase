@@ -6,10 +6,13 @@
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
+	supervisors = "the Human Resources Director"
+	selection_color = "#092B0D"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
-		/datum/employer/none
+		/datum/employer/scp,
+		/datum/employer/horizon_initiative,
 	)
 
 	outfits = list(

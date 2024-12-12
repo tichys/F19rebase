@@ -22,10 +22,7 @@
 // Security
 
 /datum/job/investigations_agent
-	alt_titles = list(JOB_INVESTIGATIONS_AGENT)
-
-/datum/job/dclass
-	alt_titles = list(JOB_DCLASS)
+	alt_titles = list(JOB_INVESTIGATIONS_AGENT, "Forensics Specialist")
 
 // Research
 
@@ -62,16 +59,16 @@
 // Medical
 
 /datum/job/doctor
-	alt_titles = list(JOB_MEDICAL_DOCTOR, "Surgeon", "Physician")
+	alt_titles = list(JOB_MEDICAL_DOCTOR, "Physician")
 
 /datum/job/paramedic
 	alt_titles = list(JOB_PARAMEDIC)
 
 /datum/job/chemist
-	alt_titles = list(JOB_CHEMIST)
+	alt_titles = list(JOB_CHEMIST, "Pharmacist")
 
 /datum/job/virologist
-	alt_titles = list(JOB_VIROLOGIST)
+	alt_titles = list(JOB_VIROLOGIST, "Pathologist")
 
 /datum/job/psychologist
 	alt_titles = list(JOB_PSYCHOLOGIST)
@@ -97,16 +94,10 @@
 /datum/job/logistics_technician
 	alt_titles = list(JOB_LOGISTICS_TECHNICIAN, "Mailman")
 
-/datum/job/shaft_miner
-	alt_titles = list(JOB_PROSPECTOR)
-
 // Service
 
 /datum/job/cook
 	alt_titles = list(JOB_COOK, "Chef", "Culinary Artist")
-
-/datum/job/bartender
-	alt_titles = list(JOB_BARTENDER, "Mixologist", "Barkeeper")
 
 /datum/job/botanist
 	alt_titles = list(JOB_BOTANIST)
@@ -118,4 +109,4 @@
 	alt_titles = list(JOB_JANITOR, "Custodian", "Sanitation Technician")
 
 /datum/job/chaplain
-	alt_titles = list(JOB_CHAPLAIN, "Priest", "Preacher", "Reverend", "Oracle", "Pontifex", "Magister", "High Priest", "Imam", "Rabbi", "Monk", "Counselor")
+	alt_titles = list(JOB_CHAPLAIN, "Horizon Initiative Shepard", "Priest", "Preacher", "Reverend", "Oracle", "Pontifex", "Magister", "High Priest", "Imam", "Rabbi", "Monk", "Counselor")

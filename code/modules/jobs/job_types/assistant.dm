@@ -4,9 +4,9 @@ GLOBAL_DATUM(colored_assistant, /datum/colored_assistant)
 Assistant
 */
 /datum/job/assistant
-	title = JOB_ASSISTANT
+	title = JOB_ASSISTANT //Flag and Job name defined in \code\__DEFINES\jobs.dm
 	description = "The everyman, an essential component to station life."
-	faction = FACTION_STATION
+	faction = FACTION_STATION //Flag and Faction name defined in \code\__DEFINES\jobs.dm
 	total_positions = 5
 	spawn_positions = 5
 	exp_granted_type = EXP_TYPE_CREW
@@ -46,6 +46,15 @@ Assistant
 	name = JOB_ASSISTANT
 	jobtype = /datum/job/assistant
 	id_trim = /datum/id_trim/job/assistant
+	/********************************************************************************************************
+		[id_trim] selects the overlay for the ID card.
+		The ID card itself is selected in [\code\modules\jobs\job_types\_job.dm]
+		or you could re-define it here-- for instance, if you wanted to give them a black ID you could put
+		put id = [/obj/item/card/id/advanced/black_blank] in this outfit.
+
+		[id_trim] also has its own defines in [\code\datums\id_trim\jobs.dm] where you can assign access,
+		icons for the overlay, sechud overlays, and modification requirement access.
+	********************************************************************************************************/
 
 /datum/outfit/job/assistant/pre_equip(mob/living/carbon/human/target)
 	..()

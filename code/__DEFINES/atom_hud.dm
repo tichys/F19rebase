@@ -97,6 +97,7 @@
 #define SECHUD_HUMAN_RESOURCES_DIRECTOR "hudhumanresources"
 #define SECHUD_INTERNAL_TRIBUNAL_DEPARTMENT_OFFICER "huditdo"
 #define SECHUD_ETHICS_COMMITTEE_LIAISON "hudecl"
+#define SECHUD_GOI_REP "hudgoi"
 #define SECHUD_COMMUNICATIONS_DIRECTOR "hudcommsofficer"
 
 #define SECHUD_LCZ_ZONE_COMMANDER "hudlczcommander"

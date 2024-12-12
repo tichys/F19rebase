@@ -49,6 +49,13 @@
 #define ACCESS_DCLASS_LUXURY 42
 #define ACCESS_DCLASS_MEDICAL 43
 
+#define ACCESS_ADMIN_HEAD 44
+#define ACCESS_SECURITY_HEAD 45
+#define ACCESS_SCIENCE_HEAD 46
+#define ACCESS_MEDICAL_HEAD 47
+#define ACCESS_ENGINEERING_HEAD 48
+#define ACCESS_SERVICE_HEAD 49
+
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
 	Mostly for admin fun times.*/
@@ -292,9 +299,9 @@
 	ACCESS_MEDICAL_LVL5, \
 	)
 /// Name for the Research region.
-#define REGION_RESEARCH "Research"
+#define REGION_SCIENCE "Science"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all research regional accesses that are overseen by the RD.
-#define REGION_ACCESS_RESEARCH list( \
+#define REGION_ACCESS_SCIENCE list( \
 	ACCESS_SCIENCE, \
 	ACCESS_SCIENCE_LVL1, \
 	ACCESS_SCIENCE_LVL2, \
@@ -314,7 +321,7 @@
 	ACCESS_ENGINEERING_LVL5, \
 	)
 /// Name for the Supply region.
-#define REGION_SUPPLY "Supply"
+#define REGION_SUPPLY "Logistics"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all cargo regional accesses that are overseen by the HoP.
 #define REGION_ACCESS_SUPPLY list( \
 	ACCESS_LOGISTICS, \
@@ -365,7 +372,7 @@ Comment here because it really doesn't like them anywhere else here
 	/obj/item/modular_computer/tablet/pda/detective = list(REGION_SECURITY), \
 	/obj/item/modular_computer/tablet/pda/warden = list(REGION_SECURITY), \
 	/obj/item/modular_computer/tablet/pda/janitor = list(REGION_GENERAL), \
-	/obj/item/modular_computer/tablet/pda/science = list(REGION_RESEARCH), \
+	/obj/item/modular_computer/tablet/pda/science = list(REGION_SCIENCE), \
 	/obj/item/modular_computer/tablet/pda/heads/hop = list(REGION_COMMAND), \
 	/obj/item/modular_computer/tablet/pda/heads/hos = list(REGION_COMMAND), \
 	/obj/item/modular_computer/tablet/pda/heads/cmo = list(REGION_COMMAND), \
@@ -377,13 +384,13 @@ Comment here because it really doesn't like them anywhere else here
 	/obj/item/modular_computer/tablet/pda/chaplain = list(REGION_GENERAL), \
 	/obj/item/modular_computer/tablet/pda/lawyer = list(REGION_GENERAL, REGION_SECURITY), \
 	/obj/item/modular_computer/tablet/pda/botanist = list(REGION_GENERAL), \
-	/obj/item/modular_computer/tablet/pda/roboticist = list(REGION_RESEARCH), \
+	/obj/item/modular_computer/tablet/pda/roboticist = list(REGION_SCIENCE), \
 	/obj/item/modular_computer/tablet/pda/curator = list(REGION_GENERAL), \
 	/obj/item/modular_computer/tablet/pda/cook = list(REGION_GENERAL), \
 	/obj/item/modular_computer/tablet/pda/bar = list(REGION_GENERAL), \
 	/obj/item/modular_computer/tablet/pda/atmos = list(REGION_ENGINEERING), \
 	/obj/item/modular_computer/tablet/pda/chemist = list(REGION_MEDBAY), \
-	/obj/item/modular_computer/tablet/pda/geneticist = list(REGION_RESEARCH), \
+	/obj/item/modular_computer/tablet/pda/geneticist = list(REGION_SCIENCE), \
 )
 
 /// All regions that make up the station area. Helper define to quickly designate a region as part of the station or not. Access via SSid_access.station_regions.
@@ -391,7 +398,7 @@ Comment here because it really doesn't like them anywhere else here
 	REGION_GENERAL, \
 	REGION_SECURITY, \
 	REGION_MEDBAY, \
-	REGION_RESEARCH, \
+	REGION_SCIENCE, \
 	REGION_ENGINEERING, \
 	REGION_SUPPLY, \
 	REGION_COMMAND, \

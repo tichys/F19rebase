@@ -7,7 +7,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the medical director"
-	selection_color = "#013d3b"
+	selection_color = "#092527"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(

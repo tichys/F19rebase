@@ -6,8 +6,8 @@
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "the 0-5 Council."
-	selection_color = "#2f2f7f"
+	supervisors = "the 0-5 Council"
+	selection_color = "#294DCF"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	exp_requirements = 180
@@ -57,11 +57,11 @@
 
 /datum/outfit/job/site_director
 	name = JOB_SITE_DIRECTOR
-	jobtype = /datum/job/captain
+	jobtype = /datum/job/site_director
 	allow_jumpskirt = FALSE
 
-	id = /obj/item/card/id/advanced/black_blank
 	id_trim = /datum/id_trim/job/site_director
+	id = /obj/item/card/id/advanced/black_blank
 	uniform = /obj/item/clothing/under/suit/charcoal
 	backpack_contents = list(
 		/obj/item/assembly/flash/handheld = 1

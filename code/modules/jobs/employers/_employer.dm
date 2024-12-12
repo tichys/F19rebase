@@ -4,9 +4,9 @@
 	var/creator_info = ""
 
 /datum/employer/scp
-	name = "The S.C.P. Foundation"
+	name = "The SCP Foundation"
 	short_name = "Foundation"
-	creator_info = "A foundation for containing anomalous entities the world would be better off not knowing about."
+	creator_info = "A foundation for containing anomalous entities the normal world would be better off not knowing about."
 
 /datum/employer/goc
 	name = "The Global Occult Coalition"
@@ -23,10 +23,17 @@
 	short_name = "Goldbaker-Reinz"
 	creator_info = "Goldbaker-Reinz Ltd. is one of the foremost insurance providers for the anomalous world. It provides insurance to both individuals and institutions, as well as reinsurance, data vending, risk analysis, and forensic & enforcement services. It is known throughout the anomalous world for always honoring the letter of its contracts in good faith."
 
-/datum/employer/hermes
-	name = "Hermes Galactic Freight"
-	short_name = "Hermes"
-	creator_info = "A ragtag fleet of merchants and freighters who will ship anything anywhere for the right price. They loosely follow the group's leader, a Vox named Grease Kitriki, who was previously a fierce pirate."
+/datum/employer/horizon_initiative
+	name = "Horizon Initiative"
+	short_name = "Horizon"
+	creator_info = "PLACEHOLDER."
+#warn Placeholder description for Horizon Initiative.
+
+/datum/employer/mcd
+	name = "Marshal, Carter & Dark"
+	short_name = "MC&D"
+	creator_info = "PLACEHOLDER."
+#warn Placeholder description for Marshal, Carter & Dark.
 
 /datum/employer/none
 	name = "None"
