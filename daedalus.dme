@@ -2017,6 +2017,7 @@
 #include "code\modular_scp\repositories\prefix.dm"
 #include "code\modular_scp\repositories\sound_channels.dm"
 #include "code\modular_scp\repositories\unique.dm"
+#include "code\modular_scp\SCPs\SCP-008.dm"
 #include "code\modular_scp\SCPs\SCP-012.dm"
 #include "code\modular_scp\SCPs\SCP-013.dm"
 #include "code\modular_scp\SCPs\SCP-049.dm"
