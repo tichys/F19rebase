@@ -1,60 +1,72 @@
-#define ACCESS_SECURITY 1 /// Brig cells+timers, permabrig, gulag+gulag shuttle, prisoner management console. Also Security Records
-#define ACCESS_SECURITY_LVL1 2
+/*
+	ID Trim access is a pre-set [\code\datums\id_trim\jobs.dm] group
+	of accesses that can be toggled on and off at a ID managment
+	computer.
+
+	Wildcards are access that can be applied to your ID, outside of
+	your ID's trim. (In order to give Security Access to a Logistics
+	Technican, you need to give them a Wildcard.)
+
+	Wildcards are limited, and based on your ID type. White/Grey
+	IDs will allow you to select less wildcards then Silver/Gold ones.
+
+	[\code\game\objects\items\cards_ids.dm] Here you can see the IDs
+	and what Wildcard Level they use.
+
+	[code\__DEFINES\id_cards.dm] Here you can see what limits each
+	Wildcard Level has.
+*/
+
+#define ACCESS_SECURITY 1
+#define ACCESS_SECURITY_LVL1 2 //Levels 1-3, Common Wildcards.
 #define ACCESS_SECURITY_LVL2 3
 #define ACCESS_SECURITY_LVL3 4
-#define ACCESS_SECURITY_LVL4 5 /// Armory, gulag teleporter, execution chamber
-#define ACCESS_SECURITY_LVL5 6
+#define ACCESS_SECURITY_LVL4 5 //Level 4, Command Wildcard.
+#define ACCESS_SECURITY_LVL5 6 //Level 5, Private Command Wildcard.
 
 #define ACCESS_ADMIN 7
-#define ACCESS_ADMIN_LVL1 8
+#define ACCESS_ADMIN_LVL1 8  //Levels 1-3, Common Wildcards.
 #define ACCESS_ADMIN_LVL2 9
-#define ACCESS_ADMIN_LVL3 10 /// Bridge, EVA storage windoors, gateway shutters, AI integrity restorer, comms console, RQ console
-#define ACCESS_ADMIN_LVL4 11
-#define ACCESS_ADMIN_LVL5 12
+#define ACCESS_ADMIN_LVL3 10
+#define ACCESS_ADMIN_LVL4 11 //Level 4, Command Wildcard.
+#define ACCESS_ADMIN_LVL5 12 //Level 5, Site Director/Captain Wildcard.
 
 #define ACCESS_SCIENCE 13
-#define ACCESS_SCIENCE_LVL1 14
+#define ACCESS_SCIENCE_LVL1 14 //Levels 1-3, Common Wildcards.
 #define ACCESS_SCIENCE_LVL2 15
 #define ACCESS_SCIENCE_LVL3 16
-#define ACCESS_SCIENCE_LVL4 17
-#define ACCESS_SCIENCE_LVL5 18
+#define ACCESS_SCIENCE_LVL4 17 //Level 4, Command Wildcard.
+#define ACCESS_SCIENCE_LVL5 18 //Level 5, Private Command Wildcard.
 
 #define ACCESS_MEDICAL 19
-#define ACCESS_MEDICAL_LVL1 20
+#define ACCESS_MEDICAL_LVL1 20 //Levels 1-3, Common Wildcards.
 #define ACCESS_MEDICAL_LVL2 21
 #define ACCESS_MEDICAL_LVL3 22
-#define ACCESS_MEDICAL_LVL4 23
-#define ACCESS_MEDICAL_LVL5  24
+#define ACCESS_MEDICAL_LVL4 23 //Level 4, Command Wildcard.
+#define ACCESS_MEDICAL_LVL5 24 //Level 5, Private Command Wildcard.
 
 #define ACCESS_ENGINEERING 25
-#define ACCESS_ENGINEERING_LVL1 26
+#define ACCESS_ENGINEERING_LVL1 26 //Levels 1-3, Common Wildcards.
 #define ACCESS_ENGINEERING_LVL2 27
 #define ACCESS_ENGINEERING_LVL3 28
-#define ACCESS_ENGINEERING_LVL4 29
-#define ACCESS_ENGINEERING_LVL5 30
+#define ACCESS_ENGINEERING_LVL4 29 //Level 4, Command Wildcard.
+#define ACCESS_ENGINEERING_LVL5 30 //Level 5, Private Command Wildcard.
 
 #define ACCESS_LOGISTICS 31
-#define ACCESS_LOGISTICS_LVL1 32
+#define ACCESS_LOGISTICS_LVL1 32 //Levels 1-3, Common Wildcards.
 #define ACCESS_LOGISTICS_LVL2 33
 #define ACCESS_LOGISTICS_LVL3 34
-#define ACCESS_LOGISTICS_LVL4 35
-#define ACCESS_LOGISTICS_LVL5 36
+#define ACCESS_LOGISTICS_LVL4 35 //Level 4, Command Wildcard.
+#define ACCESS_LOGISTICS_LVL5 36 //Level 5, Private Command Wildcard.
 
-#define ACCESS_SERVICE 37
+#define ACCESS_SERVICE 37 //Common Wildcard.
 
-#define ACCESS_DCLASS 38
+#define ACCESS_DCLASS 38 //All D-Class Access codes are Common Wildcards.
 #define ACCESS_DCLASS_MINING 39
 #define ACCESS_DCLASS_BOTANY 40
 #define ACCESS_DCLASS_JANITORIAL 41
 #define ACCESS_DCLASS_LUXURY 42
 #define ACCESS_DCLASS_MEDICAL 43
-
-#define ACCESS_ADMIN_HEAD 44
-#define ACCESS_SECURITY_HEAD 45
-#define ACCESS_SCIENCE_HEAD 46
-#define ACCESS_MEDICAL_HEAD 47
-#define ACCESS_ENGINEERING_HEAD 48
-#define ACCESS_SERVICE_HEAD 49
 
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
@@ -204,26 +216,56 @@
 
 /// Departmental/general/common area accesses. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_COMMON)
 #define COMMON_ACCESS list( \
-	ACCESS_ADMIN_LVL1, \
-	ACCESS_SECURITY_LVL1, \
-	ACCESS_MEDICAL_LVL1, \
-	ACCESS_SCIENCE_LVL1, \
-	ACCESS_ENGINEERING_LVL1, \
-	ACCESS_LOGISTICS_LVL1, \
-	ACCESS_SERVICE, \
-)
-
-/// Command staff/secure accesses, think bridge/armoury, AI upload, notably access to modify ID cards themselves. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_COMMAND)
-#define COMMAND_ACCESS list( \
 	ACCESS_ADMIN, \
 	ACCESS_ADMIN_LVL1, \
 	ACCESS_ADMIN_LVL2, \
 	ACCESS_ADMIN_LVL3, \
-	ACCESS_ADMIN_LVL4, \
-	ACCESS_ADMIN_LVL5, \
+	ACCESS_SECURITY, \
+	ACCESS_SECURITY_LVL1, \
+	ACCESS_SECURITY_LVL2, \
+	ACCESS_SECURITY_LVL3, \
+	ACCESS_MEDICAL, \
+	ACCESS_MEDICAL_LVL1, \
+	ACCESS_MEDICAL_LVL2, \
+	ACCESS_MEDICAL_LVL3, \
+	ACCESS_SCIENCE, \
+	ACCESS_SCIENCE_LVL1, \
+	ACCESS_SCIENCE_LVL2, \
+	ACCESS_SCIENCE_LVL3, \
+	ACCESS_ENGINEERING, \
+	ACCESS_ENGINEERING_LVL1, \
+	ACCESS_ENGINEERING_LVL2, \
+	ACCESS_ENGINEERING_LVL3, \
+	ACCESS_LOGISTICS, \
+	ACCESS_LOGISTICS_LVL1, \
+	ACCESS_LOGISTICS_LVL2, \
+	ACCESS_LOGISTICS_LVL3, \
+	ACCESS_SERVICE, \
+	ACCESS_DCLASS, \
+	ACCESS_DCLASS_MINING, \
+	ACCESS_DCLASS_BOTANY, \
+	ACCESS_DCLASS_JANITORIAL, \
+	ACCESS_DCLASS_LUXURY, \
+	ACCESS_DCLASS_MEDICAL, \
+)
+
+/// Command staff/secure accesses, think bridge/armoury, AI upload, notably access to modify ID cards themselves. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_COMMAND)
+#define COMMAND_ACCESS list( \
+	ACCESS_SECURITY_LVL4, \
+	ACCESS_MEDICAL_LVL4, \
+	ACCESS_SCIENCE_LVL4, \
+	ACCESS_ENGINEERING_LVL4, \
+	ACCESS_LOGISTICS_LVL4, \
 	)
 /// Private head of staff offices, usually only granted to most cards by trimming. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_PRV_COMMAND)
-#define PRIVATE_COMMAND_ACCESS list(ACCESS_ADMIN_LVL4)
+#define PRIVATE_COMMAND_ACCESS list( \
+	ACCESS_ADMIN_LVL4, \
+	ACCESS_SECURITY_LVL5, \
+	ACCESS_MEDICAL_LVL5, \
+	ACCESS_SCIENCE_LVL5, \
+	ACCESS_ENGINEERING_LVL5, \
+	ACCESS_LOGISTICS_LVL5, \
+	)
 
 /// Captains private rooms. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_CAPTAIN)
 #define CAPTAIN_ACCESS list(ACCESS_ADMIN_LVL5)
@@ -286,6 +328,12 @@
 	ACCESS_SECURITY_LVL3, \
 	ACCESS_SECURITY_LVL4, \
 	ACCESS_SECURITY_LVL5, \
+	ACCESS_DCLASS, \
+	ACCESS_DCLASS_MINING, \
+	ACCESS_DCLASS_BOTANY, \
+	ACCESS_DCLASS_JANITORIAL, \
+	ACCESS_DCLASS_LUXURY, \
+	ACCESS_DCLASS_MEDICAL, \
 	)
 /// Name for the Medbay region.
 #define REGION_MEDBAY "Medbay"

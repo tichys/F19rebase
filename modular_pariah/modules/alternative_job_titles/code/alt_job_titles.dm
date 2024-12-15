@@ -19,10 +19,21 @@
 /datum/job/security_director
 	alt_titles = list(JOB_SECURITY_DIRECTOR)
 
+/datum/job/goi_rep
+	alt_titles = list(
+		JOB_GOC_REP,
+		JOB_GOLDBAKER_REP,
+		JOB_UIU_REP,
+		JOB_MCD_REP
+	)
+
 // Security
 
 /datum/job/investigations_agent
-	alt_titles = list(JOB_INVESTIGATIONS_AGENT, "Forensics Specialist")
+	alt_titles = list(
+		JOB_INVESTIGATIONS_AGENT,
+		"Forensics Specialist"
+	)
 
 // Research
 

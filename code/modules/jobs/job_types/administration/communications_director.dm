@@ -29,7 +29,6 @@
 
 	departments_list = list(
 		/datum/job_department/command,
-		/datum/job_department/company_leader
 	)
 
 

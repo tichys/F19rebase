@@ -22,7 +22,6 @@
 	outfits = list(
 		"Default" = list(
 			SPECIES_HUMAN = /datum/outfit/job/site_director,
-			SPECIES_PLASMAMAN = /datum/outfit/job/site_director/plasmaman,
 		),
 	)
 
@@ -61,7 +60,7 @@
 	allow_jumpskirt = FALSE
 
 	id_trim = /datum/id_trim/job/site_director
-	id = /obj/item/card/id/advanced/black_blank
+	id = /obj/item/card/id/advanced/director_blank
 	uniform = /obj/item/clothing/under/suit/charcoal
 	backpack_contents = list(
 		/obj/item/assembly/flash/handheld = 1
@@ -105,33 +104,3 @@
 	if(!celestial_charter)
 		return
 	celestial_charter.name_type = special_charter
-
-/datum/outfit/job/site_director/plasmaman
-	name = JOB_SITE_DIRECTOR + " (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/captain
-	gloves = /obj/item/clothing/gloves/color/captain
-	head = /obj/item/clothing/head/helmet/space/plasmaman/captain
-	mask = /obj/item/clothing/mask/breath
-	r_hand = /obj/item/tank/internals/plasmaman/belt/full
-
-/datum/outfit/job/site_director/mod
-	name = "Captain (MODsuit)"
-
-	suit_store = /obj/item/tank/internals/oxygen
-	back = /obj/item/mod/control/pre_equipped/magnate
-	suit = null
-	head = null
-	mask = /obj/item/clothing/mask/gas/atmos/captain
-	internals_slot = ITEM_SLOT_SUITSTORE
-	backpack_contents = null
-	box = null
-
-/datum/outfit/job/site_director/mod/post_equip(mob/living/carbon/human/equipped, visualsOnly)
-	. = ..()
-	if(visualsOnly)
-		return
-
-	var/obj/item/mod/control/modsuit = equipped.back
-	var/obj/item/mod/module/pathfinder/module = locate() in modsuit.modules
-	module.implant.implant(equipped, silent = TRUE)

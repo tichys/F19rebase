@@ -29,7 +29,7 @@
 
 //No department
 
-#define JOB_ASSISTANT "Civilian"
+#define JOB_ASSISTANT "Assistant"
 #define JOB_DCLASS "D-Class"
 
 //Command
@@ -41,6 +41,9 @@
 #define JOB_COMMUNICATIONS_DIRECTOR "Communications Director"
 
 #define JOB_GOC_REP "Global Occult Coalition Representative"
+#define JOB_UIU_REP "Unusual Incidents Unit Representative"
+#define JOB_GOLDBAKER_REP "Goldbaker-Reinz Ltd. Corporate Representative"
+#define JOB_MCD_REP "Marshall, Carter & Dark Corporate Representative"
 
 //Silicon
 
@@ -59,7 +62,6 @@
 
 #define JOB_RAISA_AGENT "RAISA Agent"
 #define JOB_INVESTIGATIONS_AGENT "Investigations Agent"
-#define JOB_UIU_REP "UIU Joint Task Force Liaison"
 
 #define JOB_LCZ_COMMANDER "LCZ Commander"
 #define JOB_SENIOR_LCZ_GUARD "Senior LCZ Guard"
@@ -109,8 +111,6 @@
 #define JOB_JANITOR "Janitor"
 #define JOB_CLOWN "Morale Officer"
 #define JOB_CHAPLAIN "Chaplain"
-
-#define JOB_GOLDBAKER_REP "Goldbaker-Reinz Corporate Liaison"
 
 //ERTs
 #define JOB_ERT_DEATHSQUAD "Death Commando"

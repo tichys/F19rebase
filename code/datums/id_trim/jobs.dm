@@ -104,18 +104,52 @@
 	intern_alt_name = "Intern Director"
 	trim_state = "adminlvl5"
 	sechud_icon_state = SECHUD_SITE_DIRECTOR
-	config_job = "captain"
+	config_job = "site_director"
 	template_access = list(ACCESS_ADMIN_LVL5)
 	job = /datum/job/site_director
+	extra_access = list()
+	minimal_access = list(
+		ACCESS_ADMIN,
+		ACCESS_ADMIN_LVL1,
+		ACCESS_ADMIN_LVL2,
+		ACCESS_ADMIN_LVL3,
+		ACCESS_ADMIN_LVL4,
+		ACCESS_ADMIN_LVL5,
+		ACCESS_SECURITY,
+		ACCESS_SECURITY_LVL1,
+		ACCESS_SECURITY_LVL2,
+		ACCESS_SECURITY_LVL3,
+		ACCESS_SECURITY_LVL4,
+		ACCESS_SECURITY_LVL5,
+		ACCESS_MEDICAL,
+		ACCESS_MEDICAL_LVL1,
+		ACCESS_MEDICAL_LVL2,
+		ACCESS_MEDICAL_LVL3,
+		ACCESS_MEDICAL_LVL4,
+		ACCESS_MEDICAL_LVL5,
+		ACCESS_SCIENCE,
+		ACCESS_SCIENCE_LVL1,
+		ACCESS_SCIENCE_LVL2,
+		ACCESS_SCIENCE_LVL3,
+		ACCESS_SCIENCE_LVL4,
+		ACCESS_SCIENCE_LVL5,
+		ACCESS_ENGINEERING,
+		ACCESS_ENGINEERING_LVL1,
+		ACCESS_ENGINEERING_LVL2,
+		ACCESS_ENGINEERING_LVL3,
+		ACCESS_ENGINEERING_LVL4,
+		ACCESS_ENGINEERING_LVL5,
+		ACCESS_LOGISTICS,
+		ACCESS_LOGISTICS_LVL1,
+		ACCESS_LOGISTICS_LVL2,
+		ACCESS_LOGISTICS_LVL3,
+		ACCESS_LOGISTICS_LVL4,
+		ACCESS_LOGISTICS_LVL5,
+		ACCESS_SERVICE
+	)
+	extra_wildcard_access = list()
+	minimal_wildcard_access = list()
 
-/// Captain gets all station accesses hardcoded in because it's the Captain.
-/datum/id_trim/job/site_director/New()
-	extra_access |= (SSid_access.get_flag_access_list(ACCESS_FLAG_COMMON) + SSid_access.get_flag_access_list(ACCESS_FLAG_COMMAND))
-	extra_wildcard_access |= (SSid_access.get_flag_access_list(ACCESS_FLAG_PRV_COMMAND) + SSid_access.get_flag_access_list(ACCESS_FLAG_CAPTAIN))
-	minimal_access |= (SSid_access.get_flag_access_list(ACCESS_FLAG_COMMON) + SSid_access.get_flag_access_list(ACCESS_FLAG_COMMAND))
-	minimal_wildcard_access |= (SSid_access.get_flag_access_list(ACCESS_FLAG_PRV_COMMAND) + SSid_access.get_flag_access_list(ACCESS_FLAG_CAPTAIN))
-
-	return ..()
 
 /datum/id_trim/job/human_resources_director
 	assignment = JOB_HUMAN_RESOURCES_DIRECTOR
@@ -144,8 +178,8 @@
 		ACCESS_SECURITY,
 		ACCESS_SECURITY_LVL1
 	)
-	minimal_wildcard_access = list(ACCESS_ADMIN_HEAD, ACCESS_SERVICE_HEAD)
-	config_job = "head_of_personnel"
+	minimal_wildcard_access = list()
+	config_job = "human_resources_director"
 	template_access = list(ACCESS_ADMIN_LVL5)
 	job = /datum/job/human_resources_director
 
@@ -206,15 +240,13 @@
 		ACCESS_ADMIN_LVL2,
 		ACCESS_ADMIN_LVL3,
 		)
-	config_job = "goc rep"
+	config_job = "goi_rep"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
-	job = /datum/job/goc_rep
+	job = /datum/job/goi_rep
 
 /datum/id_trim/job/goldbaker_rep
 	assignment = JOB_GOLDBAKER_REP
 	trim_state = "adminlvl3"
-	sechud_icon_state = SECHUD_GOI_REP
-	extra_access = list()
 	minimal_access = list(
 		ACCESS_ADMIN,
 		ACCESS_ADMIN_LVL1,
@@ -224,15 +256,10 @@
 		ACCESS_MEDICAL_LVL1,
 		ACCESS_SECURITY,
 		)
-	config_job = "goc rep"
-	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
-	job = /datum/job/goldbaker_rep
 
 /datum/id_trim/job/uiu_rep
 	assignment = JOB_UIU_REP
 	trim_state = "adminlvl3"
-	sechud_icon_state = SECHUD_GOI_REP
-	extra_access = list()
 	minimal_access = list(
 		ACCESS_ADMIN,
 		ACCESS_ADMIN_LVL1,
@@ -242,9 +269,16 @@
 		ACCESS_SECURITY_LVL1,
 		ACCESS_SECURITY_LVL2,
 		)
-	config_job = "uiu rep"
-	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
-	job = /datum/job/uiu_rep
+
+/datum/id_trim/job/mcd_rep
+	assignment = JOB_MCD_REP
+	trim_state = "adminlvl3"
+	minimal_access = list(
+		ACCESS_ADMIN,
+		ACCESS_ADMIN_LVL1,
+		ACCESS_ADMIN_LVL2,
+		ACCESS_ADMIN_LVL3
+		)
 
 /datum/id_trim/job/communications_director
 	assignment = "Communications Director"
@@ -310,7 +344,7 @@
 		ACCESS_SECURITY_LVL4,
 		ACCESS_SECURITY_LVL5
 		)
-	minimal_wildcard_access = list(ACCESS_SECURITY_HEAD)
+	minimal_wildcard_access = list()
 	config_job = "security_director"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
 	job = /datum/job/security_director
@@ -583,7 +617,7 @@
 		ACCESS_SECURITY_LVL1,
 		ACCESS_SECURITY_LVL2
 	)
-	minimal_wildcard_access = list(ACCESS_SCIENCE_HEAD)
+	minimal_wildcard_access = list()
 	config_job = "research_director"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
 	job = /datum/job/research_director
@@ -652,7 +686,7 @@
 		ACCESS_MEDICAL_LVL4,
 		ACCESS_MEDICAL_LVL5
 		)
-	minimal_wildcard_access = list(ACCESS_MEDICAL_HEAD)
+	minimal_wildcard_access = list()
 	config_job = "medical_director"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
 	job = /datum/job/medical_director
@@ -758,7 +792,7 @@
 	sechud_icon_state = SECHUD_ENGINEERING_DIRECTOR
 	extra_access = list()
 	minimal_access = list(ACCESS_ADMIN_LVL1, ACCESS_ADMIN_LVL2, ACCESS_ADMIN_LVL3, ACCESS_ADMIN_LVL4, ACCESS_ENGINEERING, ACCESS_ENGINEERING_LVL1, ACCESS_ENGINEERING_LVL2, ACCESS_ENGINEERING_LVL3, ACCESS_ENGINEERING_LVL4, ACCESS_ENGINEERING_LVL5, ACCESS_SECURITY_LVL1, ACCESS_SCIENCE_LVL1, ACCESS_LOGISTICS_LVL1)
-	minimal_wildcard_access = list(ACCESS_ENGINEERING_HEAD)
+	minimal_wildcard_access = list()
 	config_job = "engineering_director"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
 	job = /datum/job/engineering_director
@@ -1003,20 +1037,39 @@
 	job = /datum/job/janitor
 
 /datum/id_trim/job/prisoner
-	assignment = "Prisoner"
-	trim_state = "trim_prisoner"
+	assignment = "D-Class"
+	trim_state = "trim_classd"
 	sechud_icon_state = SECHUD_PRISONER
+	extra_access = list()
+	minimal_access = list(ACCESS_DCLASS)
 	config_job = "prisoner"
-	template_access = list(ACCESS_ADMIN_LVL5, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL5, ACCESS_ADMIN_LVL5)
+	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL2, ACCESS_SECURITY_LVL3, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
 	job = /datum/job/dclass
 
-/datum/id_trim/job/prisoner
-	assignment = "Prisoner"
-	trim_state = "trim_prisoner"
-	sechud_icon_state = SECHUD_PRISONER
-	config_job = "prisoner"
+/datum/id_trim/job/prisoner/janitor
+	assignment = "D-Class Janitor"
+	trim_state = "trim_classdjani"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
-	job = /datum/job/dclass
+
+/datum/id_trim/job/prisoner/medic
+	assignment = "D-Class Medic"
+	trim_state = "trim_classdmed"
+	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
+
+/datum/id_trim/job/prisoner/cook
+	assignment = "D-Class Cook"
+	trim_state = "trim_classdcook"
+	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
+
+/datum/id_trim/job/prisoner/botanist
+	assignment = "D-Class Botanist"
+	trim_state = "trim_classdbot"
+	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
+
+/datum/id_trim/job/prisoner/miner
+	assignment = "D-Class Miner"
+	trim_state = "trim_classdmine"
+	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5, ACCESS_SECURITY_LVL4, ACCESS_SECURITY_LVL5)
 
 /datum/id_trim/job/prisoner/one
 	trim_state = "trim_prisoner_1"

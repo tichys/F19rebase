@@ -5,11 +5,10 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	/datum/job/ethics_committee_liaison,
 	/datum/job/internal_tribunal_department_officer,
 	/datum/job/communications_director,
-	/datum/job/goc_rep,
+	/datum/job/goi_rep,
 	// Security
 	/datum/job/security_director,
 	/datum/job/investigations_agent,
-	/datum/job/uiu_rep,
 	/datum/job/raisa_agent,
 	/datum/job/ez_commander,
 	/datum/job/senior_ez_guard,
@@ -58,7 +57,6 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	/datum/job/chaplain,
 	/datum/job/janitor,
 	/datum/job/clown,
-	/datum/job/goldbaker_rep,
 	/datum/job/assistant,
 	/datum/job/ai,
 	/datum/job/cyborg

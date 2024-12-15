@@ -782,12 +782,19 @@
 	desc = "A basic, plastic identification card with some electronics sandwiched inside."
 	icon_state = "white_blank"
 	assigned_icon_state = "assigned_base"
-	wildcard_slots = WILDCARD_LIMIT_GOLD
+	wildcard_slots = WILDCARD_LIMIT_GREY
 
 /obj/item/card/id/advanced/black_blank
 	name = "fancy identification card"
 	desc = "A fancy, plastic identification card with some electronics sandwiched inside."
 	icon_state = "black_blank"
+	assigned_icon_state = "assigned_admin"
+	wildcard_slots = WILDCARD_LIMIT_SILVER
+
+/obj/item/card/id/advanced/director_blank
+	name = "thick identification card"
+	desc = "A thick, plastic identification card. This baby is sure to hold a lot of access codes."
+	icon_state = "director_blank"
 	assigned_icon_state = "assigned_admin"
 	wildcard_slots = WILDCARD_LIMIT_GOLD
 

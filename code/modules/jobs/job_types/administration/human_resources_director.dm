@@ -18,12 +18,12 @@
 	outfits = list(
 		"Default" = list(
 			SPECIES_HUMAN = /datum/outfit/job/human_resources_director,
-			SPECIES_PLASMAMAN = /datum/outfit/job/human_resources_director/plasmaman,
 		),
 	)
 
 	departments_list = list(
 		/datum/job_department/command,
+		/datum/job_department/company_leader
 	)
 
 	paycheck = PAYCHECK_COMMAND
@@ -32,7 +32,7 @@
 	liver_traits = list(TRAIT_ROYAL_METABOLISM)
 
 	mail_goodies = list(
-		/obj/item/card/id/advanced/black_blank = 10,
+		/obj/item/storage/box/black_foundation_ids = 10,
 		/obj/item/stack/sheet/bone = 5
 	)
 
@@ -65,15 +65,6 @@
 		/obj/item/gun/energy/e_gun,
 		/obj/item/stamp/hop,
 	)
-
-/datum/outfit/job/human_resources_director/plasmaman
-	name = JOB_HUMAN_RESOURCES_DIRECTOR + " (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/head_of_personnel
-	gloves = /obj/item/clothing/gloves/color/plasmaman/head_of_personnel
-	head = /obj/item/clothing/head/helmet/space/plasmaman/head_of_personnel
-	mask = /obj/item/clothing/mask/breath
-	r_hand = /obj/item/tank/internals/plasmaman/belt/full
 
 /datum/outfit/job/human_resources_director/pre_equip(mob/living/carbon/human/H)
 	..()

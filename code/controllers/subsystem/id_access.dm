@@ -152,37 +152,37 @@ SUBSYSTEM_DEF(id_access)
 		))
 
 	sub_department_managers_tgui = list(
-		"[ACCESS_ADMIN_HEAD]" = list(
+		"[ACCESS_ADMIN_LVL5]" = list(
 			"regions" = list(REGION_COMMAND),
 			"head" = JOB_SITE_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_SERVICE_HEAD]" = list(
+		"[ACCESS_ADMIN_LVL4]" = list(
 			"regions" = list(REGION_GENERAL, REGION_SUPPLY),
 			"head" = JOB_HUMAN_RESOURCES_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_SECURITY_HEAD]" = list(
+		"[ACCESS_SECURITY_LVL5]" = list(
 			"regions" = list(REGION_SECURITY),
 			"head" = JOB_SECURITY_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_MEDICAL_HEAD]" = list(
+		"[ACCESS_MEDICAL_LVL5]" = list(
 			"regions" = list(REGION_MEDBAY),
 			"head" = JOB_MEDICAL_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_SCIENCE_HEAD]" = list(
+		"[ACCESS_SCIENCE_LVL5]" = list(
 			"regions" = list(REGION_SCIENCE),
 			"head" = JOB_RESEARCH_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_ENGINEERING_HEAD]" = list(
+		"[ACCESS_ENGINEERING_LVL5]" = list(
 			"regions" = list(REGION_ENGINEERING),
 			"head" = JOB_ENGINEERING_DIRECTOR,
 			"templates" = list(),

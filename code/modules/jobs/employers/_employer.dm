@@ -75,6 +75,11 @@
 	short_name = "Goldbaker-Reinz"
 	creator_info = "Goldbaker-Reinz Ltd. is one of the foremost insurance providers for the anomalous world. It provides insurance to both individuals and institutions, as well as reinsurance, data vending, risk analysis, and forensic & enforcement services. It is known throughout the anomalous world for always honoring the letter of its contracts in good faith."
 
+/datum/employer/mcd
+	name = "Marshall, Carter & Dark"
+	short_name = "MC&D"
+	creator_info = "Marshall, Carter & Dark is a corporation which specialize in the sale of anomalous objects for profit."
+
 /datum/employer/horizon_initiative
 	name = "Horizon Initiative"
 	short_name = "Horizon"
