@@ -97,7 +97,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = JOB_UIU_REP
 
 
-/obj/effect/landmark/start/gmcd_rep
+/obj/effect/landmark/start/mcd_rep
 	name = JOB_MCD_REP
 	icon_state = JOB_MCD_REP
 
@@ -294,6 +294,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 /obj/effect/landmark/start/clown
 	name = JOB_CLOWN
 	icon_state = JOB_CLOWN
+
+/obj/effect/landmark/start/mime
+	name = JOB_MIME
+	icon_state = JOB_MIME
 
 /obj/effect/landmark/start/chaplain
 	name = JOB_CHAPLAIN
