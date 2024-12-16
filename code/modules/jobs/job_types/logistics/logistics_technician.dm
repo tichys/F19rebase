@@ -8,7 +8,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the Logistics Officer"
-	selection_color = "#241D0E"
+	selection_color = "#3A2300"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(

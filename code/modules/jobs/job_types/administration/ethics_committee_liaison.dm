@@ -7,7 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the Ethics Committee"
-	selection_color = "#131E41"
+	selection_color = "#00007F"
 	minimal_player_age = 14
 	exp_requirements = 180
 	exp_required_type = EXP_TYPE_CREW

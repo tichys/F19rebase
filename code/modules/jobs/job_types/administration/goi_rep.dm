@@ -1,13 +1,13 @@
 /datum/job/goi_rep
 	title = "Group of Interest Representative"
-	description = "As the GOC Representative, your task is to assess the facility and generally \
-	advocate for hardline approaches in regards to anomalies and their containment, or destruction. "
+	description = "Represent your respective group of interest. Advise command personnel \
+	about your group's best interests."
 	auto_deadmin_role_flags = DEADMIN_POSITION_HEAD|DEADMIN_POSITION_SECURITY
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the leaders of your respective group of interest."
-	selection_color = "#131E41"
+	selection_color = "#00007F"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	exp_requirements = 180

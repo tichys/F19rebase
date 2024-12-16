@@ -83,7 +83,7 @@
 /datum/employer/horizon_initiative
 	name = "Horizon Initiative"
 	short_name = "Horizon"
-	creator_info = "In the SCP Foundation universe, the 'Horizon Initiative' is a Group of Interest comprised of influential religious sects from the three major Abrahamic religions, formed to actively seek out and either retrieve or destroy anomalous objects they perceive as threats based on their religious dogma."
+	creator_info = "The 'Horizon Initiative' is a Group of Interest comprised of influential religious sects from the three major Abrahamic religions, formed to actively seek out and either retrieve or destroy anomalous objects they perceive as threats based on their religious dogma."
 
 /datum/employer/none
 	name = "None"

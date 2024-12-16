@@ -7,7 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the 0-5 Council"
-	selection_color = "#294DCF"
+	selection_color = "#0000E5"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	exp_requirements = 180

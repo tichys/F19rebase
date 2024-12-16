@@ -159,7 +159,15 @@ SUBSYSTEM_DEF(id_access)
 			"pdas" = list(),
 		),
 		"[ACCESS_ADMIN_LVL4]" = list(
-			"regions" = list(REGION_GENERAL, REGION_SUPPLY),
+			"regions" = list(
+				REGION_GENERAL,
+				REGION_COMMAND,
+				REGION_SUPPLY,
+				REGION_SECURITY,
+				REGION_MEDBAY,
+				REGION_SCIENCE,
+				REGION_ENGINEERING
+				),
 			"head" = JOB_HUMAN_RESOURCES_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),

@@ -6,7 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the Site Director"
-	selection_color = "#131E41"
+	selection_color = "#00007F"
 	req_admin_notify = 1
 	minimal_player_age = 10
 	exp_granted_type = EXP_TYPE_CREW
