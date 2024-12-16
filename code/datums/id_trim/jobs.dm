@@ -231,7 +231,7 @@
 
 /datum/id_trim/job/goc_rep
 	assignment = JOB_GOC_REP
-	trim_state = "adminlvl3"
+	trim_state = "goc"
 	sechud_icon_state = SECHUD_GOI_REP
 	extra_access = list()
 	minimal_access = list(
@@ -246,7 +246,7 @@
 
 /datum/id_trim/job/goldbaker_rep
 	assignment = JOB_GOLDBAKER_REP
-	trim_state = "adminlvl3"
+	trim_state = "goldbaker"
 	minimal_access = list(
 		ACCESS_ADMIN,
 		ACCESS_ADMIN_LVL1,
@@ -259,7 +259,7 @@
 
 /datum/id_trim/job/uiu_rep
 	assignment = JOB_UIU_REP
-	trim_state = "adminlvl3"
+	trim_state = "uiu"
 	minimal_access = list(
 		ACCESS_ADMIN,
 		ACCESS_ADMIN_LVL1,
@@ -272,7 +272,7 @@
 
 /datum/id_trim/job/mcd_rep
 	assignment = JOB_MCD_REP
-	trim_state = "adminlvl3"
+	trim_state = "mcd"
 	minimal_access = list(
 		ACCESS_ADMIN,
 		ACCESS_ADMIN_LVL1,
