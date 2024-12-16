@@ -29,7 +29,7 @@
 
 //No department
 
-#define JOB_ASSISTANT "Assistant"
+#define JOB_ASSISTANT "Intern"
 #define JOB_DCLASS "D-Class"
 
 //Command
@@ -110,6 +110,7 @@
 #define JOB_COOK "Cook"
 #define JOB_JANITOR "Janitor"
 #define JOB_CLOWN "Morale Officer"
+#define JOB_MIME "Morale Agent"
 #define JOB_CHAPLAIN "Chaplain"
 
 //ERTs

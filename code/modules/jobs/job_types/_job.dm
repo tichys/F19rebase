@@ -57,6 +57,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	/datum/job/chaplain,
 	/datum/job/janitor,
 	/datum/job/clown,
+	/datum/job/mime,
 	/datum/job/assistant,
 	/datum/job/ai,
 	/datum/job/cyborg

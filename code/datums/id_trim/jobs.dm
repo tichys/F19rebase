@@ -980,7 +980,7 @@
 	minimal_access = list(ACCESS_SERVICE)
 	config_job = "mime"
 	template_access = list(ACCESS_ADMIN_LVL4, ACCESS_ADMIN_LVL5)
-	job = /datum/job/clown
+	job = /datum/job/mime
 
 /datum/id_trim/job/bartender
 	assignment = JOB_COOK

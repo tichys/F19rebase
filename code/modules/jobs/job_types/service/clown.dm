@@ -1,5 +1,5 @@
 /datum/job/clown
-	title = JOB_CLOWN
+	title = "Morale Officer"
 	description = "Entertain the crew, make bad jokes, go on a holy quest to find bananium, HONK!"
 	faction = FACTION_STATION
 	total_positions = 2
@@ -12,16 +12,13 @@
 		/datum/employer/scp
 	)
 
-	alt_titles = list(JOB_CLOWN, "Morale Agent")
 	outfits = list(
 		"Default" = list(
 			SPECIES_HUMAN = /datum/outfit/job/clown,
-			SPECIES_PLASMAMAN = /datum/outfit/job/clown/plasmaman,
 		),
 
-		"Morale Agent" = list(
+		JOB_MIME = list(
 			SPECIES_HUMAN = /datum/outfit/job/mime,
-			SPECIES_PLASMAMAN = /datum/outfit/job/mime/plasmaman,
 		),
 	)
 
@@ -42,7 +39,6 @@
 	family_heirlooms = list(/obj/item/bikehorn/golden)
 	rpg_title = "Jester"
 	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
-
 
 /datum/job/clown/after_spawn(mob/living/spawned, client/player_client)
 	. = ..()
@@ -77,15 +73,6 @@
 	chameleon_extras = /obj/item/stamp/clown
 	implants = list(/obj/item/implant/sad_trombone)
 
-/datum/outfit/job/clown/plasmaman
-	name = "Clown (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/clown
-	gloves = /obj/item/clothing/gloves/color/plasmaman/clown
-	head = /obj/item/clothing/head/helmet/space/plasmaman/clown
-	mask = /obj/item/clothing/mask/gas/clown_hat/plasmaman
-	r_hand = /obj/item/tank/internals/plasmaman/belt/full
-
 /datum/outfit/job/clown/mod
 	name = "Clown (MODsuit)"
 
@@ -117,9 +104,51 @@
 	for(var/datum/mutation/human/clumsy/M in H.dna.mutations)
 		M.ryetalyn_proof = TRUE
 
+/datum/job/mime
+	title = "Morale Agent"
+	description = "Entertain the crew while keeping your vow of silence. Communicate through gesticulation!"
+	faction = FACTION_STATION
+	total_positions = 2
+	spawn_positions = 2
+	supervisors = "the Human Resources Director"
+	selection_color = "#092B0D"
+	exp_granted_type = EXP_TYPE_CREW
+
+	employers = list(
+		/datum/employer/scp
+	)
+
+	outfits = list(
+		"Default" = list(
+			SPECIES_HUMAN = /datum/outfit/job/mime
+		),
+	)
+
+	liver_traits = list(TRAIT_COMEDY_METABOLISM)
+
+	departments_list = list(
+		/datum/job_department/service,
+	)
+
+	mail_goodies = list(
+		/obj/item/reagent_containers/food/drinks/bottle/bottleofnothing = 100,
+		/obj/item/toy/crayon/spraycan/mimecan = 50
+	)
+
+	family_heirlooms = list(/obj/item/food/baguette)
+	rpg_title = "Jester"
+	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
+
+/datum/job/mime/after_spawn(mob/living/spawned, client/player_client)
+	. = ..()
+	if(!ishuman(spawned))
+		return
+
+	spawned.apply_pref_name(/datum/preference/name/clown)
+
 /datum/outfit/job/mime
-	name = "Mime"
-	jobtype = /datum/job/clown
+	name = JOB_MIME
+	jobtype = /datum/job/mime
 
 	id_trim = /datum/id_trim/job/mime
 	uniform = /obj/item/clothing/under/rank/civilian/mime
@@ -140,15 +169,6 @@
 	satchel = /obj/item/storage/backpack/mime
 
 	chameleon_extras = /obj/item/stamp/mime
-
-/datum/outfit/job/mime/plasmaman
-	name = "Mime (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/mime
-	gloves = /obj/item/clothing/gloves/color/plasmaman/white
-	head = /obj/item/clothing/head/helmet/space/plasmaman/mime
-	mask = /obj/item/clothing/mask/gas/mime/plasmaman
-	r_hand = /obj/item/tank/internals/plasmaman/belt/full
 
 /datum/outfit/job/mime/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	..()

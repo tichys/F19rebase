@@ -10,14 +10,8 @@
 	var/list/alt_titles = null
 
 // Heads
-/datum/job/engineering_director
-	alt_titles = list(JOB_ENGINEERING_DIRECTOR)
-
-/datum/job/medical_director
-	alt_titles = list(JOB_MEDICAL_DIRECTOR)
-
 /datum/job/security_director
-	alt_titles = list(JOB_SECURITY_DIRECTOR)
+	alt_titles = list(JOB_SECURITY_DIRECTOR, "Guard Commander")
 
 /datum/job/goi_rep
 	alt_titles = list(
@@ -40,10 +34,13 @@
 /datum/job/junior_researcher
 	alt_titles = list(
 		"Junior AIAD Technican",
+		"Junior Cryptozoologist",
 		"Junior Xenobiologist",
+		"Junior Xenoentomologist",
 		"Junior Xenobotanologist",
 		"Junior Xenoarcheologist",
 		"Apprentice Thaumatologist",
+		"Apprentice Alchemist",
 		"Research Assistant"
 		)
 
@@ -51,9 +48,12 @@
 	alt_titles = list(
 		JOB_RESEARCHER,
 		"AIAD Technican",
+		"Cryptozoologist",
 		"Xenobiologist",
+		"Xenoentomologist",
 		"Xenobotanologist",
 		"Xenoarcheologist",
+		"Alchemist",
 		"Thaumatologist"
 		)
 
@@ -61,9 +61,12 @@
 	alt_titles = list(
 		JOB_RESEARCHER,
 		"Senior AIAD Technican",
+		"Senior Cryptozoologist",
 		"Senior Xenobiologist",
+		"Senior Xenoentomologist",
 		"Senior Xenobotanologist",
 		"Senior Xenoarcheologist",
+		"Elder Alchemist",
 		"Elder Thaumatologist"
 		)
 
@@ -73,7 +76,7 @@
 	alt_titles = list(JOB_MEDICAL_DOCTOR, "Physician")
 
 /datum/job/paramedic
-	alt_titles = list(JOB_PARAMEDIC)
+	alt_titles = list(JOB_PARAMEDIC, "Emergency Medical Technician")
 
 /datum/job/chemist
 	alt_titles = list(JOB_CHEMIST, "Pharmacist")
@@ -82,7 +85,7 @@
 	alt_titles = list(JOB_VIROLOGIST, "Pathologist")
 
 /datum/job/psychologist
-	alt_titles = list(JOB_PSYCHOLOGIST)
+	alt_titles = list(JOB_PSYCHOLOGIST, "Therapist")
 
 // Engineering
 
@@ -95,15 +98,9 @@
 /datum/job/junior_engineer
 	alt_titles = list(JOB_JUNIOR_ENGINEER, "Junior Maintenance Technician", "Junior Electrician", "Junior Engine Technician")
 
-/datum/job/atmospheric_technician
-	alt_titles = list(JOB_ATMOSPHERIC_TECHNICIAN)
-
 // Cargo
 /datum/job/logistics_officer
-	alt_titles = list(JOB_LOGISTICS_OFFICER)
-
-/datum/job/logistics_technician
-	alt_titles = list(JOB_LOGISTICS_TECHNICIAN, "Mailman")
+	alt_titles = list(JOB_LOGISTICS_OFFICER, "Quartermaster")
 
 // Service
 
@@ -111,10 +108,10 @@
 	alt_titles = list(JOB_COOK, "Chef", "Culinary Artist")
 
 /datum/job/botanist
-	alt_titles = list(JOB_BOTANIST)
+	alt_titles = list(JOB_BOTANIST, "Hydroponicist")
 
 /datum/job/curator
-	alt_titles = list(JOB_IT_TECHNICIAN)
+	alt_titles = list(JOB_IT_TECHNICIAN, "Archivist")
 
 /datum/job/janitor
 	alt_titles = list(JOB_JANITOR, "Custodian", "Sanitation Technician")
