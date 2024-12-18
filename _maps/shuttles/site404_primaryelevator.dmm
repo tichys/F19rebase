@@ -1,0 +1,79 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"b" = (
+/obj/machinery/light/cold/no_nightlight/directional/east,
+/turf/open/floor/tiled/small,
+/area/shuttle/site404/primaryelevator)
+"d" = (
+/turf/closed/wall/mineral/titanium,
+/area/shuttle/site404/primaryelevator)
+"m" = (
+/obj/machinery/door/airlock/shuttle,
+/turf/open/floor/tiled/steel_grid,
+/area/shuttle/site404/primaryelevator)
+"s" = (
+/obj/machinery/light/cold/no_nightlight/directional/west,
+/turf/open/floor/tiled/small,
+/area/shuttle/site404/primaryelevator)
+"u" = (
+/obj/docking_port/mobile{
+	name = "Site 404 - Primary Elevator";
+	id = "primaryelevator";
+	height = 5;
+	dwidth = 2;
+	width = 5;
+	callTime = -5
+	},
+/obj/machinery/door/airlock/shuttle,
+/turf/open/floor/tiled/steel_grid,
+/area/shuttle/site404/primaryelevator)
+"G" = (
+/obj/structure/chair/sofa/bench/left,
+/turf/open/floor/tiled/monofloor,
+/area/shuttle/site404/primaryelevator)
+"M" = (
+/obj/structure/chair/sofa/bench/right,
+/turf/open/floor/tiled/monofloor,
+/area/shuttle/site404/primaryelevator)
+"S" = (
+/turf/open/floor/tiled/small,
+/area/shuttle/site404/primaryelevator)
+"X" = (
+/obj/machinery/computer/shuttle/site404/primaryelevator,
+/turf/open/floor/tiled/monofloor,
+/area/shuttle/site404/primaryelevator)
+
+(1,1,1) = {"
+d
+d
+d
+d
+d
+"}
+(2,1,1) = {"
+d
+X
+s
+S
+m
+"}
+(3,1,1) = {"
+d
+M
+S
+S
+u
+"}
+(4,1,1) = {"
+d
+G
+b
+S
+m
+"}
+(5,1,1) = {"
+d
+d
+d
+d
+d
+"}
