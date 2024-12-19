@@ -369,9 +369,9 @@
 	target_dept = REGION_MEDBAY
 
 /// Science departmental variant. Limited to PDAs defined in the SSid_access.sub_department_managers_tgui data structure.
-/obj/machinery/pdapainter/research
+/obj/machinery/pdapainter/science
 	name = "\improper Research PDA & ID Painter"
-	target_dept = REGION_RESEARCH
+	target_dept = REGION_SCIENCE
 
 /// Engineering departmental variant. Limited to PDAs defined in the SSid_access.sub_department_managers_tgui data structure.
 /obj/machinery/pdapainter/engineering

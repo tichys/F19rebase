@@ -12,7 +12,7 @@
 	health = 25
 	maxHealth = 25
 
-	maints_access_required = list(ACCESS_ROBOTICS, ACCESS_JANITOR)
+	maints_access_required = list(ACCESS_SCIENCE_LVL2, ACCESS_SERVICE)
 	radio_key = /obj/item/encryptionkey/headset_service
 	radio_channel = RADIO_CHANNEL_SERVICE //Service //true
 	bot_type = CLEAN_BOT
@@ -39,22 +39,35 @@
 	var/list/stolen_valor = list()
 
 	var/static/list/officers_titles = list(
-		JOB_CAPTAIN,
-		JOB_HEAD_OF_PERSONNEL,
-		JOB_SECURITY_MARSHAL,
+		JOB_SITE_DIRECTOR,
+		JOB_HUMAN_RESOURCES_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
 	)
 	var/static/list/command_titles = list(
-		JOB_CAPTAIN = "Cpt.",
-		JOB_HEAD_OF_PERSONNEL = "Lt.",
+		JOB_SITE_DIRECTOR = "Cpt.",
+		JOB_HUMAN_RESOURCES_DIRECTOR = "Lt.",
 	)
 	var/static/list/security_titles = list(
-		JOB_SECURITY_MARSHAL = "Maj.",
+		JOB_SECURITY_DIRECTOR = "Maj.",
 		JOB_WARDEN = "Sgt.",
-		JOB_DETECTIVE = "Det.",
+		JOB_INVESTIGATIONS_AGENT = "Det.",
 		JOB_SECURITY_OFFICER = "Officer",
+		JOB_EZ_COMMANDER = "Cdr.",
+		JOB_LCZ_COMMANDER = "Cdr.",
+		JOB_HCZ_COMMANDER = "Cdr.",
+		JOB_SENIOR_EZ_GUARD = "Sgt.",
+		JOB_SENIOR_LCZ_GUARD = "Sgt.",
+		JOB_SENIOR_HCZ_GUARD = "Sgt.",
+		JOB_EZ_GUARD = "Officer",
+		JOB_LCZ_GUARD = "Officer",
+		JOB_HCZ_GUARD = "Officer",
+		JOB_JUNIOR_EZ_GUARD = "Pvt.",
+		JOB_JUNIOR_LCZ_GUARD = "Pvt.",
+		JOB_JUNIOR_HCZ_GUARD = "Pvt.",
+		JOB_RAISA_AGENT = "Agent"
 	)
 	var/static/list/engineering_titles = list(
-		JOB_CHIEF_ENGINEER = "Chief Engineer",
+		JOB_ENGINEERING_DIRECTOR = "Chief Engineer",
 		JOB_STATION_ENGINEER = "Engineer",
 		JOB_ATMOSPHERIC_TECHNICIAN = "Technician",
 	)
@@ -84,7 +97,7 @@
 
 /mob/living/simple_animal/bot/cleanbot/medbay
 	name = "Scrubs, MD"
-	maints_access_required = list(ACCESS_ROBOTICS, ACCESS_JANITOR, ACCESS_MEDICAL)
+	maints_access_required = list(ACCESS_SCIENCE_LVL2, ACCESS_SERVICE, ACCESS_MEDICAL)
 	bot_mode_flags = ~(BOT_MODE_ON | BOT_MODE_REMOTE_ENABLED)
 
 /mob/living/simple_animal/bot/cleanbot/Initialize(mapload)

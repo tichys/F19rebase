@@ -452,7 +452,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/requests_console, 30)
 			msgVerified = "<font color='green'><b>Verified by [ID.registered_name] ([ID.assignment])</b></font>"
 			updateUsrDialog()
 		if(screen == REQ_SCREEN_ANNOUNCE)
-			if (ACCESS_RC_ANNOUNCE in ID.access)
+			if (ACCESS_ADMIN_LVL3 in ID.access)
 				announceAuth = TRUE
 			else
 				announceAuth = FALSE

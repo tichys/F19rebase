@@ -40,7 +40,7 @@
 
 	var/list/dream_pool
 	var/datum/dream/dream
-	if(mind?.assigned_role?.title == JOB_DETECTIVE)
+	if(mind?.assigned_role?.title == JOB_INVESTIGATIONS_AGENT)
 		dream_pool = GLOB.detective_dreams_weighted.Copy()
 
 	else

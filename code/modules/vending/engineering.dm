@@ -5,7 +5,7 @@
 	icon_state = "engi"
 	icon_deny = "engi-deny"
 	panel_type = "panel10"
-	req_access = list(ACCESS_ENGINE_EQUIP)
+	req_access = list(ACCESS_ENGINEERING_LVL1)
 	products = list(
 		/obj/item/clothing/under/rank/engineering/chief_engineer = 4,
 		/obj/item/clothing/under/rank/engineering/engineer = 4,
@@ -36,7 +36,7 @@
 	payment_department = ACCOUNT_ENG
 	light_mask = "engi-light-mask"
 
-	discount_access = ACCESS_ENGINE
+	discount_access = ACCESS_ENGINEERING
 
 /obj/item/vending_refill/engineering
 	machine_name = "Robco Tool Maker"

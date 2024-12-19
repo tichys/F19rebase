@@ -1,38 +1,63 @@
 GLOBAL_LIST_INIT(job_display_order, list(
 	// Management
-	/datum/job/captain,
-	/datum/job/head_of_personnel,
-	///datum/job/bureaucrat,
+	/datum/job/site_director,
+	/datum/job/human_resources_director,
+	/datum/job/ethics_committee_liaison,
+	/datum/job/internal_tribunal_department_officer,
+	/datum/job/communications_director,
+	/datum/job/goi_rep,
 	// Security
-	/datum/job/head_of_security,
-	/datum/job/warden,
-	/datum/job/security_officer,
-	/datum/job/prisoner,
-	// Engineeering
-	/datum/job/chief_engineer,
-	/datum/job/station_engineer,
-	/datum/job/atmospheric_technician,
+	/datum/job/security_director,
+	/datum/job/investigations_agent,
+	/datum/job/raisa_agent,
+	/datum/job/ez_commander,
+	/datum/job/senior_ez_guard,
+	/datum/job/ez_guard,
+	/datum/job/junior_ez_guard,
+	/datum/job/lcz_commander,
+	/datum/job/senior_lcz_guard,
+	/datum/job/lcz_guard,
+	/datum/job/junior_lcz_guard,
+	/datum/job/hcz_commander,
+	/datum/job/senior_hcz_guard,
+	/datum/job/hcz_guard,
+	/datum/job/junior_hcz_guard,
+	/datum/job/dclass,
+	//Science
+	/datum/job/research_director,
+	/datum/job/assistant_research_director,
+	/datum/job/senior_researcher,
+	/datum/job/researcher,
+	/datum/job/junior_researcher,
 	// Medical
-	/datum/job/chief_medical_officer,
-	/datum/job/doctor,
-	/datum/job/paramedic,
+	/datum/job/medical_director,
+	/datum/job/assistant_medical_director,
+	/datum/job/surgeon,
 	/datum/job/chemist,
 	/datum/job/virologist,
+	/datum/job/medical_doctor,
+	/datum/job/paramedic,
+	/datum/job/trainee_doctor,
 	/datum/job/psychologist,
+	// Engineeering
+	/datum/job/engineering_director,
+	/datum/job/assistant_engineering_director,
+	/datum/job/containment_engineer,
+	/datum/job/it_technician,
+	/datum/job/senior_engineer,
+	/datum/job/engineer,
+	/datum/job/junior_engineer,
+	/datum/job/atmospheric_technician,
 	// Supply
-	/datum/job/quartermaster,
-	/datum/job/cargo_technician,
-	/datum/job/shaft_miner,
+	/datum/job/logistics_officer,
+	/datum/job/logistics_technician,
 	// Other
-	/datum/job/detective,
-	/datum/job/bartender,
 	/datum/job/botanist,
 	/datum/job/cook,
 	/datum/job/chaplain,
-	/datum/job/curator,
 	/datum/job/janitor,
-	/datum/job/lawyer,
 	/datum/job/clown,
+	/datum/job/mime,
 	/datum/job/assistant,
 	/datum/job/ai,
 	/datum/job/cyborg
@@ -316,7 +341,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	/// If this job uses the Jumpskirt/Jumpsuit pref
 	var/allow_jumpskirt = TRUE
 	uniform = /obj/item/clothing/under/color/grey
-	id = /obj/item/card/id/advanced
+	id = /obj/item/card/id/advanced/white_blank
 	ears = /obj/item/radio/headset
 	belt = /obj/item/modular_computer/tablet/pda
 	back = /obj/item/storage/backpack

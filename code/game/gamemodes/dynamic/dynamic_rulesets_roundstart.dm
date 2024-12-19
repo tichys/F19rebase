@@ -12,11 +12,21 @@
 	antag_datum = /datum/antagonist/traitor
 	minimum_required_age = 0
 	protected_roles = list(
-		JOB_CAPTAIN,
-		JOB_SECURITY_MARSHAL,
-		JOB_PRISONER,
-		JOB_SECURITY_OFFICER,
-		JOB_WARDEN,
+		JOB_SITE_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_RAISA_AGENT,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
 	)
 	restricted_roles = list(
 		JOB_AI,
@@ -107,12 +117,22 @@
 	antag_flag = ROLE_BROTHER
 	antag_datum = /datum/antagonist/brother
 	protected_roles = list(
-		JOB_CAPTAIN,
-		JOB_DETECTIVE, // The detective works alone
-		JOB_SECURITY_MARSHAL,
-		JOB_PRISONER,
-		JOB_SECURITY_OFFICER,
-		JOB_WARDEN,
+		JOB_SITE_DIRECTOR,
+		JOB_INVESTIGATIONS_AGENT, // The detective works alone
+		JOB_SECURITY_DIRECTOR,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_RAISA_AGENT,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
 	)
 	restricted_roles = list(
 		JOB_AI,
@@ -166,12 +186,22 @@
 	antag_flag = ROLE_CHANGELING
 	antag_datum = /datum/antagonist/changeling
 	protected_roles = list(
-		JOB_CAPTAIN,
-		JOB_DETECTIVE,
-		JOB_SECURITY_MARSHAL,
-		JOB_PRISONER,
-		JOB_SECURITY_OFFICER,
-		JOB_WARDEN,
+		JOB_SITE_DIRECTOR,
+		JOB_INVESTIGATIONS_AGENT,
+		JOB_SECURITY_DIRECTOR,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_RAISA_AGENT,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
 	)
 	restricted_roles = list(
 		JOB_AI,
@@ -222,12 +252,23 @@
 	antag_flag = ROLE_HERETIC
 	antag_datum = /datum/antagonist/heretic
 	protected_roles = list(
-		JOB_CAPTAIN,
-		JOB_DETECTIVE, // It's up to him to investigate eldritch evil.
-		JOB_SECURITY_MARSHAL,
-		JOB_PRISONER,
-		JOB_SECURITY_OFFICER,
-		JOB_WARDEN,
+		JOB_SITE_DIRECTOR,
+		JOB_INVESTIGATIONS_AGENT, // It's up to him to investigate eldritch evil.
+		JOB_SECURITY_DIRECTOR,
+		JOB_DCLASS,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_RAISA_AGENT,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
 	)
 	restricted_roles = list(
 		JOB_AI,
@@ -280,8 +321,8 @@
 	flags = HIGH_IMPACT_RULESET
 	minimum_required_age = 14
 	restricted_roles = list(
-		JOB_CAPTAIN,
-		JOB_SECURITY_MARSHAL,
+		JOB_SITE_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
 	) // Just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	required_candidates = 1
 	weight = 2
@@ -327,15 +368,25 @@
 	minimum_required_age = 14
 	restricted_roles = list(
 		JOB_AI,
-		JOB_CAPTAIN,
+		JOB_SITE_DIRECTOR,
 		JOB_CHAPLAIN,
 		JOB_CYBORG,
-		JOB_DETECTIVE,
-		JOB_HEAD_OF_PERSONNEL,
-		JOB_SECURITY_MARSHAL,
-		JOB_PRISONER,
-		JOB_SECURITY_OFFICER,
-		JOB_WARDEN,
+		JOB_INVESTIGATIONS_AGENT,
+		JOB_HUMAN_RESOURCES_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_RAISA_AGENT,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
 	)
 	required_candidates = 2
 	weight = 3
@@ -395,8 +446,8 @@
 	var/datum/antagonist/antag_leader_datum = /datum/antagonist/nukeop/leader
 	minimum_required_age = 14
 	restricted_roles = list(
-		JOB_CAPTAIN,
-		JOB_SECURITY_MARSHAL,
+		JOB_SITE_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
 	) // Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	required_candidates = 5
 	weight = 3
@@ -484,16 +535,26 @@
 	minimum_required_age = 14
 	restricted_roles = list(
 		JOB_AI,
-		JOB_CAPTAIN,
-		JOB_CHIEF_ENGINEER,
+		JOB_SITE_DIRECTOR,
+		JOB_ENGINEERING_DIRECTOR,
 		JOB_MEDICAL_DIRECTOR,
 		JOB_CYBORG,
-		JOB_DETECTIVE,
-		JOB_HEAD_OF_PERSONNEL,
-		JOB_SECURITY_MARSHAL,
-		JOB_PRISONER,
-		JOB_SECURITY_OFFICER,
-		JOB_WARDEN,
+		JOB_INVESTIGATIONS_AGENT,
+		JOB_HUMAN_RESOURCES_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_RAISA_AGENT,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
 	)
 	required_candidates = 3
 	weight = 3
@@ -580,17 +641,28 @@
 	antag_datum = /datum/antagonist/gang
 	antag_flag = ROLE_FAMILIES
 	protected_roles = list(
-		JOB_HEAD_OF_PERSONNEL,
-		JOB_PRISONER,
+		JOB_HUMAN_RESOURCES_DIRECTOR,
+		JOB_DCLASS,
 	)
 	restricted_roles = list(
 		JOB_AI,
-		JOB_CAPTAIN,
+		JOB_SITE_DIRECTOR,
 		JOB_CYBORG,
-		JOB_DETECTIVE,
-		JOB_SECURITY_MARSHAL,
-		JOB_SECURITY_OFFICER,
-		JOB_WARDEN,
+		JOB_INVESTIGATIONS_AGENT,
+		JOB_SECURITY_DIRECTOR,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_RAISA_AGENT,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
 	)
 	required_candidates = 3
 	weight = 1

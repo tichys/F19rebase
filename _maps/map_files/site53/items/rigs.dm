@@ -67,7 +67,7 @@
 	glove_type = /obj/item/clothing/gloves/rig/command
 
 	allowed = list(/obj/item/gun, /obj/item/ammo_magazine, /obj/item/device/flashlight, /obj/item/tank, /obj/item/device/suit_cooling_unit, /obj/item/storage/secure/briefcase)
-	req_access = list(ACCESS_HOP)
+	req_access = list(ACCESS_ADMIN_LVL5)
 
 /obj/item/clothing/head/helmet/space/rig/command/xo
 	icon_state = "command_XO_rig"
@@ -101,7 +101,7 @@
 
 	allowed = list(/obj/item/gun, /obj/item/ammo_magazine, /obj/item/device/flashlight, /obj/item/tank, /obj/item/device/suit_cooling_unit, /obj/item/storage/secure/briefcase)
 
-	req_access = list(ACCESS_CAPTAIN)
+	req_access = list(ACCESS_ADMIN_LVL5)
 
 /obj/item/clothing/head/helmet/space/rig/command/co
 	icon_state = "command_CO_rig"
@@ -134,7 +134,7 @@
 
 //	allowed = list(/obj/item/gun, /obj/item/device/flashlight, /obj/item/tank, /obj/item/device/suit_cooling_unit, /obj/item/storage/firstaid, /obj/item/device/healthanalyzer, /obj/item/stack/medical, /obj/item/roller)
 
-	req_access = list(ACCESS_CMO)
+	req_access = list(ACCESS_MEDICAL_LVL5)
 
 /obj/item/clothing/head/helmet/space/rig/command/medical
 	icon_state = "command_med_rig"
@@ -168,7 +168,7 @@
 
 	allowed = list(/obj/item/gun, /obj/item/ammo_magazine, /obj/item/ammo_casing, /obj/item/handcuffs, /obj/item/device/flashlight, /obj/item/tank, /obj/item/device/suit_cooling_unit, /obj/item/melee/baton)
 
-	req_access = list(ACCESS_HOS)
+	req_access = list(ACCESS_SECURITY_LVL5)
 
 /obj/item/clothing/head/helmet/space/rig/command/security
 	icon_state = "command_sec_rig"

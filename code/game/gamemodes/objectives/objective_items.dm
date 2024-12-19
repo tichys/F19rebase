@@ -38,8 +38,8 @@
 	name = "the (TECH BOARD) circuitboard in secure tech storage"
 	var/circuitboard_name
 	excludefromjob = list(
-		JOB_CAPTAIN,
-		JOB_CHIEF_ENGINEER,
+		JOB_SITE_DIRECTOR,
+		JOB_ENGINEERING_DIRECTOR,
 	)
 	exists_on_map = TRUE
 
@@ -65,11 +65,15 @@
 	targetitem = /obj/item/aicard
 	name = "an intelliCard"
 	excludefromjob = list(
-		JOB_CAPTAIN,
-		JOB_CHIEF_ENGINEER,
+		JOB_SITE_DIRECTOR,
+		JOB_ENGINEERING_DIRECTOR,
+		JOB_ASSISTANT_ENGINEERING_DIRECTOR,
 		JOB_MEDICAL_DIRECTOR,
-		JOB_SECURITY_MARSHAL,
-		JOB_STATION_ENGINEER,
+		JOB_SECURITY_DIRECTOR,
+		JOB_CONTAINMENT_ENGINEER,
+		JOB_IT_TECHNICIAN,
+		JOB_SENIOR_ENGINEER,
+		JOB_ENGINEER,
 		JOB_ATMOSPHERIC_TECHNICIAN,
 	)
 	exists_on_map = TRUE
@@ -81,7 +85,7 @@
 /datum/objective_item/steal/low_risk/bartender_shotgun
 	name = "the bartender's shotgun"
 	targetitem = /obj/item/gun/ballistic/shotgun/doublebarrel
-	excludefromjob = list(JOB_BARTENDER)
+	excludefromjob = list(JOB_COOK)
 	exists_on_map = TRUE
 
 /obj/item/gun/ballistic/shotgun/doublebarrel/add_stealing_item_objective()
@@ -90,7 +94,16 @@
 /datum/objective_item/steal/low_risk/fireaxe
 	name = "a fire axe"
 	targetitem = /obj/item/fireaxe
-	excludefromjob = list(JOB_CHIEF_ENGINEER,JOB_STATION_ENGINEER,JOB_ATMOSPHERIC_TECHNICIAN)
+	excludefromjob = list(
+		JOB_ENGINEERING_DIRECTOR,
+		JOB_ASSISTANT_ENGINEERING_DIRECTOR,
+		JOB_CONTAINMENT_ENGINEER,
+		JOB_IT_TECHNICIAN,
+		JOB_SENIOR_ENGINEER,
+		JOB_ENGINEER,
+		JOB_JUNIOR_ENGINEER,
+		JOB_ATMOSPHERIC_TECHNICIAN
+	)
 	exists_on_map = TRUE
 
 /obj/item/fireaxe/add_stealing_item_objective()
@@ -108,7 +121,7 @@
 /datum/objective_item/steal/low_risk/clown_shoes
 	name = "the clown's shoes"
 	targetitem = /obj/item/clothing/shoes/clown_shoes
-	excludefromjob = list(JOB_CLOWN, JOB_DECKHAND, JOB_QUARTERMASTER)
+	excludefromjob = list(JOB_CLOWN, JOB_LOGISTICS_TECHNICIAN, JOB_LOGISTICS_OFFICER)
 
 /datum/objective_item/steal/low_risk/clown_shoes/TargetExists()
 	for(var/mob/player as anything in GLOB.player_list)
@@ -124,7 +137,7 @@
 /datum/objective_item/steal/low_risk/cargo_budget
 	name = "cargo's departmental budget"
 	targetitem = /obj/item/card/id/departmental_budget/car
-	excludefromjob = list(JOB_QUARTERMASTER, JOB_DECKHAND)
+	excludefromjob = list(JOB_LOGISTICS_TECHNICIAN, JOB_LOGISTICS_OFFICER)
 	exists_on_map = TRUE
 
 /obj/item/card/id/departmental_budget/car/add_stealing_item_objective()
@@ -135,7 +148,7 @@
 	name = "the captain's antique laser gun"
 	targetitem = /obj/item/gun/energy/laser/captain
 	difficulty = 5
-	excludefromjob = list(JOB_CAPTAIN)
+	excludefromjob = list(JOB_SITE_DIRECTOR)
 	exists_on_map = TRUE
 
 /obj/item/gun/energy/laser/captain/add_stealing_item_objective()
@@ -145,7 +158,7 @@
 	name = "the security marshal's personal laser gun"
 	targetitem = /obj/item/gun/energy/e_gun/hos
 	difficulty = 10
-	excludefromjob = list(JOB_SECURITY_MARSHAL)
+	excludefromjob = list(JOB_SECURITY_DIRECTOR)
 	exists_on_map = TRUE
 
 /obj/item/gun/energy/e_gun/hos/add_stealing_item_objective()
@@ -155,7 +168,7 @@
 	name = "a hand teleporter"
 	targetitem = /obj/item/hand_tele
 	difficulty = 5
-	excludefromjob = list(JOB_CAPTAIN, JOB_HEAD_OF_PERSONNEL)
+	excludefromjob = list(JOB_SITE_DIRECTOR, JOB_HUMAN_RESOURCES_DIRECTOR)
 	exists_on_map = TRUE
 
 /obj/item/hand_tele/add_stealing_item_objective()
@@ -165,7 +178,7 @@
 	name = "the Captain's jetpack"
 	targetitem = /obj/item/tank/jetpack/oxygen/captain
 	difficulty = 5
-	excludefromjob = list(JOB_CAPTAIN)
+	excludefromjob = list(JOB_SITE_DIRECTOR)
 	exists_on_map = TRUE
 
 /obj/item/tank/jetpack/oxygen/captain/add_stealing_item_objective()
@@ -175,7 +188,7 @@
 	name = "the chief engineer's advanced magnetic boots"
 	targetitem = /obj/item/clothing/shoes/magboots/advance
 	difficulty = 5
-	excludefromjob = list(JOB_CHIEF_ENGINEER)
+	excludefromjob = list(JOB_ENGINEERING_DIRECTOR)
 	exists_on_map = TRUE
 
 /obj/item/clothing/shoes/magboots/advance/add_stealing_item_objective()
@@ -185,7 +198,7 @@
 	name = "the medal of captaincy"
 	targetitem = /obj/item/clothing/accessory/medal/gold/captain
 	difficulty = 5
-	excludefromjob = list(JOB_CAPTAIN)
+	excludefromjob = list(JOB_SITE_DIRECTOR)
 	exists_on_map = TRUE
 
 /obj/item/clothing/accessory/medal/gold/captain/add_stealing_item_objective()
@@ -205,7 +218,7 @@
 	name = "the nuclear authentication disk"
 	targetitem = /obj/item/disk/nuclear
 	difficulty = 5
-	excludefromjob = list(JOB_CAPTAIN)
+	excludefromjob = list(JOB_SITE_DIRECTOR)
 
 /datum/objective_item/steal/nukedisc/check_special_completion(obj/item/disk/nuclear/N)
 	return !N.fake
@@ -214,7 +227,21 @@
 	name = "a reflector trenchcoat"
 	targetitem = /obj/item/clothing/suit/hooded/ablative
 	difficulty = 3
-	excludefromjob = list(JOB_SECURITY_MARSHAL, JOB_WARDEN)
+	excludefromjob = list(
+		JOB_SECURITY_DIRECTOR,
+		JOB_EZ_COMMANDER,
+		JOB_SENIOR_EZ_GUARD,
+		JOB_EZ_GUARD,
+		JOB_JUNIOR_EZ_GUARD,
+		JOB_LCZ_COMMANDER,
+		JOB_SENIOR_LCZ_GUARD,
+		JOB_LCZ_GUARD,
+		JOB_JUNIOR_LCZ_GUARD,
+		JOB_HCZ_COMMANDER,
+		JOB_SENIOR_HCZ_GUARD,
+		JOB_HCZ_GUARD,
+		JOB_JUNIOR_HCZ_GUARD
+	)
 	exists_on_map = TRUE
 
 /obj/item/clothing/suit/hooded/ablative/add_stealing_item_objective()
@@ -262,7 +289,12 @@
 	targetitem = /obj/item/tank
 	difficulty = 3
 	excludefromjob = list(
-		JOB_CHIEF_ENGINEER, JOB_STATION_ENGINEER, JOB_ATMOSPHERIC_TECHNICIAN,
+		JOB_ENGINEERING_DIRECTOR,
+		JOB_ASSISTANT_ENGINEERING_DIRECTOR,
+		JOB_CONTAINMENT_ENGINEER,
+		JOB_SENIOR_ENGINEER,
+		JOB_ENGINEER,
+		JOB_ATMOSPHERIC_TECHNICIAN,
 	)
 
 /datum/objective_item/steal/plasma/check_special_completion(obj/item/tank/T)
@@ -288,7 +320,7 @@
 	name = "the station blueprints"
 	targetitem = /obj/item/areaeditor/blueprints
 	difficulty = 10
-	excludefromjob = list(JOB_CHIEF_ENGINEER)
+	excludefromjob = list(JOB_ENGINEERING_DIRECTOR)
 	altitems = list(/obj/item/photo)
 	exists_on_map = TRUE
 
@@ -308,7 +340,14 @@
 	name = "the Blackbox"
 	targetitem = /obj/item/blackbox
 	difficulty = 10
-	excludefromjob = list(JOB_CHIEF_ENGINEER, JOB_STATION_ENGINEER, JOB_ATMOSPHERIC_TECHNICIAN)
+	excludefromjob = list(
+		JOB_ENGINEERING_DIRECTOR,
+		JOB_CONTAINMENT_ENGINEER,
+		JOB_IT_TECHNICIAN,
+		JOB_SENIOR_ENGINEER,
+		JOB_ENGINEER,
+		JOB_ATMOSPHERIC_TECHNICIAN,
+	)
 	exists_on_map = TRUE
 
 /obj/item/blackbox/add_stealing_item_objective()

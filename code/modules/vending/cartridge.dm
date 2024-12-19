@@ -22,7 +22,7 @@
 	payment_department = ACCOUNT_STATION_MASTER
 	light_mask="cart-light-mask"
 
-	discount_access = ACCESS_CHANGE_IDS
+	discount_access = ACCESS_ADMIN_LVL5
 
 /obj/item/vending_refill/cart
 	machine_name = "PTech"

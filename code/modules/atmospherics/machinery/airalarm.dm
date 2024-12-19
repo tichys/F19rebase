@@ -83,7 +83,7 @@ DEFINE_INTERACTABLE(/obj/machinery/airalarm)
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.05
 	active_power_usage = BASE_MACHINE_ACTIVE_CONSUMPTION * 0.02
 	power_channel = AREA_USAGE_ENVIRON
-	req_access = list(ACCESS_ATMOSPHERICS)
+	req_access = list(ACCESS_ENGINEERING_LVL3)
 	max_integrity = 250
 	integrity_failure = 0.33
 	armor = list(BLUNT = 0, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 100, BOMB = 0, BIO = 100, FIRE = 90, ACID = 30)
@@ -997,13 +997,13 @@ DEFINE_INTERACTABLE(/obj/machinery/airalarm)
 	name = "engine air alarm"
 	locked = FALSE
 	req_access = null
-	req_one_access = list(ACCESS_ATMOSPHERICS, ACCESS_ENGINE)
+	req_one_access = list(ACCESS_ENGINEERING_LVL3, ACCESS_ENGINEERING)
 
 /obj/machinery/airalarm/mixingchamber
 	name = "chamber air alarm"
 	locked = FALSE
 	req_access = null
-	req_one_access = list(ACCESS_ATMOSPHERICS, ACCESS_ORDNANCE)
+	req_one_access = list(ACCESS_ENGINEERING_LVL3, ACCESS_SCIENCE)
 
 /obj/machinery/airalarm/all_access
 	name = "all-access air alarm"

@@ -7,8 +7,8 @@
 	max_integrity = 140
 	armor = list(BLUNT = -20, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 100, ACID = 100)
 	max_temperature = 25000
-	operation_req_access = list(ACCESS_THEATRE)
-	internals_req_access = list(ACCESS_MECH_SCIENCE, ACCESS_THEATRE)
+	operation_req_access = list(ACCESS_SERVICE)
+	internals_req_access = list(ACCESS_MECH_SCIENCE, ACCESS_SERVICE)
 	wreckage = /obj/structure/mecha_wreckage/honker
 	mecha_flags = CANSTRAFE | IS_ENCLOSED | HAS_LIGHTS | MMI_COMPATIBLE
 	max_equip_by_category = list(

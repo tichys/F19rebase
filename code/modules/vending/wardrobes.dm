@@ -103,7 +103,7 @@
 	payment_department = ACCOUNT_ENG
 	light_color = COLOR_VIVID_YELLOW
 
-	discount_access = ACCESS_ENGINE
+	discount_access = ACCESS_ENGINEERING
 /obj/item/vending_refill/wardrobe/engi_wardrobe
 	machine_name = "EngiDrobe"
 
@@ -126,7 +126,7 @@
 	payment_department = ACCOUNT_ENG
 	light_color = COLOR_VIVID_YELLOW
 
-	discount_access = ACCESS_ATMOSPHERICS
+	discount_access = ACCESS_ENGINEERING_LVL3
 
 /obj/item/vending_refill/wardrobe/atmos_wardrobe
 	machine_name = "AtmosDrobe"
@@ -157,7 +157,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/cargo_wardrobe
 	payment_department = ACCOUNT_CAR
 
-	discount_access = ACCESS_CARGO
+	discount_access = ACCESS_LOGISTICS_LVL2
 
 /obj/item/vending_refill/wardrobe/cargo_wardrobe
 	machine_name = "CargoDrobe"
@@ -184,7 +184,7 @@
 	extra_price = PAYCHECK_HARD * 1.2
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_ROBOTICS
+	discount_access = ACCESS_SCIENCE_LVL2
 /obj/item/vending_refill/wardrobe/robo_wardrobe
 	machine_name = "RoboDrobe"
 
@@ -211,7 +211,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/science_wardrobe
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_RESEARCH
+	discount_access = ACCESS_SCIENCE
 /obj/item/vending_refill/wardrobe/science_wardrobe
 	machine_name = "SciDrobe"
 
@@ -236,7 +236,7 @@
 	payment_department = ACCOUNT_STATION_MASTER
 	light_color = LIGHT_COLOR_ELECTRIC_GREEN
 
-	discount_access = ACCESS_HYDROPONICS
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/wardrobe/hydro_wardrobe
 	machine_name = "HyDrobe"
@@ -266,7 +266,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/curator_wardrobe
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_LIBRARY
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/wardrobe/curator_wardrobe
 	machine_name = "CuraDrobe"
@@ -301,7 +301,7 @@
 	payment_department = ACCOUNT_STATION_MASTER
 	extra_price = PAYCHECK_HARD
 
-	discount_access = ACCESS_BAR
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/wardrobe/bar_wardrobe
 	machine_name = "BarDrobe"
@@ -330,7 +330,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/chef_wardrobe
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_KITCHEN
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/wardrobe/chef_wardrobe
 	machine_name = "ChefDrobe"
@@ -365,7 +365,7 @@
 	payment_department = ACCOUNT_STATION_MASTER
 	light_color = COLOR_STRONG_MAGENTA
 
-	discount_access = ACCESS_JANITOR
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/wardrobe/jani_wardrobe
 	machine_name = "JaniDrobe"
@@ -400,7 +400,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/law_wardrobe
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_LAWYER
+	discount_access = ACCESS_SECURITY
 
 /obj/item/vending_refill/wardrobe/law_wardrobe
 	machine_name = "LawDrobe"
@@ -438,7 +438,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/chap_wardrobe
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_CHAPEL_OFFICE
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/wardrobe/chap_wardrobe
 	machine_name = "DeusVend"
@@ -465,7 +465,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/chem_wardrobe
 	payment_department = ACCOUNT_MED
 
-	discount_access = ACCESS_CHEMISTRY
+	discount_access = ACCESS_MEDICAL_LVL3
 
 /obj/item/vending_refill/wardrobe/chem_wardrobe
 	machine_name = "ChemDrobe"
@@ -489,7 +489,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/gene_wardrobe
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_GENETICS
+	discount_access = ACCESS_SCIENCE
 
 /obj/item/vending_refill/wardrobe/gene_wardrobe
 	machine_name = "GeneDrobe"
@@ -513,7 +513,7 @@
 	refill_canister = /obj/item/vending_refill/wardrobe/viro_wardrobe
 	payment_department = ACCOUNT_MED
 
-	discount_access = ACCESS_VIROLOGY
+	discount_access = ACCESS_MEDICAL_LVL3
 
 /obj/item/vending_refill/wardrobe/viro_wardrobe
 	machine_name = "ViroDrobe"
@@ -555,7 +555,7 @@
 	extra_price = PAYCHECK_ASSISTANT * 4
 	payment_department = ACCOUNT_SEC
 
-	discount_access = ACCESS_FORENSICS
+	discount_access = ACCESS_SECURITY
 
 /obj/item/vending_refill/wardrobe/det_wardrobe
 	machine_name = "DetDrobe"

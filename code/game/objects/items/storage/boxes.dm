@@ -571,6 +571,28 @@
 	for(var/i in 1 to 7)
 		new /obj/item/card/id/advanced/silver(src)
 
+// ============== SCP ID Boxes Begin ==============
+
+/obj/item/storage/box/white_foundation_ids
+	name = "box of spare IDs"
+	desc = "Has so many empty IDs."
+	illustration = "id"
+
+/obj/item/storage/box/white_foundation_ids/PopulateContents()
+	for(var/i in 1 to 7)
+		new /obj/item/card/id/advanced/white_blank(src)
+
+/obj/item/storage/box/black_foundation_ids
+	name = "box of spare fancy IDs"
+	desc = "Shiny IDs for important people."
+	illustration = "id"
+
+/obj/item/storage/box/white_foundation_ids/PopulateContents()
+	for(var/i in 1 to 7)
+		new /obj/item/card/id/advanced/black_blank(src)
+
+// ============== SCP ID Boxes End ==============
+
 /obj/item/storage/box/prisoner
 	name = "box of prisoner IDs"
 	desc = "Take away their last shred of dignity, their name."

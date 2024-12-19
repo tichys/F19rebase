@@ -7,7 +7,7 @@ GLOBAL_VAR(posibrain_notify_cooldown)
 	icon_state = "posibrain"
 	base_icon_state = "posibrain"
 	w_class = WEIGHT_CLASS_NORMAL
-	req_access = list(ACCESS_ROBOTICS)
+	req_access = list(ACCESS_SCIENCE_LVL2)
 
 	layer = ABOVE_MOB_LAYER
 	zone = BODY_ZONE_CHEST

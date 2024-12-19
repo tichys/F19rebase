@@ -7,7 +7,7 @@ GLOBAL_VAR_INIT(time_last_changed_position, 0)
 	category = PROGRAM_CATEGORY_CREW
 	program_icon_state = "id"
 	extended_desc = "Program for viewing and changing job slot availability."
-	transfer_access = list(ACCESS_MANAGEMENT)
+	transfer_access = list(ACCESS_ADMIN_LVL3)
 	requires_ntnet = TRUE
 	size = 4
 	tgui_id = "NtosJobManager"
@@ -16,10 +16,10 @@ GLOBAL_VAR_INIT(time_last_changed_position, 0)
 	var/change_position_cooldown = 30
 	///Jobs blacklisted from having their slots edited.
 	var/list/blacklisted = list(
-		JOB_CAPTAIN,
-		JOB_HEAD_OF_PERSONNEL,
-		JOB_SECURITY_MARSHAL,
-		JOB_CHIEF_ENGINEER,
+		JOB_SITE_DIRECTOR,
+		JOB_HUMAN_RESOURCES_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
+		JOB_ENGINEERING_DIRECTOR,
 		JOB_MEDICAL_DIRECTOR,
 		JOB_AI,
 		JOB_CYBORG,
@@ -72,7 +72,7 @@ GLOBAL_VAR_INIT(time_last_changed_position, 0)
 	var/obj/item/computer_hardware/card_slot/card_slot = computer.all_components[MC_CARD]
 	var/obj/item/card/id/user_id = card_slot?.stored_card
 
-	if(!user_id || !(ACCESS_CHANGE_IDS in user_id.access))
+	if(!user_id || !(ACCESS_ADMIN_LVL5 in user_id.access))
 		return
 
 	switch(action)
@@ -125,7 +125,7 @@ GLOBAL_VAR_INIT(time_last_changed_position, 0)
 	var/authed = FALSE
 	var/obj/item/computer_hardware/card_slot/card_slot = computer.all_components[MC_CARD]
 	var/obj/item/card/id/user_id = card_slot?.stored_card
-	if(user_id && (ACCESS_CHANGE_IDS in user_id.access))
+	if(user_id && (ACCESS_ADMIN_LVL5 in user_id.access))
 		authed = TRUE
 
 	data["authed"] = authed
