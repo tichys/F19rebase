@@ -421,11 +421,761 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark/end
 	icon_state = "siding_wideplating_new_end"
 
+/obj/effect/turf_decal/ported/f19/siding/fancy
+	name = "spline - fancy"
+	icon_state = "spline_fancy"
+
+/obj/effect/turf_decal/ported/f19/siding/fancy/corner
+	icon_state = "spline_fancy_corner"
+
+/obj/effect/turf_decal/ported/f19/siding/fancy/black
+	color = "#808080"
+
+/obj/effect/turf_decal/ported/f19/siding/fancy/black/corner
+	icon_state = "spline_fancy_corner"
+
+/obj/effect/turf_decal/ported/f19/siding/fancy/wood
+	name = "spline - wood"
+	color = "#cb9e04"
+
+/obj/effect/turf_decal/ported/f19/siding/fancy/wood/corner
+	icon_state = "spline_fancy_corner"
+
+/obj/effect/turf_decal/ported/f19/siding/fancy/wood/cee
+	icon_state = "spline_fancy_cee"
+
+/obj/effect/turf_decal/ported/f19/siding/fancy/wood/three_quarters
+	icon_state = "spline_fancy_full"
+
 //Ported Markings
 
 /obj/effect/turf_decal/ported
 	icon = 'icons/turf/decals-ported.dmi'
 	icon_state = "outline"
+
+/obj/effect/turf_decal/ported/f19/corner
+	icon_state = "alt_corner"
+	alpha = 229
+
+/obj/effect/turf_decal/ported/f19/corner/black
+	name = "black corner"
+	color = "#333333"
+
+/obj/effect/turf_decal/ported/f19/corner/black/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/black/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/black/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/black/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/black/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/black/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/black/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/black/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/black/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/black/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/blue
+	name = "blue corner"
+	color = "#6a97b0"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/blue/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue
+	name = "pale blue corner"
+	color = "#8bbbd5"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/paleblue/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/green
+	name = "green corner"
+	color = "#8daf6a"
+
+/obj/effect/turf_decal/ported/f19/corner/green/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/green/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/green/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/green/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/green/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/green/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/green/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/green/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/green/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/green/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/lime
+	name = "lime corner"
+	color = "#aed18b"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/lime/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow
+	name = "yellow corner"
+	color = "#ffcc00"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/yellow/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/beige
+	name = "beige corner"
+	color = "#ceb689"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/beige/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/red
+	name = "red corner"
+	color = "#aa5f61"
+
+/obj/effect/turf_decal/ported/f19/corner/red/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/red/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/red/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/red/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/red/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/red/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/red/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/red/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/red/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/red/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/keter
+	name = "keter red corner"
+	color = "#65261e"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/keter/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/safe
+	name = "safe green corner"
+	color = "#365034"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/safe/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid
+	name = "euclid yellow corner"
+	color = "#635424"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/euclid/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/pink
+	name = "pink corner"
+	color = "#cc9090"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/pink/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/purple
+	name = "purple corner"
+	color = "#a2819e"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/purple/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve
+	name = "mauve corner"
+	color = "#bda2ba"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/mauve/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/orange
+	name = "orange corner"
+	color = "#b95a00"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/orange/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/brown
+	name = "brown corner"
+	color = "#917448"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/brown/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/white
+	name = "white corner"
+	icon_state = "alt_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/white/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/white/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/white/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/white/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/white/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/grey
+	name = "grey corner"
+	color = "#8d8c8c"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/white/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/white/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/white/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/white/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/white/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/grey/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey
+	name = "lightgrey corner"
+	color = "#a8b2b6"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/lightgrey/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green
+	name = "bottle green corner"
+	color = "#57967f"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/b_green/border_cee
+	icon_state = "alt_border_cee"
+
+/obj/effect/turf_decal/ported/f19/corner/research
+	name = "research corner"
+	color = "#a2819e"
+
+/obj/effect/turf_decal/ported/f19/corner/research/diagonal
+	icon_state = "alt_corner_diagonal"
+
+/obj/effect/turf_decal/ported/f19/corner/research/three_quarters
+	icon_state = "alt_corner_three_quarters"
+
+/obj/effect/turf_decal/ported/f19/corner/research/full
+	icon_state = "alt_corner_full"
+
+/obj/effect/turf_decal/ported/f19/corner/research/border
+	icon_state = "alt_border"
+
+/obj/effect/turf_decal/ported/f19/corner/research/half
+	icon_state = "alt_border_half"
+
+/obj/effect/turf_decal/ported/f19/corner/research/mono
+	icon_state = "alt_border_monofull"
+
+/obj/effect/turf_decal/ported/f19/corner/research/border_corner
+	icon_state = "alt_border_corner"
+
+/obj/effect/turf_decal/ported/f19/corner/research/border_corner2
+	icon_state = "alt_border_corner2"
+
+/obj/effect/turf_decal/ported/f19/corner/research/alt_border_full
+	icon_state = "alt_border_full"
+
+/obj/effect/turf_decal/ported/f19/corner/research/border_cee
+	icon_state = "alt_border_cee"
 
 /obj/effect/turf_decal/ported/outline
 	icon_state = "outline"
