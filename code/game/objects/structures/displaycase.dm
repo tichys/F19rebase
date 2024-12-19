@@ -282,7 +282,7 @@
 	name = "lab cage"
 	desc = "A glass lab container for storing interesting creatures."
 	start_showpiece_type = /obj/item/clothing/mask/facehugger/lamarr
-	req_access = list(ACCESS_RD)
+	req_access = list(ACCESS_SCIENCE_LVL5)
 
 /obj/structure/displaycase/noalert
 	alert = FALSE
@@ -592,5 +592,5 @@
 
 /obj/structure/displaycase/forsale/kitchen
 	desc = "A display case with an ID-card swiper. Use your ID to purchase the contents. Meant for the bartender and chef."
-	req_one_access = list(ACCESS_KITCHEN, ACCESS_BAR)
+	req_one_access = list(ACCESS_SERVICE, ACCESS_SERVICE)
 

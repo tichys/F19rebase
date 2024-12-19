@@ -4,7 +4,7 @@
 	icon_state = "engivend"
 	icon_deny = "engivend-deny"
 	panel_type = "panel10"
-	req_access = list(ACCESS_ENGINE_EQUIP)
+	req_access = list(ACCESS_ENGINEERING_LVL1)
 	products = list(
 		/obj/item/clothing/glasses/meson/engine = 2,
 		/obj/item/clothing/glasses/welding = 3,
@@ -31,7 +31,7 @@
 	payment_department = ACCOUNT_ENG
 	light_mask = "engivend-light-mask"
 
-	discount_access = ACCESS_ENGINE
+	discount_access = ACCESS_ENGINEERING
 
 /obj/item/vending_refill/engivend
 	machine_name = "Engi-Vend"

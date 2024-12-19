@@ -1,5 +1,5 @@
-/datum/job/prisoner
-	title = JOB_PRISONER
+/datum/job/dclass
+	title = JOB_DCLASS
 	description = "Keep yourself occupied in permabrig."
 	department_head = list("The Security Team")
 	faction = FACTION_STATION
@@ -30,7 +30,7 @@
 
 /datum/outfit/job/prisoner
 	name = "Prisoner"
-	jobtype = /datum/job/prisoner
+	jobtype = /datum/job/dclass
 
 	id = /obj/item/card/id/advanced/prisoner
 	id_trim = /datum/id_trim/job/prisoner

@@ -6,8 +6,8 @@
 
 	weight = GAMEMODE_WEIGHT_EPIC
 	restricted_jobs = list(
-		JOB_CAPTAIN,
-		JOB_SECURITY_MARSHAL,
+		JOB_SITE_DIRECTOR,
+		JOB_SECURITY_DIRECTOR,
 	)// Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 
 	required_enemies = 5

@@ -34,7 +34,7 @@
 /datum/job/security_officer
 	banned_quirks = list(SEC_RESTRICTED_QUIRKS)
 
-/datum/job/detective
+/datum/job/investigations_agent
 	banned_quirks = list(SEC_RESTRICTED_QUIRKS)
 
 /datum/job/warden
@@ -53,13 +53,13 @@
 /datum/job/captain
 	banned_quirks = list(HEAD_RESTRICTED_QUIRKS)
 
-/datum/job/head_of_security
+/datum/job/security_director
 	banned_quirks = list(SEC_RESTRICTED_QUIRKS, HEAD_RESTRICTED_QUIRKS)
 
-/datum/job/chief_medical_officer
+/datum/job/medical_director
 	banned_quirks = list(HEAD_RESTRICTED_QUIRKS)
 
-/datum/job/chief_engineer
+/datum/job/engineering_director
 	banned_quirks = list(HEAD_RESTRICTED_QUIRKS, "Paraplegic" = TRUE)
 
 /datum/job/research_director

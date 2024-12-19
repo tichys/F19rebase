@@ -254,7 +254,7 @@
 	filedesc = "Custodial Locator"
 	extended_desc = "This program allows for tracking of custodial equipment."
 	requires_ntnet = TRUE
-	transfer_access = list(ACCESS_JANITOR)
+	transfer_access = list(ACCESS_SERVICE)
 	available_on_ntnet = TRUE
 	program_icon = "broom"
 	size = 2

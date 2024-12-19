@@ -4,7 +4,7 @@
 
 /obj/structure/closet/secure_closet/decktech
 	name = "deck technician's locker"
-	req_access = list(ACCESS_CARGO)
+	req_access = list(ACCESS_LOGISTICS_LVL2)
 	icon_state = "securecargo1"
 
 /obj/structure/closet/secure_closet/decktech/WillContain()

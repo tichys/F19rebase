@@ -3,7 +3,7 @@
 	desc = "Used to view and edit personnel's security records."
 	icon_screen = "security"
 	icon_keyboard = "security_key"
-	req_one_access = list(ACCESS_SECURITY, ACCESS_FORENSICS, ACCESS_HOP)
+	req_one_access = list(ACCESS_SECURITY, ACCESS_ADMIN_LVL5)
 	circuit = /obj/item/circuitboard/computer/secure_data
 	light_color = COLOR_SOFT_RED
 	var/rank = null
@@ -1002,8 +1002,8 @@ Age: [active1.fields[DATACORE_AGE]]<BR>"}
 							temp += "</ul>"
 					if("rank")
 						var/list/L = list(
-							JOB_CAPTAIN,
-							JOB_HEAD_OF_PERSONNEL,
+							JOB_SITE_DIRECTOR,
+							JOB_HUMAN_RESOURCES_DIRECTOR,
 							JOB_AI,
 							JOB_CENTCOM,
 						)

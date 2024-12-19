@@ -198,7 +198,7 @@
 			chefcount++
 		if(H.is_wearing_item_of_type(/obj/item/clothing/under/rank/civilian/lawyer))
 			lawyercount++
-		if(H.mind && H.mind.assigned_role.title == JOB_PROSPECTOR)
+		if(H.mind && H.mind.assigned_role.title == JOB_LOGISTICS_TECHNICIAN)
 			minercount++
 		if(H.mind && H.mind.assigned_role.title == "Chaplain")
 			chaplaincount++
@@ -266,7 +266,7 @@
 							chance += 250
 						episode_names += new /datum/episode_name/rare("[pick("COME HELL OR HIGH HONKER", "THE LAST LAUGH")]", "The Clown was the only survivor in the shuttle.", chance)
 						theme = "clown"
-				if(JOB_DETECTIVE)
+				if(JOB_INVESTIGATIONS_AGENT)
 					var/chance = 250
 					if(H.is_wearing_item_of_type(/obj/item/storage/belt/holster/shoulder))
 						chance += 1000
@@ -277,7 +277,7 @@
 					if(H.is_wearing_item_of_type(/obj/item/clothing/under/rank/security/detective))
 						chance += 250
 					episode_names += new /datum/episode_name/rare("[uppertext(H.real_name)]: LOOSE CANNON", "The Detective was the only survivor in the shuttle.", chance)
-				if(JOB_PROSPECTOR)
+				if(JOB_LOGISTICS_TECHNICIAN)
 					var/chance = 250
 					if(H.is_wearing_item_of_type(/obj/item/pickaxe))
 						chance += 1000
@@ -286,7 +286,7 @@
 					if(H.is_wearing_item_of_type(/obj/item/clothing/suit/space/nasavoid/old))
 						chance += 250
 					episode_names += new /datum/episode_name/rare("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "The Miner was the only survivor in the shuttle.", chance)
-				if(JOB_ARCHIVIST)
+				if(JOB_IT_TECHNICIAN)
 					var/chance = 750
 					if(H.is_wearing_item_of_type(/obj/item/book))
 						chance += 1000

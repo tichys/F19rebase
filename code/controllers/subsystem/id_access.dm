@@ -24,11 +24,11 @@ SUBSYSTEM_DEF(id_access)
 	var/list/desc_by_access = list()
 	/// List of accesses for the Heads of each sub-department alongside the regions they control and their job name.
 	var/list/sub_department_managers_tgui = list()
-	/// Helper list containing all trim paths that can be used as job templates. Intended to be used alongside logic for ACCESS_CHANGE_IDS. Grab templates from sub_department_managers_tgui for Head of Staff restrictions.
+	/// Helper list containing all trim paths that can be used as job templates. Intended to be used alongside logic for ACCESS_ADMIN_LVL5. Grab templates from sub_department_managers_tgui for Head of Staff restrictions.
 	var/list/station_job_templates = list()
 	/// Helper list containing all trim paths that can be used as Centcom templates.
 	var/list/centcom_job_templates = list()
-	/// Helper list containing all PDA paths that can be painted by station machines. Intended to be used alongside logic for ACCESS_CHANGE_IDS. Grab templates from sub_department_managers_tgui for Head of Staff restrictions.
+	/// Helper list containing all PDA paths that can be painted by station machines. Intended to be used alongside logic for ACCESS_ADMIN_LVL5. Grab templates from sub_department_managers_tgui for Head of Staff restrictions.
 	var/list/station_pda_templates = list()
 	/// Helper list containing all station regions.
 	var/list/station_regions = list()
@@ -116,7 +116,7 @@ SUBSYSTEM_DEF(id_access)
 	accesses_by_region[REGION_GENERAL] = REGION_ACCESS_GENERAL
 	accesses_by_region[REGION_SECURITY] = REGION_ACCESS_SECURITY
 	accesses_by_region[REGION_MEDBAY] = REGION_ACCESS_MEDBAY
-	accesses_by_region[REGION_RESEARCH] = REGION_ACCESS_RESEARCH
+	accesses_by_region[REGION_SCIENCE] = REGION_ACCESS_SCIENCE
 	accesses_by_region[REGION_ENGINEERING] = REGION_ACCESS_ENGINEERING
 	accesses_by_region[REGION_SUPPLY] = REGION_ACCESS_SUPPLY
 	accesses_by_region[REGION_COMMAND] = REGION_ACCESS_COMMAND
@@ -152,33 +152,47 @@ SUBSYSTEM_DEF(id_access)
 		))
 
 	sub_department_managers_tgui = list(
-		"[ACCESS_CAPTAIN]" = list(
+		"[ACCESS_ADMIN_LVL5]" = list(
 			"regions" = list(REGION_COMMAND),
-			"head" = JOB_CAPTAIN,
+			"head" = JOB_SITE_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_HOP]" = list(
-			"regions" = list(REGION_GENERAL, REGION_SUPPLY),
-			"head" = JOB_HEAD_OF_PERSONNEL,
+		"[ACCESS_ADMIN_LVL4]" = list(
+			"regions" = list(
+				REGION_GENERAL,
+				REGION_COMMAND,
+				REGION_SUPPLY,
+				REGION_SECURITY,
+				REGION_MEDBAY,
+				REGION_SCIENCE,
+				REGION_ENGINEERING
+				),
+			"head" = JOB_HUMAN_RESOURCES_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_HOS]" = list(
+		"[ACCESS_SECURITY_LVL5]" = list(
 			"regions" = list(REGION_SECURITY),
-			"head" = JOB_SECURITY_MARSHAL,
+			"head" = JOB_SECURITY_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_CMO]" = list(
+		"[ACCESS_MEDICAL_LVL5]" = list(
 			"regions" = list(REGION_MEDBAY),
 			"head" = JOB_MEDICAL_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
-		"[ACCESS_CE]" = list(
+		"[ACCESS_SCIENCE_LVL5]" = list(
+			"regions" = list(REGION_SCIENCE),
+			"head" = JOB_RESEARCH_DIRECTOR,
+			"templates" = list(),
+			"pdas" = list(),
+		),
+		"[ACCESS_ENGINEERING_LVL5]" = list(
 			"regions" = list(REGION_ENGINEERING),
-			"head" = JOB_CHIEF_ENGINEER,
+			"head" = JOB_ENGINEERING_DIRECTOR,
 			"templates" = list(),
 			"pdas" = list(),
 		),
@@ -194,7 +208,7 @@ SUBSYSTEM_DEF(id_access)
 		for(var/access in trim.template_access)
 			var/list/manager = sub_department_managers_tgui["[access]"]
 			if(!manager)
-				if(access != ACCESS_CHANGE_IDS)
+				if(access != ACCESS_ADMIN_LVL5)
 					WARNING("Invalid template access access \[[access]\] registered with [trim_path]. Template added to global list anyway.")
 				continue
 			var/list/templates = manager["templates"]
@@ -238,84 +252,56 @@ SUBSYSTEM_DEF(id_access)
 
 /// Setup dictionary that converts access levels to text descriptions.
 /datum/controller/subsystem/id_access/proc/setup_access_descriptions()
-	desc_by_access["[ACCESS_CARGO]"] = "Cargo Bay"
-	desc_by_access["[ACCESS_SECURITY]"] = "Security"
-	desc_by_access["[ACCESS_BRIG]"] = "Holding Cells"
-	desc_by_access["[ACCESS_COURT]"] = "Courtroom"
-	desc_by_access["[ACCESS_FORENSICS]"] = "P.I's Office"
-	desc_by_access["[ACCESS_MEDICAL]"] = "Medical"
-	desc_by_access["[ACCESS_GENETICS]"] = "Genetics Lab"
-	desc_by_access["[ACCESS_MORGUE]"] = "Morgue"
-	desc_by_access["[ACCESS_RND]"] = "R&D Lab"
-	desc_by_access["[ACCESS_ORDNANCE]"] = "Ordnance Lab"
-	desc_by_access["[ACCESS_ORDNANCE_STORAGE]"] = "Ordnance Storage"
-	desc_by_access["[ACCESS_CHEMISTRY]"] = "Chemistry Lab"
-	desc_by_access["[ACCESS_RD]"] = "RD Office"
-	desc_by_access["[ACCESS_BAR]"] = "Bar"
-	desc_by_access["[ACCESS_JANITOR]"] = "Custodial Closet"
-	desc_by_access["[ACCESS_ENGINE]"] = "Engineering"
-	desc_by_access["[ACCESS_ENGINE_EQUIP]"] = "Power and Engineering Equipment"
-	desc_by_access["[ACCESS_MAINT_TUNNELS]"] = "Maintenance"
-	desc_by_access["[ACCESS_EXTERNAL_AIRLOCKS]"] = "External Airlocks"
-	desc_by_access["[ACCESS_CHANGE_IDS]"] = "ID Console"
-	desc_by_access["[ACCESS_AI_UPLOAD]"] = "AI Chambers"
-	desc_by_access["[ACCESS_TELEPORTER]"] = "Teleporter"
-	desc_by_access["[ACCESS_EVA]"] = "EVA"
-	desc_by_access["[ACCESS_MANAGEMENT]"] = "Management"
-	desc_by_access["[ACCESS_CAPTAIN]"] = "Captain"
-	desc_by_access["[ACCESS_ALL_PERSONAL_LOCKERS]"] = "Personal Lockers"
-	desc_by_access["[ACCESS_CHAPEL_OFFICE]"] = "Chapel Office"
-	desc_by_access["[ACCESS_TECH_STORAGE]"] = "Technical Storage"
-	desc_by_access["[ACCESS_ATMOSPHERICS]"] = "Atmospherics"
-	desc_by_access["[ACCESS_CREMATORIUM]"] = "Crematorium"
-	desc_by_access["[ACCESS_ARMORY]"] = "Armory"
-	desc_by_access["[ACCESS_CONSTRUCTION]"] = "Construction"
-	desc_by_access["[ACCESS_KITCHEN]"] = "Kitchen"
-	desc_by_access["[ACCESS_HYDROPONICS]"] = "Hydroponics"
-	desc_by_access["[ACCESS_LIBRARY]"] = "Library"
-	desc_by_access["[ACCESS_LAWYER]"] = "Law Office"
-	desc_by_access["[ACCESS_ROBOTICS]"] = "Robotics"
-	desc_by_access["[ACCESS_VIROLOGY]"] = "Virology"
-	desc_by_access["[ACCESS_PSYCHOLOGY]"] = "Psychology"
-	desc_by_access["[ACCESS_CMO]"] = "CMO Office"
-	desc_by_access["[ACCESS_QM]"] = "Quartermaster"
-	desc_by_access["[ACCESS_SURGERY]"] = "Surgery"
-	desc_by_access["[ACCESS_THEATRE]"] = "Theatre"
-	desc_by_access["[ACCESS_RESEARCH]"] = "Science"
-	desc_by_access["[ACCESS_MINING]"] = "Mining"
-	desc_by_access["[ACCESS_MAILSORTING]"] = "Cargo Office"
-	desc_by_access["[ACCESS_VAULT]"] = "Main Vault"
-	desc_by_access["[ACCESS_MINING_STATION]"] = "Mining EVA"
-	desc_by_access["[ACCESS_XENOBIOLOGY]"] = "Xenobiology Lab"
-	desc_by_access["[ACCESS_HOP]"] = "HoP Office"
-	desc_by_access["[ACCESS_HOS]"] = "HoS Office"
-	desc_by_access["[ACCESS_CE]"] = "CE Office"
-	desc_by_access["[ACCESS_PHARMACY]"] = "Pharmacy"
-	desc_by_access["[ACCESS_RC_ANNOUNCE]"] = "RC Announcements"
-	desc_by_access["[ACCESS_KEYCARD_AUTH]"] = "Keycode Auth."
-	desc_by_access["[ACCESS_TCOMSAT]"] = "Telecommunications"
-	desc_by_access["[ACCESS_GATEWAY]"] = "Gateway"
-	desc_by_access["[ACCESS_BRIG_ENTRANCE]"] = "Brig"
-	desc_by_access["[ACCESS_MINERAL_STOREROOM]"] = "Mineral Storage"
-	desc_by_access["[ACCESS_MINISAT]"] = "AI Satellite"
-	desc_by_access["[ACCESS_WEAPONS]"] = "Weapon Permit"
-	desc_by_access["[ACCESS_NETWORK]"] = "Network Access"
-	desc_by_access["[ACCESS_MECH_MINING]"] = "Mining Mech Access"
-	desc_by_access["[ACCESS_MECH_MEDICAL]"] = "Medical Mech Access"
-	desc_by_access["[ACCESS_MECH_SECURITY]"] = "Security Mech Access"
-	desc_by_access["[ACCESS_MECH_SCIENCE]"] = "Science Mech Access"
-	desc_by_access["[ACCESS_MECH_ENGINE]"] = "Engineering Mech Access"
-	desc_by_access["[ACCESS_AUX_BASE]"] = "Auxiliary Base"
-	desc_by_access["[ACCESS_SERVICE]"] = "Service Hallway"
-	desc_by_access["[ACCESS_CENT_GENERAL]"] = "Code Grey"
-	desc_by_access["[ACCESS_CENT_THUNDER]"] = "Code Yellow"
-	desc_by_access["[ACCESS_CENT_STORAGE]"] = "Code Orange"
-	desc_by_access["[ACCESS_CENT_LIVING]"] = "Code Green"
-	desc_by_access["[ACCESS_CENT_MEDICAL]"] = "Code White"
-	desc_by_access["[ACCESS_CENT_TELEPORTER]"] = "Code Blue"
-	desc_by_access["[ACCESS_CENT_SPECOPS]"] = "Code Black"
-	desc_by_access["[ACCESS_CENT_CAPTAIN]"] = "Code Gold"
-	desc_by_access["[ACCESS_CENT_BAR]"] = "Code Scotch"
+	desc_by_access["[ACCESS_SECURITY]"] = "Security Department Affiliation"
+	desc_by_access["[ACCESS_SECURITY_LVL1]"] = "Level 1 Security Clearance"
+	desc_by_access["[ACCESS_SECURITY_LVL2]"] = "Level 2 Security Clearance"
+	desc_by_access["[ACCESS_SECURITY_LVL3]"] = "Level 3 Security Clearance"
+	desc_by_access["[ACCESS_SECURITY_LVL4]"] = "Level 4 Security Clearance"
+	desc_by_access["[ACCESS_SECURITY_LVL5]"] = "Level 5 Security Clearance"
+
+	desc_by_access["[ACCESS_ADMIN]"] = "Administration Department Affiliation"
+	desc_by_access["[ACCESS_ADMIN_LVL1]"] = "Level 1 Administrative Clearance"
+	desc_by_access["[ACCESS_ADMIN_LVL2]"] = "Level 2 Administrative Clearance"
+	desc_by_access["[ACCESS_ADMIN_LVL3]"] = "Level 3 Administrative Clearance"
+	desc_by_access["[ACCESS_ADMIN_LVL4]"] = "Level 4 Administrative Clearance"
+	desc_by_access["[ACCESS_ADMIN_LVL5]"] = "Level 5 Administrative Clearance"
+
+	desc_by_access["[ACCESS_SCIENCE]"] = "Research Department Affiliation"
+	desc_by_access["[ACCESS_SCIENCE_LVL1]"] = "Level 1 Research Clearance"
+	desc_by_access["[ACCESS_SCIENCE_LVL2]"] = "Level 2 Research Clearance"
+	desc_by_access["[ACCESS_SCIENCE_LVL3]"] = "Level 3 Research Clearance"
+	desc_by_access["[ACCESS_SCIENCE_LVL4]"] = "Level 4 Research Clearance"
+	desc_by_access["[ACCESS_SCIENCE_LVL5]"] = "Level 5 Research Clearance"
+
+	desc_by_access["[ACCESS_MEDICAL]"] = "Medical Department Affiliation"
+	desc_by_access["[ACCESS_MEDICAL_LVL1]"] = "Level 1 Medical Clearance"
+	desc_by_access["[ACCESS_MEDICAL_LVL2]"] = "Level 2 Medical Clearance"
+	desc_by_access["[ACCESS_MEDICAL_LVL3]"] = "Level 3 Medical Clearance"
+	desc_by_access["[ACCESS_MEDICAL_LVL4]"] = "Level 4 Medical Clearance"
+	desc_by_access["[ACCESS_MEDICAL_LVL5]"] = "Level 5 Medical Clearance"
+
+	desc_by_access["[ACCESS_ENGINEERING]"] = "Engineering Department Affiliation"
+	desc_by_access["[ACCESS_ENGINEERING_LVL1]"] = "Level 1 Engineering Clearance"
+	desc_by_access["[ACCESS_ENGINEERING_LVL2]"] = "Level 2 Engineering Clearance"
+	desc_by_access["[ACCESS_ENGINEERING_LVL3]"] = "Level 3 Engineering Clearance"
+	desc_by_access["[ACCESS_ENGINEERING_LVL4]"] = "Level 4 Engineering Clearance"
+	desc_by_access["[ACCESS_ENGINEERING_LVL5]"] = "Level 5 Engineering Clearance"
+
+	desc_by_access["[ACCESS_LOGISTICS]"] = "Logistics Department Affiliation"
+	desc_by_access["[ACCESS_LOGISTICS_LVL1]"] = "Level 1 Logistics Clearance"
+	desc_by_access["[ACCESS_LOGISTICS_LVL2]"] = "Level 2 Logistics Clearance"
+	desc_by_access["[ACCESS_LOGISTICS_LVL3]"] = "Level 3 Logistics Clearance"
+	desc_by_access["[ACCESS_LOGISTICS_LVL4]"] = "Level 4 Logistics Clearance"
+	desc_by_access["[ACCESS_LOGISTICS_LVL5]"] = "Level 5 Logistics Clearance"
+
+	desc_by_access["[ACCESS_SERVICE]"] = "Service Department Affiliation"
+
+	desc_by_access["[ACCESS_DCLASS]"] = "Class-D Residential Clearance"
+	desc_by_access["[ACCESS_DCLASS_MINING]"] = "Class-D Mining Clearance"
+	desc_by_access["[ACCESS_DCLASS_BOTANY]"] = "Class-D Hydroponics Clearance"
+	desc_by_access["[ACCESS_DCLASS_JANITORIAL]"] = "Class-D Janitorial Clearance"
+	desc_by_access["[ACCESS_DCLASS_LUXURY]"] = "Class-D Luxury Clearance"
+	desc_by_access["[ACCESS_DCLASS_MEDICAL]"] = "Class-D Medical Clearance"
 
 /**
  * Returns the access bitflags associated with any given access level.

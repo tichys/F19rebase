@@ -1,9 +1,9 @@
 
 //jobs from ss13 but DEAD.
 
-/obj/effect/mob_spawn/corpse/human/cargo_tech
-	name = "Cargo Tech"
-	outfit = /datum/outfit/job/cargo_tech
+/obj/effect/mob_spawn/corpse/human/logistics_technician
+	name = "Logistics Technican"
+	outfit = /datum/outfit/job/logistics_technician
 	icon_state = "corpsecargotech"
 
 /obj/effect/mob_spawn/corpse/human/cook
@@ -11,9 +11,9 @@
 	outfit = /datum/outfit/job/cook
 	icon_state = "corpsecook"
 
-/obj/effect/mob_spawn/corpse/human/doctor
+/obj/effect/mob_spawn/corpse/human/medical_doctor
 	name = "Doctor"
-	outfit = /datum/outfit/job/doctor
+	outfit = /datum/outfit/job/medical_doctor
 	icon_state = "corpsedoctor"
 
 /obj/effect/mob_spawn/corpse/human/engineer
@@ -30,7 +30,7 @@
 	icon_state = "corpseclown"
 
 /obj/effect/mob_spawn/corpse/human/miner
-	name = JOB_PROSPECTOR
+	name = JOB_LOGISTICS_TECHNICIAN
 	outfit = /datum/outfit/job/miner
 	icon_state = "corpseminer"
 

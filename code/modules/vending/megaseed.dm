@@ -70,7 +70,7 @@
 	extra_price = PAYCHECK_ASSISTANT
 	payment_department = ACCOUNT_STATION_MASTER
 
-	discount_access = ACCESS_HYDROPONICS
+	discount_access = ACCESS_SERVICE
 
 /obj/item/vending_refill/hydroseeds
 	machine_name = "MegaSeed Servitor"

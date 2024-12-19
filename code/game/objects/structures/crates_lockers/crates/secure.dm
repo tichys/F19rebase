@@ -52,7 +52,7 @@
 /obj/structure/closet/crate/secure/freezer/pizza
 	name = "secure pizza crate"
 	desc = "An insulated crate with a lock on it, used to secure pizza."
-	req_access = list(ACCESS_KITCHEN)
+	req_access = list(ACCESS_SERVICE)
 	tamperproof = 10
 
 /obj/structure/closet/crate/secure/freezer/pizza/PopulateContents()

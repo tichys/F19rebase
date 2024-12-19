@@ -29,330 +29,199 @@
 	return access
 
 // -------------------- Req Any (Only requires ONE of the given accesses to open)
-// -------------------- Command access helpers
-/obj/effect/mapping_helpers/airlock/access/any/command
-	icon_state = "access_helper_com"
 
-/obj/effect/mapping_helpers/airlock/access/any/command/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MANAGEMENT
-	return access_list
+// -------------------- Security Access Helpers
 
-/obj/effect/mapping_helpers/airlock/access/any/command/ai_upload/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_AI_UPLOAD
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/command/teleporter/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_TELEPORTER
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/command/eva/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_EVA
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/command/gateway/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_GATEWAY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/command/hop/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_HOP
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/command/captain/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CAPTAIN
-	return access_list
-
-// -------------------- Engineering access helpers
-/obj/effect/mapping_helpers/airlock/access/any/engineering
-	icon_state = "access_helper_eng"
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ENGINE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/engine_equipment/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ENGINE_EQUIP
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/construction/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CONSTRUCTION
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/aux_base/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_AUX_BASE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/maintenance/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MAINT_TUNNELS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/external/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_EXTERNAL_AIRLOCKS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/tech_storage/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_TECH_STORAGE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/atmos/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ATMOSPHERICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/tcoms/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_TCOMSAT
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/engineering/ce/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CE
-	return access_list
-
-// -------------------- Medical access helpers
-/obj/effect/mapping_helpers/airlock/access/any/medical
-	icon_state = "access_helper_med"
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MEDICAL
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/morgue/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MORGUE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/chemistry/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CHEMISTRY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/virology/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_VIROLOGY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/surgery/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_SURGERY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/cmo/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CMO
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/pharmacy/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_PHARMACY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/medical/psychology/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_PSYCHOLOGY
-	return access_list
-
-// -------------------- Science access helpers
-/obj/effect/mapping_helpers/airlock/access/any/science
-	icon_state = "access_helper_sci"
-
-/obj/effect/mapping_helpers/airlock/access/any/science/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_RND
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/research/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_RESEARCH
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/ordnance/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ORDNANCE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/ordnance_storage/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ORDNANCE_STORAGE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/genetics/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_GENETICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/robotics/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ROBOTICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/xenobio/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_XENOBIOLOGY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/minisat/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MINISAT
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/science/rd/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_RD
-	return access_list
-
-// -------------------- Security access helpers
 /obj/effect/mapping_helpers/airlock/access/any/security
 	icon_state = "access_helper_sec"
 
-/obj/effect/mapping_helpers/airlock/access/any/security/general/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/security/level1/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_SECURITY
+	access_list += ACCESS_SECURITY_LVL1
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/security/entrance/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/security/level2/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_BRIG_ENTRANCE
+	access_list += ACCESS_SECURITY_LVL2
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/security/brig/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/security/level3/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_BRIG
+	access_list += ACCESS_SECURITY_LVL3
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/security/armory/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/security/level4/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_ARMORY
+	access_list += ACCESS_SECURITY_LVL4
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/security/detective/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/security/level5/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_FORENSICS
+	access_list += ACCESS_SECURITY_LVL5
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/security/court/get_access()
+// -------------------- Administration Access Helpers
+
+/obj/effect/mapping_helpers/airlock/access/any/admin
+	icon_state = "access_helper_com"
+
+/obj/effect/mapping_helpers/airlock/access/any/admin/level1/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_COURT
+	access_list += ACCESS_ADMIN_LVL1
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/security/hos/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/admin/level2/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_HOS
+	access_list += ACCESS_ADMIN_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/admin/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ADMIN_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/admin/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ADMIN_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/admin/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ADMIN_LVL5
+	return access_list
+
+// -------------------- Science Access Helpers
+
+/obj/effect/mapping_helpers/airlock/access/any/science
+	icon_state = "access_helper_sci"
+
+/obj/effect/mapping_helpers/airlock/access/any/science/level1/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL1
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/science/level2/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/science/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/science/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/science/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL5
+	return access_list
+
+// -------------------- Medical Access Helpers
+
+/obj/effect/mapping_helpers/airlock/access/any/medical
+	icon_state = "access_helper_med"
+
+/obj/effect/mapping_helpers/airlock/access/any/medical/level1/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL1
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/medical/level2/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/medical/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/medical/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/medical/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL5
+	return access_list
+
+// -------------------- Engineering access helpers
+
+/obj/effect/mapping_helpers/airlock/access/any/engineering
+	icon_state = "access_helper_eng"
+
+/obj/effect/mapping_helpers/airlock/access/any/engineering/level1/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL1
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/engineering/level2/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/engineering/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/engineering/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/any/engineering/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL5
 	return access_list
 
 // -------------------- Service access helpers
+
 /obj/effect/mapping_helpers/airlock/access/any/service
 	icon_state = "access_helper_serv"
 
-/obj/effect/mapping_helpers/airlock/access/any/service/general/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/service/level1/get_access()
 	var/list/access_list = ..()
 	access_list += ACCESS_SERVICE
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/service/kitchen/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_KITCHEN
-	return access_list
+// -------------------- Logistics Access Helpers
 
-/obj/effect/mapping_helpers/airlock/access/any/service/bar/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_BAR
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/service/hydroponics/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_HYDROPONICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/service/janitor/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_JANITOR
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/service/chapel_office/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CHAPEL_OFFICE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/service/crematorium/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CREMATORIUM
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/service/library/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_LIBRARY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/service/theatre/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_THEATRE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/service/lawyer/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_LAWYER
-	return access_list
-
-// -------------------- Supply access helpers
-/obj/effect/mapping_helpers/airlock/access/any/supply
+/obj/effect/mapping_helpers/airlock/access/any/logistics
 	icon_state = "access_helper_sup"
 
-/obj/effect/mapping_helpers/airlock/access/any/supply/general/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/logistics/level1/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_CARGO
+	access_list += ACCESS_LOGISTICS_LVL1
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/supply/mail_sorting/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/logistics/level2/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MAILSORTING
+	access_list += ACCESS_LOGISTICS_LVL2
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/supply/mining/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/logistics/level3/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MINING
+	access_list += ACCESS_LOGISTICS_LVL3
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/supply/mining_station/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/logistics/level4/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MINING_STATION
+	access_list += ACCESS_LOGISTICS_LVL4
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/any/supply/mineral_storage/get_access()
+/obj/effect/mapping_helpers/airlock/access/any/logistics/level5/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MINERAL_STOREROOM
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/supply/qm/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_QM
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/supply/vault/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_VAULT
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/any/supply/maintenance/get_access()
-	var/list/access_list = ..()
-	access_list += list(ACCESS_CARGO, ACCESS_MAINT_TUNNELS)
+	access_list += ACCESS_LOGISTICS_LVL5
 	return access_list
 
 // -------------------- Syndicate access helpers
+
 /obj/effect/mapping_helpers/airlock/access/any/syndicate
 	icon_state = "access_helper_syn"
 
@@ -475,323 +344,197 @@
 	return access_list
 
 // -------------------- Req All (Requires ALL of the given accesses to open)
-// -------------------- Command access helpers
-/obj/effect/mapping_helpers/airlock/access/all/command
-	icon_state = "access_helper_com"
 
-/obj/effect/mapping_helpers/airlock/access/all/command/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MANAGEMENT
-	return access_list
+// -------------------- Security Access Helpers
 
-/obj/effect/mapping_helpers/airlock/access/all/command/ai_upload/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_AI_UPLOAD
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/command/teleporter/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_TELEPORTER
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/command/eva/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_EVA
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/command/gateway/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_GATEWAY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/command/hop/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_HOP
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/command/captain/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CAPTAIN
-	return access_list
-
-// -------------------- Engineering access helpers
-/obj/effect/mapping_helpers/airlock/access/all/engineering
-	icon_state = "access_helper_eng"
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ENGINE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/engine_equipment/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ENGINE_EQUIP
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/construction/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CONSTRUCTION
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/aux_base/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_AUX_BASE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/maintenance/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MAINT_TUNNELS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/external/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_EXTERNAL_AIRLOCKS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/tech_storage/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_TECH_STORAGE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/atmos/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ATMOSPHERICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/tcoms/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_TCOMSAT
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/engineering/ce/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CE
-	return access_list
-
-// -------------------- Medical access helpers
-/obj/effect/mapping_helpers/airlock/access/all/medical
-	icon_state = "access_helper_med"
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MEDICAL
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/morgue/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MORGUE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/chemistry/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CHEMISTRY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/virology/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_VIROLOGY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/surgery/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_SURGERY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/cmo/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CMO
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/pharmacy/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_PHARMACY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/medical/psychology/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_PSYCHOLOGY
-	return access_list
-
-// -------------------- Science access helpers
-/obj/effect/mapping_helpers/airlock/access/all/science
-	icon_state = "access_helper_sci"
-
-/obj/effect/mapping_helpers/airlock/access/all/science/general/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_RND
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/research/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_RESEARCH
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/ordnance/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ORDNANCE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/ordnance_storage/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ORDNANCE_STORAGE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/genetics/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_GENETICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/robotics/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_ROBOTICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/xenobio/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_XENOBIOLOGY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/minisat/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_MINISAT
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/science/rd/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_RD
-	return access_list
-
-// -------------------- Security access helpers
 /obj/effect/mapping_helpers/airlock/access/all/security
 	icon_state = "access_helper_sec"
 
-/obj/effect/mapping_helpers/airlock/access/all/security/general/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/security/level1/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_SECURITY
+	access_list += ACCESS_SECURITY_LVL1
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/security/entrance/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/security/level2/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_BRIG_ENTRANCE
+	access_list += ACCESS_SECURITY_LVL2
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/security/brig/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/security/level3/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_BRIG
+	access_list += ACCESS_SECURITY_LVL3
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/security/armory/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/security/level4/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_ARMORY
+	access_list += ACCESS_SECURITY_LVL4
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/security/detective/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/security/level5/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_FORENSICS
+	access_list += ACCESS_SECURITY_LVL5
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/security/court/get_access()
+// -------------------- Administration Access Helpers
+
+/obj/effect/mapping_helpers/airlock/access/all/admin
+	icon_state = "access_helper_com"
+
+/obj/effect/mapping_helpers/airlock/access/all/admin/level1/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_COURT
+	access_list += ACCESS_ADMIN_LVL1
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/security/hos/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/admin/level2/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_HOS
+	access_list += ACCESS_ADMIN_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/admin/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ADMIN_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/admin/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ADMIN_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/admin/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ADMIN_LVL5
+	return access_list
+
+// -------------------- Science Access Helpers
+
+/obj/effect/mapping_helpers/airlock/access/all/science
+	icon_state = "access_helper_sci"
+
+/obj/effect/mapping_helpers/airlock/access/all/science/level1/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL1
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/science/level2/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/science/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/science/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/science/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_SCIENCE_LVL5
+	return access_list
+
+// -------------------- Medical Access Helpers
+
+/obj/effect/mapping_helpers/airlock/access/all/medical
+	icon_state = "access_helper_med"
+
+/obj/effect/mapping_helpers/airlock/access/all/medical/level1/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL1
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/medical/level2/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/medical/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/medical/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/medical/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_MEDICAL_LVL5
+	return access_list
+
+// -------------------- Engineering access helpers
+
+/obj/effect/mapping_helpers/airlock/access/all/engineering
+	icon_state = "access_helper_eng"
+
+/obj/effect/mapping_helpers/airlock/access/all/engineering/level1/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL1
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/engineering/level2/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL2
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/engineering/level3/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL3
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/engineering/level4/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL4
+	return access_list
+
+/obj/effect/mapping_helpers/airlock/access/all/engineering/level5/get_access()
+	var/list/access_list = ..()
+	access_list += ACCESS_ENGINEERING_LVL5
 	return access_list
 
 // -------------------- Service access helpers
+
 /obj/effect/mapping_helpers/airlock/access/all/service
 	icon_state = "access_helper_serv"
 
-/obj/effect/mapping_helpers/airlock/access/all/service/general/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/service/level1/get_access()
 	var/list/access_list = ..()
 	access_list += ACCESS_SERVICE
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/service/kitchen/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_KITCHEN
-	return access_list
+// -------------------- Logistics Access Helpers
 
-/obj/effect/mapping_helpers/airlock/access/all/service/bar/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_BAR
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/service/hydroponics/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_HYDROPONICS
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/service/janitor/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_JANITOR
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/service/chapel_office/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CHAPEL_OFFICE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/service/crematorium/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_CREMATORIUM
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/service/library/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_LIBRARY
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/service/theatre/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_THEATRE
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/service/lawyer/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_LAWYER
-	return access_list
-
-// -------------------- Supply access helpers
-/obj/effect/mapping_helpers/airlock/access/all/supply
+/obj/effect/mapping_helpers/airlock/access/all/logistics
 	icon_state = "access_helper_sup"
 
-/obj/effect/mapping_helpers/airlock/access/all/supply/general/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/logistics/level1/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_CARGO
+	access_list += ACCESS_LOGISTICS_LVL1
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/supply/mail_sorting/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/logistics/level2/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MAILSORTING
+	access_list += ACCESS_LOGISTICS_LVL2
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/supply/mining/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/logistics/level3/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MINING
+	access_list += ACCESS_LOGISTICS_LVL3
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/supply/mining_station/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/logistics/level4/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MINING_STATION
+	access_list += ACCESS_LOGISTICS_LVL4
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/supply/mineral_storage/get_access()
+/obj/effect/mapping_helpers/airlock/access/all/logistics/level5/get_access()
 	var/list/access_list = ..()
-	access_list += ACCESS_MINERAL_STOREROOM
+	access_list += ACCESS_LOGISTICS_LVL5
 	return access_list
 
-/obj/effect/mapping_helpers/airlock/access/all/supply/qm/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_QM
-	return access_list
-
-/obj/effect/mapping_helpers/airlock/access/all/supply/vault/get_access()
-	var/list/access_list = ..()
-	access_list += ACCESS_VAULT
-	return access_list
 
 // -------------------- Syndicate access helpers
 /obj/effect/mapping_helpers/airlock/access/all/syndicate

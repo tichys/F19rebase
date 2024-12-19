@@ -40,7 +40,7 @@
 	COOLDOWN_DECLARE(next_salute_check)
 
 	///Access required to access this Bot's maintenance protocols
-	var/maints_access_required = list(ACCESS_ROBOTICS)
+	var/maints_access_required = list(ACCESS_SCIENCE_LVL2)
 	///The Robot arm attached to this robot - has a 50% chance to drop on death.
 	var/robot_arm = /obj/item/bodypart/arm/right/robot
 	///The inserted (if any) pAI in this bot.
@@ -174,7 +174,7 @@
 	// Give bots a fancy new ID card that can hold any access.
 	access_card = new /obj/item/card/id/advanced/simple_bot(src)
 	// This access is so bots can be immediately set to patrol and leave Robotics, instead of having to be let out first.
-	access_card.set_access(list(ACCESS_ROBOTICS))
+	access_card.set_access(list(ACCESS_SCIENCE_LVL2))
 	internal_radio = new /obj/item/radio(src)
 	if(radio_key)
 		internal_radio.keyslot = new radio_key

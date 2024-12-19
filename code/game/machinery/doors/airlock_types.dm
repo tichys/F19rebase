@@ -120,7 +120,7 @@
 	autoclose = FALSE
 	frequency = FREQ_AIRLOCK_CONTROL
 	heat_proof = TRUE
-	req_access = list(ACCESS_ORDNANCE)
+	req_access = list(ACCESS_SCIENCE)
 
 /obj/machinery/door/airlock/research/glass/incinerator/ordmix_interior
 	name = "Mixing Room Interior Airlock"
@@ -313,7 +313,7 @@
 	autoclose = FALSE
 	frequency = FREQ_AIRLOCK_CONTROL
 	heat_proof = TRUE
-	req_one_access = list(ACCESS_ATMOSPHERICS, ACCESS_MAINT_TUNNELS)
+	req_one_access = list(ACCESS_ENGINEERING_LVL3, ACCESS_ENGINEERING_LVL1)
 
 /obj/machinery/door/airlock/public/glass/incinerator/atmos_interior
 	name = "Turbine Interior Airlock"
@@ -336,7 +336,7 @@
 	overlays_file = 'icons/obj/doors/airlocks/external/overlays.dmi'
 	airlock_paint = "#9F2828"
 	assemblytype = /obj/structure/door_assembly/door_assembly_ext
-	req_access = list(ACCESS_EXTERNAL_AIRLOCKS)
+	req_access = list(ACCESS_ENGINEERING_LVL2)
 
 	/// Whether or not the airlock can be opened without access from a certain direction while powered, or with bare hands from any direction while unpowered OR pressurized.
 	var/space_dir = null

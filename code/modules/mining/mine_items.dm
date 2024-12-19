@@ -45,7 +45,7 @@
 /obj/structure/closet/secure_closet/miner
 	name = "miner's equipment"
 	icon_state = "mining"
-	req_access = list(ACCESS_MINING)
+	req_access = list(ACCESS_LOGISTICS_LVL3)
 
 /obj/structure/closet/secure_closet/miner/unlocked
 	locked = FALSE

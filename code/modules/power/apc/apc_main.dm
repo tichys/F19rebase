@@ -120,7 +120,7 @@ GLOBAL_REAL_VAR(default_apc_armor) = list(BLUNT = 20, PUNCTURE = 20, SLASH = 0, 
 
 /obj/machinery/power/apc/New(turf/loc, ndir, building=0)
 	if(!req_access)
-		req_access = list(ACCESS_ENGINE_EQUIP)
+		req_access = list(ACCESS_ENGINEERING_LVL1)
 	if(!armor)
 		armor = global.default_apc_armor
 	..()

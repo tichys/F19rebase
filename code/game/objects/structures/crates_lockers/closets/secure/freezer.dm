@@ -39,7 +39,7 @@
 
 /obj/structure/closet/secure_closet/freezer/kitchen
 	name = "kitchen cabinet"
-	req_access = list(ACCESS_KITCHEN)
+	req_access = list(ACCESS_SERVICE)
 
 /obj/structure/closet/secure_closet/freezer/kitchen/PopulateContents()
 	..()
@@ -66,7 +66,7 @@
 
 /obj/structure/closet/secure_closet/freezer/meat
 	name = "meat fridge"
-	req_access = list(ACCESS_KITCHEN)
+	req_access = list(ACCESS_SERVICE)
 
 /obj/structure/closet/secure_closet/freezer/meat/PopulateContents()
 	..()
@@ -87,7 +87,7 @@
 
 /obj/structure/closet/secure_closet/freezer/fridge
 	name = "refrigerator"
-	req_access = list(ACCESS_KITCHEN)
+	req_access = list(ACCESS_SERVICE)
 
 /obj/structure/closet/secure_closet/freezer/fridge/PopulateContents()
 	..()
@@ -104,7 +104,7 @@
 /obj/structure/closet/secure_closet/freezer/money
 	name = "freezer"
 	desc = "This contains cold hard cash."
-	req_access = list(ACCESS_VAULT)
+	req_access = list(ACCESS_LOGISTICS_LVL5)
 
 /obj/structure/closet/secure_closet/freezer/money/PopulateContents()
 	..()
@@ -116,7 +116,7 @@
 /obj/structure/closet/secure_closet/freezer/cream_pie
 	name = "cream pie closet"
 	desc = "Contains pies filled with cream and/or custard, you sickos."
-	req_access = list(ACCESS_THEATRE)
+	req_access = list(ACCESS_SERVICE)
 
 /obj/structure/closet/secure_closet/freezer/cream_pie/PopulateContents()
 	..()
