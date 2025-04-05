@@ -68,6 +68,8 @@
 	grant_language(LANGUAGE_HUMAN_SPANISH)
 	grant_language(LANGUAGE_PLAGUESPEAK_GLOBAL)
 
+	RegisterSignal(src, COMSIG_MOVABLE_HEAR, PROC_REF(reset_interaction_time))
+
 	home_area = get_area(src)
 
 /mob/living/carbon/human/scp049/proc/InitSkills()
@@ -268,12 +270,12 @@
 		var/pest_message = pick("They reek of the disease.", "They need to be cured.", "The disease is strong in them.", "You sense the pestilence in them.")
 		to_chat(src, "[SPAN_DANGER(SPAN_BOLD(pest_message))]")
 
-/mob/living/carbon/human/scp049/Hear(message, verb = "says", datum/language/language = null, alt_name = "", italics = 0, mob/speaker = null, sound/speech_sound, sound_vol)
-	. = ..()
-	// Check if the speaker is not SCP-049 itself
-	if(speaker == src)
+/mob/living/carbon/human/scp049/proc/reset_interaction_time(datum/source, list/hearing_args)
+	SIGNAL_HANDLER
+
+	var/mob/hearing_speaker = hearing_args[HEARING_SPEAKER]
+	if(hearing_speaker == src || !ishuman(hearing_speaker))
 		return
-	// Update the last interaction time to the current time
 	last_interaction_time = world.time
 
 //Util Overrides

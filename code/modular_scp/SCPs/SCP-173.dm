@@ -86,6 +86,8 @@
 
 	defecation_cooldown = world.time + 10 MINUTES // Give everyone some time to prepare
 	spawn_area = get_area(src)
+	remove_all_languages()
+
 	return ..()
 
 /mob/living/scp173/Destroy()
@@ -96,9 +98,6 @@
 	clear_target()
 
 	return ..()
-
-/mob/living/scp173/say(message)
-	return // lol you can't talk
 
 /mob/living/scp173/Move(a,b,f)
 	if(IsBeingWatched())

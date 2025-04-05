@@ -37,6 +37,8 @@
 		SCP_PLAYABLE|SCP_ROLEPLAY
 	)
 
+	grant_all_languages()
+
 	add_verb(src, /mob/living/carbon/human/scp343/verb/object_phase)
 
 //Mechanics
