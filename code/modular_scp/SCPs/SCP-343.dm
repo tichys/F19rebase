@@ -4,7 +4,7 @@
 	icon = 'icons/SCP/scp-343.dmi'
 	icon_state = null
 
-	see_invisible = SEE_INVISIBLE_NOLIGHTING
+	see_invisible = SEE_INVISIBLE_LIVING
 	see_in_dark = 7
 
 	status_flags = CANPUSH|GODMODE
