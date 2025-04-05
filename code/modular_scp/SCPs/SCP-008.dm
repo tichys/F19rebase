@@ -1,3 +1,7 @@
+/*
+/ DO NOT TICK THIS FILE UNTIL 008 IS REWRITTEN AS REAGENTS ARE HANDLED DIFFERENTLY ON THIS CODEBASE AND THEREFORE REQUIRE A REWRITE FOR 008
+*/
+
 /datum/reagent/scp008
 	name = "008 Prions"
 	description = "An oily substance which slowly churns of its own accord."
@@ -46,7 +50,7 @@
 		return
 	var/mob/living/carbon/human/H = M
 
-	if (!(H.species.name in GLOB.zombie_species) || isspecies(H, SPECIES_DIONA) || H.isSynthetic())
+	if (!is_species(H, /datum/species/human))
 		remove_self(volume)
 		return
 	var/true_dose = H.chem_doses[type] + volume
