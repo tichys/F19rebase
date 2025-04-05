@@ -106,6 +106,25 @@
 	pixel_y = 0
 	alpha = set_alpha
 
+//Overrides
+
+/mob/living/carbon/human/scp343/UnarmedAttack(atom/A, proximity)
+	if((istate == INTENT_HARM) && iscarbon(A))
+		to_chat(src, SPAN_WARNING("You know better than to hurt one of your own children."))
+		return
+
+	if((istate == INTENT_HELP) && ismob(A))
+		var/mob/living/target = A
+		to_chat(src, SPAN_WARNING("You start to heal [target]'s wounds"))
+		visible_message(SPAN_NOTICE("\The [src] starts to heal [target]'s wounds"))
+		if(!do_after(src, 12 SECONDS, A))
+			return
+		target.revive()
+		visible_message(SPAN_NOTICE("\The [src] has fully healed [target]!"))
+		return
+
+	return ..()
+
 //TODO : Phase out obsolete proc
 /mob/living/carbon/human/scp343/proc/on_update_icon()
 	if(resting)
