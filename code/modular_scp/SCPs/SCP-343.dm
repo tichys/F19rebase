@@ -4,21 +4,51 @@
 	icon = 'icons/SCP/scp-343.dmi'
 	icon_state = null
 
+	see_invisible = SEE_INVISIBLE_NOLIGHTING
 	see_in_dark = 7
 
 	status_flags = CANPUSH|GODMODE
 
-
 	//Config
 
-	///Cooldown for our phasing ability
+	///Cooldown for our phasing wall ability
 	var/phase_cooldown = 5 SECONDS
 	///How long it takes us to phase
 	var/phase_time = 2 SECONDS
-	var/move_delay = 3.0
+	///What alpha level are we when we are invisible
+	var/phase_alpha = 115
+	///Move speed when we are phased out
+	var/phased_move_delay = 1.0
+
 	//Mechanical
+
+	///Cooldow tracker for our phasing wall ability
+	var/phase_cooldown_track
+	///Set Alpha (to know what to phase back to)
+	var/set_alpha
+
+/mob/living/carbon/human/scp343/Initialize(mapload, new_species = "SCP-343")
+	. = ..()
+	SCP = new /datum/scp(
+		src, // Ref to actual SCP atom
+		"strange elderly man", //Name (Should not be the scp desg, more like what it can be described as to viewers)
+		SCP_SAFE, //Obj Class
+		"343", //Numerical Designation
+		SCP_PLAYABLE|SCP_ROLEPLAY
+	)
+
+	add_verb(src, /mob/living/carbon/human/scp343/verb/object_phase)
+
+//Mechanics
+
 /mob/living/carbon/human/scp343/verb/object_phase()
-	phase_time = 1 SECOND
+	set name = "Phase Through Object"
+	set category = "SCP"
+	set desc = "Phase through an object in front of you."
+
+	if((world.time - phase_cooldown_track) < phase_cooldown)
+		to_chat(src, SPAN_WARNING("You can't phase again yet."))
+		return
 
 	var/obj/target_object = null
 	for(var/obj/O in get_step(src, dir))
@@ -46,11 +76,14 @@
 		to_chat(src, SPAN_WARNING("\The [target_turf] is preventing us from phasing in that direction."))
 		return
 
+	phase_cooldown_track = world.time
+
 	// Mob effects
 	var/old_layer = layer
 	var/anim_x = 0
 	var/anim_y = 0
 	layer = GHOST_PLANE
+	alpha = phase_alpha
 
 	if(dir in list(NORTH, NORTHEAST, NORTHWEST))
 		anim_y = 32
@@ -62,55 +95,16 @@
 		anim_x = -32
 	animate(src, pixel_x = anim_x, pixel_y = anim_y, time = phase_time)
 
-	//if(do_after(src, phase_time, target_object))
-	forceMove(get_step(src, dir))
-	visible_message(SPAN_NOTICE("[src] silently phases through [target_object]"))
+	if(do_after(src, phase_time, target_object))
+		forceMove(get_step(src, dir))
+		visible_message(SPAN_NOTICE("[src] silently phases through [target_object]"))
 
 	layer = old_layer
 	pixel_x = 0
 	pixel_y = 0
-	///Cooldow tracker for our phasing ability
-/mob/living/carbon/human/scp343/Initialize(mapload, new_species = "SCP-343")
-	. = ..()
-	SCP = new /datum/scp(
-		src, // Ref to actual SCP atom
-		"strange elderly man", //Name (Should not be the scp desg, more like what it can be described as to viewers)
-		SCP_SAFE, //Obj Class
-		"343", //Numerical Designation
-		SCP_PLAYABLE|SCP_ROLEPLAY
-	)
+	alpha = set_alpha
 
-	add_verb(src, /mob/living/carbon/human/scp343/verb/object_phase)
-
-	SCP.min_time = 15 MINUTES
-	SCP.min_playercount = 20
-
-//Mechanics
-
-//Overrides
-
-/mob/living/carbon/human/scp343/UnarmedAttack(atom/A, proximity)
-	if((istate == INTENT_HARM) && iscarbon(A))
-		to_chat(src, SPAN_WARNING("You know better than to hurt one of your own children."))
-		return
-
-	if((istate == INTENT_HELP) && ismob(A))
-		var/mob/living/target = A
-		to_chat(src, SPAN_WARNING("You start to heal [target]'s wounds"))
-		visible_message(SPAN_NOTICE("\The [src] starts to heal [target]'s wounds"))
-		if(!do_after(src, 12 SECONDS, A))
-			return
-		target.revive()
-		visible_message(SPAN_NOTICE("\The [src] has fully healed [target]!"))
-		return
-
-	return ..()
-
-
-//TODO: Change pathing of SCPs to no longer be humans so that we dont have to do this bullshit.
-/mob/living/carbon/human/scp343/update_icons()
-	return
-
+//TODO : Phase out obsolete proc
 /mob/living/carbon/human/scp343/proc/on_update_icon()
 	if(resting)
 		var/matrix/M =  matrix()
@@ -118,20 +112,3 @@
 	else
 		transform = null
 	return
-
-
-/mob/living/carbon/human/scp343/verb/change_shell()
-	set name = "Change shell"
-	set category = "SCP"
-	set desc = "Become unreal"
-
-	// Invisible
-	if (alpha < 255)
-		alpha = 255
-		move_delay = 3.0 // Default speed
-	else if (alpha == 255)
-		alpha = 0
-		move_delay = 1.0 // Max speed
-
-
-	to_chat(src, SPAN_WARNING("You change your visibility."))

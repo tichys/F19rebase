@@ -209,7 +209,7 @@
 			else if(can_touch_bare_skin(H))
 				visible_message(SPAN_DANGER(SPAN_ITALIC("[src] reaches towards [H]!")))
 				AttackVoiceLine()
-				H.death(deathmessage = "suddenly becomes very still...", show_dead_message = "You have been killed by SCP-[SCP.designation]. Be patient as you may yet be cured...")
+				H.death(cause_of_death = "Killed by SCP-[SCP.designation], and as such a potential patient for the good doctor...")
 			else
 				// Crowd control tool!
 				if(anger_timer >= anger_timer_max * 0.75)
