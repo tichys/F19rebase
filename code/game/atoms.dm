@@ -184,6 +184,9 @@
 	/// How this atom should react to having its astar blocking checked
 	var/can_astar_pass = CANASTARPASS_DENSITY
 
+	/// SCP datum for atoms which need to be marked as an SCP and retain the appropriate data
+	var/datum/scp/SCP
+
 /**
  * Called when an atom is created in byond (built in engine proc)
  *
