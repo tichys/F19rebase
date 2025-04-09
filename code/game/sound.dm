@@ -87,10 +87,10 @@
 
 	for(var/mob/listening_mob in listeners)//observers always hear through walls
 		if(get_dist(listening_mob, turf_source) <= maxdistance)
-			listening_mob.playsound_local(turf_source, soundin, vol, vary, frequency, falloff_exponent, channel, pressure_affected, S, maxdistance, falloff_distance, 1, use_reverb)
+			listening_mob.playsound_local(turf_source, soundin, vol, vary, frequency, falloff_exponent, channel, pressure_affected, S, maxdistance, falloff_distance, 1, use_reverb, source)
 			. += listening_mob
 
-/mob/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff_exponent = SOUND_FALLOFF_EXPONENT, channel = 0, pressure_affected = TRUE, sound/sound_to_use, max_distance, falloff_distance = SOUND_DEFAULT_FALLOFF_DISTANCE, distance_multiplier = 1, use_reverb = TRUE, wait = FALSE)
+/mob/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff_exponent = SOUND_FALLOFF_EXPONENT, channel = 0, pressure_affected = TRUE, sound/sound_to_use, max_distance, falloff_distance = SOUND_DEFAULT_FALLOFF_DISTANCE, distance_multiplier = 1, use_reverb = TRUE, wait = FALSE, atom/source)
 	if(!client || !can_hear())
 		return
 
@@ -160,6 +160,9 @@
 		if(use_reverb && sound_to_use.environment != SOUND_ENVIRONMENT_NONE) //We have reverb, reset our echo setting
 			sound_to_use.echo[3] = 0 //Room setting, 0 means normal reverb
 			sound_to_use.echo[4] = 0 //RoomHF setting, 0 means normal reverb.
+
+	if(source)
+		SEND_SIGNAL(source, COMSIG_ATOM_SOUND_HEARD, src, soundin)
 
 	SEND_SOUND(src, sound_to_use)
 	if(LAZYLEN(observers))
