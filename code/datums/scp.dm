@@ -75,7 +75,7 @@
 	if(parent)
 		GLOB.SCP_list -= parent
 		parent.SCP = null
-	if(meme_comp && parent)
+	if(meme_comp)
 		meme_comp = null //we dont delete the memetic component as it isint ours, but we still remove our reference to it
 	UnregisterSignal(parent, COMSIG_PARENT_EXAMINE)
 	parent = null
