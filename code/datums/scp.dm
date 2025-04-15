@@ -72,7 +72,11 @@
 
 /datum/scp/Destroy()
 	. = ..()
-	GLOB.SCP_list -= src
+	if(parent)
+		GLOB.SCP_list -= parent
+		parent.SCP = null
+	if(meme_comp && parent)
+		meme_comp = null //we dont delete the memetic component as it isint ours, but we still remove our reference to it
 	UnregisterSignal(parent, COMSIG_PARENT_EXAMINE)
 	parent = null
 
@@ -82,14 +86,6 @@
 		return
 	if(metaFlags & SCP_MEMETIC)
 		meme_comp = parent.AddComponent(/datum/component/memetic, memeticFlags, memetic_proc, memetic_sounds)
-
-/datum/scp/proc/Remove()
-	if(parent)
-		parent.TakeComponent(meme_comp)
-		parent.SCP = null
-		qdel(src)
-	else
-		qdel(src)
 
 ///For when an SCP object is examined, we send the examinee a message about the SCP's designation if they should know what SCP it is.
 /datum/scp/proc/OnExamine(datum/source, mob/user, list/examine_list)

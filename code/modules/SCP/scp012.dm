@@ -49,6 +49,7 @@
 /obj/item/paper/scp012/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	QDEL_NULL(soundloop)
+	QDEL_NULL(SCP)
 	return ..()
 
 //Mechanics
