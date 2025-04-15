@@ -1016,3 +1016,9 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 
 /// Trait from mob/living/update_transform()
 #define UPDATE_TRANSFORM_TRAIT "update_transform"
+
+// Memetic Traits
+///Are we insulated to visual memetics?
+#define TRAIT_MEMETIC_BLIND "TRAIT_MEMETIC_BLIND"
+///Are we insulated to audible memetics?
+#define TRAIT_MEMETIC_DEAF "TRAIT_MEMETIC_DEAF"

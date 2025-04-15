@@ -85,3 +85,6 @@
 
 /// generally called before temporary non-parallel animate()s on the atom (animation_duration)
 #define COMSIG_ATOM_TEMPORARY_ANIMATION_START "atom_temp_animate_start"
+
+/// from the base of /mob/proc/playsound_local, sent whenever an atom's audio is heard (/mob/hearer, sound)
+#define COMSIG_ATOM_SOUND_HEARD "atom_sound_heard"
