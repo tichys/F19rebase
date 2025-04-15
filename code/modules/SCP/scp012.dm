@@ -80,7 +80,7 @@
 					H.visible_message(span_notice("[H] looks at \"[name]\" and sighs dejectedly."), span_warning(pick(dmessages)))
 					playsound(H, "sound/voice/human/emote/sigh_[H.gender].ogg", 100)
 				else
-					H.visible_message(span_notice("[H] looks at the \"[name]\" and cries."), span_warning(pick(dmessages)))
+					H.visible_message(span_notice("[H] looks at \"[name]\" and cries."), span_warning(pick(dmessages)))
 					playsound(H, "sound/voice/human/emote/[H.gender]_cry[pick(list("1","2"))].ogg", 100)
 		else
 			if(prob(40))
@@ -93,7 +93,7 @@
 					H.visible_message(span_notice("[H] looks at \"[name]\" and sighs dejectedly."), span_warning(pick(dmessages)))
 					playsound(H, "sound/voice/human/emote/sigh_[H.gender].ogg", 100)
 				else
-					H.visible_message(span_notice("[H] looks at the \"[name]\" and cries."), span_warning(pick(dmessages)))
+					H.visible_message(span_notice("[H] looks at \"[name]\" and cries."), span_warning(pick(dmessages)))
 					playsound(H, "sound/voice/human/emote/[H.gender]_cry[pick(list("1","2"))].ogg", 100)
 		effect_cooldown_counter = world.time
 
