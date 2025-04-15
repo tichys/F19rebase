@@ -45,7 +45,7 @@
 		for(var/mob/living/carbon/human/H in affected_mobs)
 			if((memetic_flags & MVISUAL) && (H in viewers(parent)) && !(H.is_blind() || HAS_TRAIT(H, TRAIT_MEMETIC_BLIND))) //potentially port human memetics as this check is not nearly as extensive
 				continue
-			if((memetic_flags & MAUDIBLE) && H.can_hear() && (H in hearers(parent)) && !HAS_TRAIT(H, TRAIT_MEMETIC_DEAF))
+			if((memetic_flags & MAUDIBLE) && H.can_hear() && !HAS_TRAIT(H, TRAIT_MEMETIC_DEAF))
 				continue
 			LAZYREMOVE(affected_mobs_weakref, WEAKREF(H))
 
@@ -71,10 +71,16 @@
 	var/list/mob/affected_mobs = recursive_list_resolve(affected_mobs_weakref)
 	if((!ishuman(hearer)) || (hearer in affected_mobs))
 		return
-	if(LAZYLEN(memetic_sounds) && !(sound in memetic_sounds))
+	var/soundtext
+	if(istype(sound, /sound))
+		var/sound/Ssound = sound
+		soundtext = Ssound.file
+	else
+		soundtext = sound
+	if(LAZYLEN(memetic_sounds) && !(soundtext in memetic_sounds))
 		return
 	var/mob/living/carbon/human/H = hearer
-	if((memetic_flags & MAUDIBLE) && H.can_hear() && (H in hearers(parent)) && !HAS_TRAIT(H, TRAIT_MEMETIC_DEAF))
+	if((memetic_flags & MAUDIBLE) && H.can_hear() && !HAS_TRAIT(H, TRAIT_MEMETIC_DEAF))
 		if(memetic_flags & MSYNCED)
 			LAZYOR(affected_mobs_weakref, WEAKREF(H))
 		else if(H.stat != DEAD)
