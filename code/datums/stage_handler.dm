@@ -3,8 +3,8 @@
 	var/list/stages
 
 /datum/stageHandler/New()
- 	. = ..()
- 	LAZYINITLIST(stages)
+	. = ..()
+	LAZYINITLIST(stages)
 
 ///Creates a new stage to track
 /datum/stageHandler/proc/createStage(stageID)
@@ -39,5 +39,5 @@
 		createStage(stageID)
 	if(setAmount < 0)
 		setAmount = 0
- 	stages[stageID] = setAmount
- 	return 1
+	stages[stageID] = setAmount
+	return 1
