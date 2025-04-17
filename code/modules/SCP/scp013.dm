@@ -29,6 +29,11 @@
 
 	LAZYINITLIST(affected_weakref)
 
+/obj/item/clothing/mask/cigarette/scp013/Destroy()
+	LAZYNULL(affected_weakref)
+	QDEL_NULL(SCP)
+	return ..()
+
 //Mechanics
 
 /obj/item/clothing/mask/cigarette/scp013/proc/effect(mob/living/carbon/human/H)
