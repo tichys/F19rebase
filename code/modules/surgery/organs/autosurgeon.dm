@@ -124,3 +124,5 @@
 
 /obj/item/autosurgeon/organ/syndicate/reviver
 	starting_organ = /obj/item/organ/cyberimp/chest/reviver
+
+#undef INFINITE
