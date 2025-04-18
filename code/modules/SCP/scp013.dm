@@ -116,7 +116,7 @@
 /obj/item/clothing/mask/cigarette/put_out(mob/user, done_early = FALSE)
 	if(done_early)
 		if(user)
-			to_chat(user, span_notice("You cant bring yourself to put it out.."))
+			to_chat(user, span_notice("You cant bring yourself to put it out..."))
 		return
 	return ..()
 
