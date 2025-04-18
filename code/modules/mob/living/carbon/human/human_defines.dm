@@ -103,3 +103,6 @@
 	var/list/appearance_mods
 
 	var/list/time_of_death_stats
+
+	///Stage Handler (so we dont have a billion vars for scps)
+	var/datum/stageHandler/humanStageHandler = new()

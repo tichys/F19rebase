@@ -191,8 +191,8 @@ GLOBAL_LIST_EMPTY(active_alternate_appearances)
 	return FALSE
 
 /datum/atom_hud/alternate_appearance/basic/one_person/New(key, image/I, mob/living/M)
-	..(key, I, FALSE)
 	seer = M
+	return ..(key, I, FALSE)
 
 /datum/atom_hud/alternate_appearance/basic/one_person/mimic(atom/movable/openspace/mimic/mimic)
 	var/datum/atom_hud/alternate_appearance/basic/one_person/alt_appearance = ..()
