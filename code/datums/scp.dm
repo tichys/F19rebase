@@ -46,21 +46,15 @@
 
 	parent = creation
 
-	if(LAZYLEN(name))
-		parent.name = name
-		if(ismob(parent))
-			var/mob/parentMob = parent
-			parentMob.set_real_name(name)
-
 	// if(classification == SCP_SAFE)
 	// 	set_faction(parent, MOB_FACTION_NEUTRAL)
 	// else
 	// 	set_faction(parent, FACTION_SCPS)
 
 	if(ismob(parent))
-		var/mob/pMob = parent
+		var/mob/parentMob = parent
 		if(LAZYLEN(name))
-			pMob.fully_replace_character_name(name)
+			parentMob.fully_replace_character_name(null, name)
 		//pMob.status_flags += NO_ANTAG --- We need to rimplement no antag///
 
 	if(metaFlags & SCP_DISABLED)
