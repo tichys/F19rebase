@@ -17,4 +17,5 @@
 		ANNOUNCER_SHUTTLECALLED = 'modular_pariah/modules/announcer/sound/shuttlecalled_static.ogg',
 		ANNOUNCER_SHUTTLEDOCK = 'modular_pariah/modules/announcer/sound/shuttledock.ogg',
 		ANNOUNCER_SHUTTLERECALLED = 'modular_pariah/modules/announcer/sound/shuttlerecalled.ogg',
-		ANNOUNCER_SPANOMALIES = 'modular_pariah/modules/announcer/sound/spanomalies.ogg')
+		ANNOUNCER_SPANOMALIES = 'modular_pariah/modules/announcer/sound/spanomalies.ogg',
+		ANNOUNCER_SCP049LOGIN = 'sound/ai/default/scp/049.ogg')
