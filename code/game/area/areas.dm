@@ -530,3 +530,9 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 		return
 
 	to_chat(pawn, pick_weight(flavor_texts))
+
+///Opens all the doors in an area and cuts power (EMPs APCs) for a short amount of time.
+/area/proc/breach()
+	for(var/obj/machinery/door/D in contents)
+		INVOKE_ASYNC(D, TYPE_PROC_REF(/obj/machinery/door, open)) //open the doors all at once
+	apc.emp_act(EMP_LIGHT)
