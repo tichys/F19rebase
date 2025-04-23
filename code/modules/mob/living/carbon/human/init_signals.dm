@@ -12,6 +12,7 @@
 
 	RegisterSignal(src, SIGNAL_ADDTRAIT(TRAIT_JAUNDICE_SKIN), PROC_REF(on_jaundice_gain))
 	RegisterSignal(src, SIGNAL_REMOVETRAIT(TRAIT_JAUNDICE_SKIN), PROC_REF(on_jaundice_loss))
+	RegisterSignal(src, list(SIGNAL_ADDTRAIT(TRAIT_PESTILENCE), SIGNAL_REMOVETRAIT(TRAIT_PESTILENCE)), PROC_REF(update_pestilence_hud))
 
 /mob/living/carbon/human/proc/signal_update_name(datum/source)
 	SIGNAL_HANDLER

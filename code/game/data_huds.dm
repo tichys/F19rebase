@@ -550,6 +550,7 @@ Diagnostic HUDs!
 Pestilence HUD
 ************************************************/
 /mob/living/carbon/human/proc/update_pestilence_hud()
+	SIGNAL_HANDLER //because this is only updated on the addition / removal of TRAIT_PESTILENCE so we just register a signal to SIGNAL_TRAIT_ADD / SIGNAL_TRAIT_REMOVE
 	if(HAS_TRAIT(src, TRAIT_PESTILENCE))
 		set_hud_image_vars(PESTILENCE_HUD, "hud")
 		set_hud_image_active(PESTILENCE_HUD)
