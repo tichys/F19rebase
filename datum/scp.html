@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;scp - Daedalus Dock</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Daedalus Dock</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/scp.html#var">Var Details</a> - <a href="datum/scp.html#proc">Proc Details</a></header>
+<main>
+<h1>scp <aside>/<a href="datum.html">datum</a>/<a href="datum/scp.html">scp</a></aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L1">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 1"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/scp.html#var/classification">classification</a></th><td>SCP Class (SAFE, EUCLID, ETC.)</td></tr>
+            <tr><th><a href="datum/scp.html#var/designation">designation</a></th><td>SCP Designation (i.e 173 or 096)</td></tr>
+            <tr><th><a href="datum/scp.html#var/meme_comp">meme_comp</a></th><td>Memetic Component</td></tr>
+            <tr><th><a href="datum/scp.html#var/memeticFlags">memeticFlags</a></th><td>Flags that determine how a memetic scp is detected</td></tr>
+            <tr><th><a href="datum/scp.html#var/memetic_proc">memetic_proc</a></th><td>Proc called as an effect from memetic scps</td></tr>
+            <tr><th><a href="datum/scp.html#var/memetic_sounds">memetic_sounds</a></th><td>Sounds that are considered memetic</td></tr>
+            <tr><th><a href="datum/scp.html#var/metaFlags">metaFlags</a></th><td>Meta Flags for the SCP</td></tr>
+            <tr><th><a href="datum/scp.html#var/min_playercount">min_playercount</a></th><td>How many players do we need on for this SCP to be playable</td></tr>
+            <tr><th><a href="datum/scp.html#var/min_time">min_time</a></th><td>How much time has to have passed for this SCP to become playable</td></tr>
+            <tr><th><a href="datum/scp.html#var/name">name</a></th><td>SCP name</td></tr>
+            <tr><th><a href="datum/scp.html#var/parent">parent</a></th><td>Datum Parent</td></tr>
+            <tr><th><a href="datum/scp.html#var/regular_examine">regular_examine</a></th><td>If this SCP can still be examined as normal</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/scp.html#proc/OnExamine">OnExamine</a></th><td>For when an SCP object is examined, we send the examinee a message about the SCP's designation if they should know what SCP it is.</td></tr>
+            <tr><th><a href="datum/scp.html#proc/compInit">compInit</a></th><td>Run only after adding appropriate flags for components.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/classification"><aside class="declaration">var </aside>classification
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L7">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 7"/></a></h3>
+        <p>SCP Class (SAFE, EUCLID, ETC.)</p><h3 id="var/designation"><aside class="declaration">var </aside>designation
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L5">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 5"/></a></h3>
+        <p>SCP Designation (i.e 173 or 096)</p><h3 id="var/meme_comp"><aside class="declaration">var </aside>meme_comp
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/component.html">component</a>/<a href="datum/component/memetic.html">memetic</a></aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L25">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 25"/></a></h3>
+        <p>Memetic Component</p><h3 id="var/memeticFlags"><aside class="declaration">var </aside>memeticFlags
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L32">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 32"/></a></h3>
+        <p>Flags that determine how a memetic scp is detected</p><h3 id="var/memetic_proc"><aside class="declaration">var </aside>memetic_proc
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L30">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 30"/></a></h3>
+        <p>Proc called as an effect from memetic scps</p><h3 id="var/memetic_sounds"><aside class="declaration">var </aside>memetic_sounds
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L34">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 34"/></a></h3>
+        <p>Sounds that are considered memetic</p><h3 id="var/metaFlags"><aside class="declaration">var </aside>metaFlags
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L10">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 10"/></a></h3>
+        <p>Meta Flags for the SCP</p><h3 id="var/min_playercount"><aside class="declaration">var </aside>min_playercount
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L18">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 18"/></a></h3>
+        <p>How many players do we need on for this SCP to be playable</p><h3 id="var/min_time"><aside class="declaration">var </aside>min_time
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L20">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 20"/></a></h3>
+        <p>How much time has to have passed for this SCP to become playable</p><h3 id="var/name"><aside class="declaration">var </aside>name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L3">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 3"/></a></h3>
+        <p>SCP name</p><h3 id="var/parent"><aside class="declaration">var </aside>parent
+            <aside>&ndash; /<a href="atom.html">atom</a></aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L13">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 13"/></a></h3>
+        <p>Datum Parent</p><h3 id="var/regular_examine"><aside class="declaration">var </aside>regular_examine
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L37">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 37"/></a></h3>
+        <p>If this SCP can still be examined as normal</p><h2 id="proc">Proc Details</h2><h3 id="proc/OnExamine"><aside class="declaration">proc </aside>OnExamine<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/user, /list/examine_list) 
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L91">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 91"/></a></aside>
+        </h3>
+        <p>For when an SCP object is examined, we send the examinee a message about the SCP's designation if they should know what SCP it is.</p><h3 id="proc/compInit"><aside class="declaration">proc </aside>compInit<aside>() 
+        
+    
+            <a href="https://github.com/Foundation-19/Daedelus-Foundation/blob/f8f51dd757de0c0302ad25ffe182ed58ab7083fb/code/datums/scp.dm#L84">
+        <img src="git.png" width="16" height="16" title="code&#x2F;datums&#x2F;scp.dm 84"/></a></aside>
+        </h3>
+        <p>Run only after adding appropriate flags for components.</p></main>
+<footer>
+    daedalus.dme
+    <a href="https://github.com/Foundation-19/Daedelus-Foundation/tree/f8f51dd757de0c0302ad25ffe182ed58ab7083fb">f8f51dd</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>
