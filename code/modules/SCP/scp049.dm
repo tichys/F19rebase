@@ -1,5 +1,5 @@
 /mob/living/carbon/human/scp049
-	name = "\improper plague doctor"
+	name = "\the plague doctor"
 	desc = "A mysterious plague doctor."
 	icon = 'icons/SCP/scp-049.dmi'
 
@@ -28,6 +28,8 @@
 	COOLDOWN_DECLARE(heal)
 	///our breach timer, if it ever hits zero we breach
 	var/breach_timer
+	///Cure action datum
+	var/datum/action/scp049cure/cureaction
 
 /mob/living/carbon/human/scp049/Initialize(mapload)
 	. = ..()
@@ -37,7 +39,7 @@
 
 	SCP = new /datum/scp(
 		src, // Ref to actual SCP atom
-		"\improper plague doctor", //Name (Should not be the scp desg, more like what it can be described as to viewers)
+		"\the plague doctor", //Name (Should not be the scp desg, more like what it can be described as to viewers)
 		SCP_EUCLID, //Obj Class
 		"049", //Numerical Designation
 		SCP_PLAYABLE|SCP_ROLEPLAY
@@ -60,15 +62,19 @@
 	RegisterSignal(src, COMSIG_MOB_LOGIN, PROC_REF(announceJoin))
 	RegisterSignal(home_area, COMSIG_AREA_ENTERED, PROC_REF(handleContainment))
 	RegisterSignal(home_area, COMSIG_AREA_EXITED, PROC_REF(handleEscape))
+	RegisterSignal(src, list(COMSIG_LIVING_START_GRAB, COMSIG_LIVING_NO_LONGER_GRABBING), PROC_REF(handleCureGrab))
 
 	// grant_language(LANGUAGE_PLAGUESPEAK_GLOBAL)
 
 	var/datum/atom_hud/data/human/pestilence/pHud = GLOB.huds[DATA_HUD_PESTILENCE]
 	pHud.show_to(src)
 
+	cureaction = new
+	cureaction.link_to(src)
+
 /mob/living/carbon/human/scp049/Destroy()
 	QDEL_NULL(SCP)
-	UnregisterSignal(src, list(COMSIG_MOVABLE_HEAR, COMSIG_MOB_LOGIN))
+	UnregisterSignal(src, list(COMSIG_MOVABLE_HEAR, COMSIG_MOB_LOGIN, COMSIG_LIVING_START_GRAB))
 	UnregisterSignal(home_area, list(COMSIG_AREA_ENTERED, COMSIG_AREA_EXITED))
 	return ..()
 
@@ -116,6 +122,71 @@
 		home_area.breach()
 	breach_timer = null
 
+	// Cure procs
+
+/mob/living/carbon/human/scp049/proc/handleCureGrab(datum/source, atom/movable/pulled, obj/item/hand_item/grab/grab)
+	SIGNAL_HANDLER
+	if(grab && istype(grab.current_grab, /datum/grab/normal/aggressive) && pulled && ishuman(pulled) && HAS_TRAIT(pulled, TRAIT_PESTILENCE))
+		var/mob/living/carbon/human/H = pulled
+		if(H.stat == DEAD)
+			cureaction.Grant(src)
+			return
+	cureaction.Remove(src)
+
+// /mob/living/carbon/human/scp049/proc/PlagueDoctorCure(mob/living/carbon/human/target)
+// 	if(!(target.species.name in GLOB.zombie_species) || !target.humanStageHandler.getStage("Pestilence"))
+// 		return
+
+// 	if(isspecies(target, SPECIES_DIONA) || isspecies(target, SPECIES_SCP049_1) || target.isSynthetic())
+// 		return
+
+// 	if(target.mind)
+// 		if(target.mind.special_role == ANTAG_SCP049_1)
+// 			return
+// 		target.mind.special_role = ANTAG_SCP049_1
+
+// 	var/turf/T = get_turf(target)
+// 	new /obj/effect/decal/cleanable/blood(T)
+// 	playsound(T, 'sounds/effects/splat.ogg', 20, 1)
+// 	cured_count++
+
+// 	target.SCP = new /datum/scp(
+// 		target, // Ref to actual SCP atom
+// 		"plague zombie", //Name (Should not be the scp desg, more like what it can be described as to viewers)
+// 		SCP_EUCLID, //Obj Class
+// 		"049-[cured_count]", //Numerical Designation
+// 		SCP_PLAYABLE
+// 	)
+
+// 	target.visible_message(span_bolddanger("The lifeless corpse of [target] begins to convulse violently!"))
+// 	target.humanStageHandler.setStage("Pestilence", 0)
+
+// 	target.adjust_jitter(30 SECONDS)
+// 	target.adjustBruteLoss(100)
+
+// 	addtimer(CALLBACK(src, PROC_REF(FinishPlagueDoctorCure), target), 15 SECONDS)
+
+// /mob/living/carbon/human/scp049/proc/FinishPlagueDoctorCure(mob/living/carbon/human/target)
+// 	if(QDELETED(target))
+// 		return
+
+// 	if(isspecies(target, SPECIES_SCP049_1))
+// 		return
+
+// 	target.revive()
+// 	target.ChangeToHusk()
+// 	target.visible_message(\
+// 		span_danger("\The [target]'s skin decays before your very eyes!"), \
+// 		span_danger("You feel the last of your mind drift away... You must follow the one who cured you of your wretched disease."))
+// 	log_admin("[key_name(target)] has transformed into an instance of 049-1!")
+
+// 	target.Weaken(4)
+
+// 	target.species = all_species[SPECIES_SCP049_1]
+// 	target.species.handle_post_spawn(target)
+
+// 	playsound(get_turf(target), 'sounds/hallucinations/wail.ogg', 25, 1)
+
 //Overrides
 
 /mob/living/carbon/human/scp049/Life()
@@ -126,65 +197,37 @@
 		adjustBruteLoss(heal_amount)
 		COOLDOWN_START(src, heal, heal_cooldown)
 
-// /mob/living/carbon/human/scp049/UnarmedAttack(atom/target as obj|mob)
-// 	if(!istype(target))
-// 		return
+/mob/living/carbon/human/scp049/UnarmedAttack(atom/target as mob)
+	if(!istype(target) || !combat_mode || !ishuman(target))
+		return ..()
 
-// 	if(istype(target, /obj/machinery/door))
-// 		setClickCooldown(CLICK_CD_ATTACK)
-// 		OpenDoor(target)
-// 		return
+	var/mob/living/carbon/human/H = target
 
-// 	if(!ishuman(target) || isscp049(target))
-// 		return ..()
+	if(is_species(H, /datum/species/scp049) /*|| is_species(H, /datum/species/scp049_1)*/)
+		return ..()
 
-// 	var/mob/living/carbon/human/H = target
+	if(!HAS_TRAIT(H, TRAIT_PESTILENCE))
+		to_chat(src, span_notice("They are not infected with the Pestilence."))
+		return ..()
 
-// 	if(isspecies(H, SPECIES_SCP049_1))
-// 		return ..()
+	if(H.SCP)
+		to_chat(src, span_warning("This thing... it isnt normal... you cannot cure it."))
+		return ..()
 
-// 	if(!H.humanStageHandler.getStage("Pestilence"))
-// 		to_chat(src, span_danger("They are not infected with the Pestilence."))
-// 		return
+	var/body_parts_covered
+	for(var/i in body_zone2cover_flags(zone_selected))
+		body_parts_covered |= i
 
-// 	if(H.SCP)
-// 		to_chat(src, span_warning("This thing... it isnt normal... you cannot cure it."))
-// 		return
+	if(H.stat == DEAD)
+		to_chat(src, span_notice("They are ready for your cure."))
+		return ..()
+	else if(!(H.get_all_covered_flags() & body_parts_covered))
+		visible_message(span_bolddanger("[src] reaches towards [H]!"))
+		AttackVoiceLine()
+		H.death(cause_of_death = "Killed by SCP-[SCP.designation], and may be potentially cured...")
+		return
 
-// 	setClickCooldown(CLICK_CD_ATTACK)
-
-// 	switch(a_intent)
-// 		if(I_HELP)
-// 			to_chat(src, SPAN_NOTICE("You refrain from curing as your intent is set to help."))
-// 			return ..()
-// 		if(I_HURT)
-// 			if(H.stat == DEAD)
-// 				to_chat(src, SPAN_NOTICE("They are ready for your cure."))
-// 			else if(can_touch_bare_skin(H))
-// 				visible_message(span_danger(SPAN_ITALIC("[src] reaches towards [H]!")))
-// 				AttackVoiceLine()
-// 				H.death(deathmessage = "suddenly becomes very still...", show_dead_message = "You have been killed by SCP-[SCP.designation]. Be patient as you may yet be cured...")
-// 			else
-// 				// Crowd control tool!
-// 				if(anger_timer >= anger_timer_max * 0.75)
-// 					visible_message(span_danger(SPAN_ITALIC("[src] reaches towards [H], making them stumble!")))
-// 					H.Weaken(10)
-// 					return
-// 				visible_message(span_warning(SPAN_ITALIC("[src] reaches towards [H], but nothing happens...")))
-// 				to_chat(src, span_warning("\The target's [zone_sel.selecting] is covered. You must make contact with bare skin to kill!"))
-// 			return
-// 	return ..()
-
-// /mob/living/carbon/human/scp049/attack_hand(mob/living/carbon/human/M)
-// 	if(isspecies(M, SPECIES_SCP049_1))
-// 		to_chat(M, span_danger(SPAN_BOLD("Do not attack your master!")))
-// 		return
-
-// 	if(M.a_intent != I_HELP && M != src)
-// 		M.humanStageHandler.setStage("Pestilence", 1)
-// 		anger_timer = min(anger_timer + 2, anger_timer_max)
-
-// 	return ..()
+	to_chat(src, span_warning("\The [H]'s [parse_zone(zone_selected)] is covered! You must make contact with bare skin to kill!"))
 
 /mob/living/carbon/human/scp049/update_body_parts(update_limb_data) //dont need to draw limbs since we have our own icon
 	update_wound_overlays()
@@ -199,6 +242,11 @@
 	. = ..()
 	if((W.force > 0) && ishuman(user) && (user != src))
 		ADD_TRAIT(user, TRAIT_PESTILENCE, "Attacked SCP-049")
+
+/mob/living/carbon/human/scp049/attack_hand(mob/living/carbon/human/M, modifiers)
+	. = ..()
+	if(M.combat_mode && M != src)
+		ADD_TRAIT(M, TRAIT_PESTILENCE, "Attacked SCP-049")
 
 /mob/living/carbon/human/scp049/examinate(atom/A)
 	. = ..()
@@ -263,58 +311,26 @@
 
 	to_chat(src, span_warning("You cannot do a special emote so soon after having just done one!"))
 
-// Cure procs
+//Cure Action
+/datum/action/scp049cure
+	name = "Cure"
+	desc = "Purge the pestilence."
+	button_icon = 'icons/obj/surgery.dmi'
+	button_icon_state = "retractor"
 
-// /mob/living/carbon/human/scp049/proc/PlagueDoctorCure(mob/living/carbon/human/target)
-// 	if(!(target.species.name in GLOB.zombie_species) || !target.humanStageHandler.getStage("Pestilence"))
-// 		return
+	check_flags = AB_CHECK_CONSCIOUS | AB_CHECK_HANDS_BLOCKED
 
-// 	if(isspecies(target, SPECIES_DIONA) || isspecies(target, SPECIES_SCP049_1) || target.isSynthetic())
-// 		return
+	///Are we currently curing?
+	var/cure_in_progress = FALSE
 
-// 	if(target.mind)
-// 		if(target.mind.special_role == ANTAG_SCP049_1)
-// 			return
-// 		target.mind.special_role = ANTAG_SCP049_1
+/datum/action/scp049cure/IsAvailable(feedback)
+	. = ..()
+	if(cure_in_progress)
+		if(feedback)
+			to_chat(owner, span_warning("You are already curing someone!"))
+		return FALSE
 
-// 	var/turf/T = get_turf(target)
-// 	new /obj/effect/decal/cleanable/blood(T)
-// 	playsound(T, 'sounds/effects/splat.ogg', 20, 1)
-// 	cured_count++
-
-// 	target.SCP = new /datum/scp(
-// 		target, // Ref to actual SCP atom
-// 		"plague zombie", //Name (Should not be the scp desg, more like what it can be described as to viewers)
-// 		SCP_EUCLID, //Obj Class
-// 		"049-[cured_count]", //Numerical Designation
-// 		SCP_PLAYABLE
-// 	)
-
-// 	target.visible_message(span_bolddanger("The lifeless corpse of [target] begins to convulse violently!"))
-// 	target.humanStageHandler.setStage("Pestilence", 0)
-
-// 	target.adjust_jitter(30 SECONDS)
-// 	target.adjustBruteLoss(100)
-
-// 	addtimer(CALLBACK(src, PROC_REF(FinishPlagueDoctorCure), target), 15 SECONDS)
-
-// /mob/living/carbon/human/scp049/proc/FinishPlagueDoctorCure(mob/living/carbon/human/target)
-// 	if(QDELETED(target))
-// 		return
-
-// 	if(isspecies(target, SPECIES_SCP049_1))
-// 		return
-
-// 	target.revive()
-// 	target.ChangeToHusk()
-// 	target.visible_message(\
-// 		span_danger("\The [target]'s skin decays before your very eyes!"), \
-// 		span_danger("You feel the last of your mind drift away... You must follow the one who cured you of your wretched disease."))
-// 	log_admin("[key_name(target)] has transformed into an instance of 049-1!")
-
-// 	target.Weaken(4)
-
-// 	target.species = all_species[SPECIES_SCP049_1]
-// 	target.species.handle_post_spawn(target)
-
-// 	playsound(get_turf(target), 'sounds/hallucinations/wail.ogg', 25, 1)
+/datum/action/scp049cure/Trigger(trigger_flags)
+	. = ..()
+	if(.)
+		owner.balloon_alert(owner, "Curing")
