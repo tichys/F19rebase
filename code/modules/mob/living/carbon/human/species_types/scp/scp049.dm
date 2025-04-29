@@ -86,6 +86,7 @@
 	. = ..()
 	RegisterSignal(C, COMSIG_MOB_AFTER_APPLY_DAMAGE, PROC_REF(on_take_damage))
 	RegisterSignal(C, COMSIG_LIVING_UNARMED_ATTACK, PROC_REF(block049Attack))
+	RegisterSignal(C, COMSIG_PARENT_QDELETING, PROC_REF(handleOwnerDel))
 
 	C.SCP = new /datum/scp(
 		C, // Ref to actual SCP atom
@@ -97,13 +98,20 @@
 
 /datum/species/zombie/scp049_1/on_species_loss(mob/living/carbon/human/C, datum/species/new_species, pref_load)
 	. = ..()
-	UnregisterSignal(C, list(COMSIG_MOB_AFTER_APPLY_DAMAGE, COMSIG_LIVING_UNARMED_ATTACK))
+	UnregisterSignal(C, list(COMSIG_MOB_AFTER_APPLY_DAMAGE, COMSIG_LIVING_UNARMED_ATTACK, COMSIG_PARENT_QDELETING))
 	QDEL_NULL(C.SCP)
 
 /datum/species/zombie/scp049_1/proc/on_take_damage(datum/source, damage_dealt, damagetype, def_zone, blocked, sharpness, attack_direction, attacking_item)
 	SIGNAL_HANDLER
 	if(damage_dealt)
 		COOLDOWN_START(src, regen_cooldown, 6 SECONDS)
+
+/datum/species/zombie/scp049_1/proc/handleOwnerDel(datum/source)
+	SIGNAL_HANDLER
+	if(!istype(source, /atom))
+		return //sanity check
+	var/atom/A = source
+	QDEL_NULL(A.SCP)
 
 /datum/species/zombie/scp049_1/spec_life(mob/living/carbon/C, delta_time, times_fired)
 	. = ..()
