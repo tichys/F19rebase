@@ -29,7 +29,7 @@
 	///our breach timer, if it ever hits zero we breach
 	var/breach_timer
 	///Cure action datum
-	var/datum/action/scp049cure/cureaction
+	var/datum/weakref/cureaction
 
 /mob/living/carbon/human/scp049/Initialize(mapload)
 	. = ..()
@@ -69,8 +69,9 @@
 	var/datum/atom_hud/data/human/pestilence/pHud = GLOB.huds[DATA_HUD_PESTILENCE]
 	pHud.show_to(src)
 
-	cureaction = new
-	cureaction.link_to(src)
+	var/datum/action/scp049cure/cureact = new
+	cureaction = WEAKREF(cureact) //otherwise datum will hardel
+	cureact.link_to(src)
 
 /mob/living/carbon/human/scp049/Destroy()
 	QDEL_NULL(SCP)
@@ -126,12 +127,15 @@
 
 /mob/living/carbon/human/scp049/proc/handleCureGrab(datum/source, atom/movable/pulled, obj/item/hand_item/grab/grab)
 	SIGNAL_HANDLER
+	var/datum/action/scp049cure/cureact = cureaction.resolve()
+	if(!cureact)
+		CRASH("Could not acquire SCP-049 cureaction datum!")
 	if(grab && istype(grab.current_grab, /datum/grab/normal/aggressive) && pulled && ishuman(pulled) && HAS_TRAIT(pulled, TRAIT_PESTILENCE))
 		var/mob/living/carbon/human/H = pulled
 		if(H.stat == DEAD && !(NOZOMBIE in H.dna.species.species_traits))
-			cureaction.Grant(src)
+			cureact.Grant(src)
 			return
-	cureaction.Remove(src)
+	cureact.Remove(src)
 
 /mob/living/carbon/human/scp049/proc/FinishPlagueDoctorCure(mob/living/carbon/human/target)
 	if(QDELETED(target))

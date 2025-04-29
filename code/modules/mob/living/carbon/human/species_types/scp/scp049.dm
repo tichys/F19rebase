@@ -116,12 +116,6 @@
 	if(!(C.stat == UNCONSCIOUS) && DT_PROB(2, delta_time))
 		playsound(C, pick(spooks), 50, TRUE, 10)
 
-/datum/species/zombie/scp049_1/spec_attack_hand(mob/living/carbon/human/M, mob/living/carbon/human/H, datum/martial_art/attacker_style, modifiers)
-	if(is_species(M, /datum/species/scp049))
-		to_chat(H, span_boldwarning("Do not attack your master!"))
-		return
-	return ..()
-
 /datum/species/zombie/scp049_1/proc/block049Attack(mob/living/source, atom/target, proximity, modifiers)
 	SIGNAL_HANDLER
 	if(ishuman(target) && is_species(target, /datum/species/scp049))

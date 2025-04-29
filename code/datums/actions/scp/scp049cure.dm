@@ -37,9 +37,14 @@
 		QDEL_NULL(src) //this shouldent happen but sanity check
 		return FALSE
 
+	cure_in_progress = TRUE
+	build_all_button_icons(UPDATE_BUTTON_STATUS)
+
 	owner.visible_message(span_warning("\The [owner] begins to perfom some kind of surgery on [target]!"),span_notice("You begin to work to cure [target] of the Pestilence."))
 	if(!do_after(owner, target, curetime))
-		owner.balloon_alert(owner, "Curing interrupted!")
+		target.balloon_alert(owner, "Curing interrupted!")
+		cure_in_progress = FALSE
+		build_all_button_icons(UPDATE_BUTTON_STATUS)
 		return FALSE
 
 	owner.visible_message(span_danger("\The [owner] finishes up their procedure on [target]!"), span_boldnicegreen("You cure [target] of the Pestilence, it makes you feel good."))
@@ -48,8 +53,10 @@
 	playsound(target, 'sound/effects/splat.ogg', 20, 1)
 
 	target.visible_message(span_bolddanger("The lifeless corpse of [target] begins to convulse violently!"))
-	REMOVE_TRAIT(target, TRAIT_PESTILENCE, list("Attacked SCP-049", "badmin", "Random Pestilence"))
+	REMOVE_TRAIT(target, TRAIT_PESTILENCE, list("Attacked SCP-049", "adminabuse", "Random Pestilence"))
 
 	target.adjust_timed_status_effect(30 SECONDS, /datum/status_effect/jitter)
 
 	addtimer(CALLBACK(owner, TYPE_PROC_REF(/mob/living/carbon/human/scp049, FinishPlagueDoctorCure), target), 15 SECONDS)
+	cure_in_progress = FALSE
+	build_all_button_icons(UPDATE_BUTTON_STATUS)
