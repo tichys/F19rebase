@@ -5,17 +5,18 @@
 	species_traits = list(NOEYESPRITES, NO_UNDERWEAR)
 	inherent_traits = list(
 		TRAIT_ADVANCEDTOOLUSER,
-	 	TRAIT_XRAY_VISION,
-	 	TRAIT_NOBREATH,
-	 	TRAIT_RESISTHIGHPRESSURE,
-	 	TRAIT_RESISTLOWPRESSURE,
-	 	TRAIT_NOHUNGER,
+		TRAIT_XRAY_VISION,
+		TRAIT_NOBREATH,
+		TRAIT_RESISTHIGHPRESSURE,
+		TRAIT_RESISTLOWPRESSURE,
+		TRAIT_NOHUNGER,
 		TRAIT_TOXIMMUNE,
 		TRAIT_NODISMEMBER
 	)
 	skinned_type = /obj/item/stack/sheet/animalhide/human
 	sexes = FALSE
 	job_outfit_type = SPECIES_SCP049
+	changesource_flags = MIRROR_BADMIN //Changesource flags need to be set for something otherwise tests fail
 
 	speedmod = -0.25
 
@@ -33,8 +34,6 @@
 /datum/species/scp049/on_species_gain(mob/living/carbon/C, datum/species/old_species, pref_load)
 	. = ..()
 	C.update_body()
-	if(!istype(C, /mob/living/carbon/human/scp049))
-		CRASH("SCP-049 Species attempted to initilize on a non SCP-049 instance!")
 
 /datum/species/zombie/scp049_1
 	name = "\improper SCP-049-1 Instance"
