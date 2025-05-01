@@ -15,6 +15,10 @@
 	var/heal_cooldown = 2 SECONDS
 	/// How much time should pass without interactions to be able to get up and leave
 	var/patience_limit = 15 MINUTES
+	/// Chance an individual gets the pestilence every time pestilence spread is called
+	var/pestilence_chance = 100
+	/// How often pestilence spread is called
+	var/pestilence_time = 1 MINUTES
 
 	// Mechanical
 
@@ -73,6 +77,8 @@
 	cureaction = WEAKREF(cureact) //otherwise datum will hardel
 	cureact.link_to(src)
 
+	addtimer(CALLBACK(src, PROC_REF(HandlePestilenceSpread)), pestilence_time, TIMER_LOOP)
+
 /mob/living/carbon/human/scp049/Destroy()
 	QDEL_NULL(SCP)
 	UnregisterSignal(src, list(COMSIG_MOVABLE_HEAR, COMSIG_MOB_LOGIN, COMSIG_LIVING_START_GRAB))
@@ -89,6 +95,12 @@
 	SIGNAL_HANDLER
 	priority_announce("Motion sensors triggered in the containment chamber of SCP-049, on-site security personnel are to investigate the issue.", "Motion Sensors", "SCP-049 Potentially Active", ANNOUNCER_SCP049LOGIN)
 	resetBreachTimer()
+
+/mob/living/carbon/human/scp049/proc/HandlePestilenceSpread()
+	var/mob/M = pick(GLOB.alive_player_list)
+	if(!ishuman(M) || !prob(pestilence_chance) || M.SCP)
+		return
+	ADD_TRAIT(M, TRAIT_PESTILENCE, "Random Pestilence")
 
 	//breach related stuff below
 
@@ -226,7 +238,7 @@
 	. = ..()
 	if(ishuman(A) && HAS_TRAIT(A, TRAIT_PESTILENCE))
 		var/pest_message = pick("They reek of the disease.", "They need to be cured.", "The disease is strong in them.", "You sense the pestilence in them.")
-		to_chat(src, "[span_bolddanger(pest_message)]")
+		to_chat(src, span_bolddanger(pest_message))
 
 // Emotes
 

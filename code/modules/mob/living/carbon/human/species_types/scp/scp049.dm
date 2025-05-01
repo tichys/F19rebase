@@ -90,10 +90,10 @@
 
 	C.SCP = new /datum/scp(
 		C, // Ref to actual SCP atom
-		"plague zombie", //Name (Should not be the scp desg, more like what it can be described as to viewers)
+		null, //Name (Should not be the scp desg, more like what it can be described as to viewers)
 		SCP_EUCLID, //Obj Class
 		"049-1", //Numerical Designation
-		SCP_PLAYABLE
+		SCP_PLAYABLE | SCP_NO_NAME_REPLACE
 	)
 
 /datum/species/zombie/scp049_1/on_species_loss(mob/living/carbon/human/C, datum/species/new_species, pref_load)

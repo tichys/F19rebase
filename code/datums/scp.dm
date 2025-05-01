@@ -39,11 +39,11 @@
 /datum/scp/New(atom/creation, vName, vClass = SCP_SAFE, vDesg, vMetaFlags)
 	GLOB.SCP_list += creation
 
-	name = vName //names are now usually captalized improper descriptors to fit the theme of SCP since people dont just know the scp desg off the bat. As such we need to improper it. TODO: add mental mechanic for foundation workers to see desg instead of name.
+	metaFlags = vMetaFlags
+	if(!(metaFlags & SCP_NO_NAME_REPLACE))
+		name = vName //names are now usually captalized improper descriptors to fit the theme of SCP since people dont just know the scp desg off the bat. As such we need to improper it. TODO: add mental mechanic for foundation workers to see desg instead of name.
 	designation = vDesg
 	classification = vClass
-	metaFlags = vMetaFlags
-
 	parent = creation
 
 	// if(classification == SCP_SAFE)
@@ -51,7 +51,7 @@
 	// else
 	// 	set_faction(parent, FACTION_SCPS)
 
-	if(ismob(parent))
+	if(ismob(parent) & !(metaFlags & SCP_NO_NAME_REPLACE))
 		var/mob/parentMob = parent
 		if(LAZYLEN(name))
 			parentMob.fully_replace_character_name(null, name)

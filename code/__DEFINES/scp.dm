@@ -16,6 +16,8 @@
 #define SCP_MEMETIC			(1<<2)
 ///Is this SCP disabled and should be prevented from spawning?
 #define SCP_DISABLED 		(1<<3)
+///Should we not replace the name?
+#define SCP_NO_NAME_REPLACE (1<<4)
 
 //Memetic bitflags
 
