@@ -39,28 +39,22 @@
 /datum/scp/New(atom/creation, vName, vClass = SCP_SAFE, vDesg, vMetaFlags)
 	GLOB.SCP_list += creation
 
-	name = vName //names are now usually captalized improper descriptors to fit the theme of SCP since people dont just know the scp desg off the bat. As such we need to improper it. TODO: add mental mechanic for foundation workers to see desg instead of name.
+	metaFlags = vMetaFlags
+	if(!(metaFlags & SCP_NO_NAME_REPLACE))
+		name = vName //names are now usually captalized improper descriptors to fit the theme of SCP since people dont just know the scp desg off the bat. As such we need to improper it. TODO: add mental mechanic for foundation workers to see desg instead of name.
 	designation = vDesg
 	classification = vClass
-	metaFlags = vMetaFlags
-
 	parent = creation
-
-	if(LAZYLEN(name))
-		parent.name = name
-		if(ismob(parent))
-			var/mob/parentMob = parent
-			parentMob.set_real_name(name)
 
 	// if(classification == SCP_SAFE)
 	// 	set_faction(parent, MOB_FACTION_NEUTRAL)
 	// else
 	// 	set_faction(parent, FACTION_SCPS)
 
-	if(ismob(parent))
-		var/mob/pMob = parent
+	if(ismob(parent) & !(metaFlags & SCP_NO_NAME_REPLACE))
+		var/mob/parentMob = parent
 		if(LAZYLEN(name))
-			pMob.fully_replace_character_name(name)
+			parentMob.fully_replace_character_name(null, name)
 		//pMob.status_flags += NO_ANTAG --- We need to rimplement no antag///
 
 	if(metaFlags & SCP_DISABLED)

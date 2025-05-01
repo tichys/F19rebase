@@ -18,4 +18,5 @@
 		ANNOUNCER_SHUTTLECALLED = 'sound/ai/medbot/shuttlecalled.ogg',
 		ANNOUNCER_SHUTTLEDOCK = 'sound/ai/medbot/shuttledock.ogg',
 		ANNOUNCER_SHUTTLERECALLED = 'sound/ai/medbot/shuttlerecalled.ogg',
-		ANNOUNCER_SPANOMALIES = 'sound/ai/medbot/spanomalies.ogg')
+		ANNOUNCER_SPANOMALIES = 'sound/ai/medbot/spanomalies.ogg',
+		ANNOUNCER_SCP049LOGIN = 'sound/ai/default/scp/049.ogg')

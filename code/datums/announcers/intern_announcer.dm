@@ -41,6 +41,7 @@
 		ANNOUNCER_SHUTTLECALLED = 'sound/ai/intern/shuttlecalled.ogg',
 		ANNOUNCER_SHUTTLEDOCK = 'sound/ai/intern/shuttledock.ogg',
 		ANNOUNCER_SHUTTLERECALLED = 'sound/ai/intern/shuttlerecalled.ogg',
-		ANNOUNCER_SPANOMALIES = 'sound/ai/intern/spanomalies.ogg')
+		ANNOUNCER_SPANOMALIES = 'sound/ai/intern/spanomalies.ogg',
+		ANNOUNCER_SCP049LOGIN = 'sound/ai/default/scp/049.ogg')
 
 	custom_alert_message = "<br><span class='alert'>Please stand by for an important message from our new intern.</span><br>"

@@ -17,6 +17,7 @@
 		IMPTRACK_HUD = 'icons/mob/huds/hud.dmi',
 		GLAND_HUD = 'icons/mob/huds/hud.dmi',
 		SENTIENT_PATHOGEN_HUD = 'icons/mob/huds/hud.dmi',
+		PESTILENCE_HUD = 'icons/scp/scp-049.dmi'
 	)
 
 	hud_type = /datum/hud/human

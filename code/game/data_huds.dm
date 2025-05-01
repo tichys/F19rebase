@@ -78,6 +78,15 @@
 	for(var/mob/camera/ai_eye/eye as anything in GLOB.aiEyes)
 		eye.update_ai_detect_hud()
 
+/datum/atom_hud/data/human/pestilence
+	hud_icons = list(PESTILENCE_HUD)
+
+/datum/atom_hud/data/human/pestilence/add_atom_to_hud(atom/new_hud_atom)
+	. = ..()
+	if(ishuman(new_hud_atom))
+		var/mob/living/carbon/human/H = new_hud_atom
+		H.update_pestilence_hud() //huds start activated, this deactivates it because the default state for pestilence is off
+
 /* MED/SEC/DIAG HUD HOOKS */
 
 /*
@@ -536,3 +545,14 @@ Diagnostic HUDs!
 
 	set_hud_image_vars(DIAG_AIRLOCK_HUD, "electrified")
 	set_hud_image_active(DIAG_AIRLOCK_HUD)
+
+/***********************************************
+Pestilence HUD
+************************************************/
+/mob/living/carbon/human/proc/update_pestilence_hud()
+	SIGNAL_HANDLER //because this is only updated on the addition / removal of TRAIT_PESTILENCE so we just register a signal to SIGNAL_TRAIT_ADD / SIGNAL_TRAIT_REMOVE
+	if(HAS_TRAIT(src, TRAIT_PESTILENCE))
+		set_hud_image_vars(PESTILENCE_HUD, "hud")
+		set_hud_image_active(PESTILENCE_HUD)
+		return
+	set_hud_image_inactive(PESTILENCE_HUD)

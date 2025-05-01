@@ -1109,6 +1109,8 @@
 /mob/living/carbon/human/species/ipc/saurian
 	race = /datum/species/ipc/saurian
 
+/mob/living/carbon/human/species/scp049_1
+	race = /datum/species/zombie/scp049_1
 
 /mob/living/carbon/human/verb/checkpulse()
 	set name = "Check Pulse"

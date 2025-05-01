@@ -373,6 +373,8 @@
 		if (flavor_text_link)
 			. += span_notice(flavor_text_link)
 
+	SEND_SIGNAL(src, COMSIG_PARENT_EXAMINE, user, .) //dont know why this was just not included for humans
+
 	// AT THIS POINT WE'RE DONE WITH EXAMINE STUFF
 	var/mob/living/living_user = user
 	if(user == src && stat != CONSCIOUS || !istype(living_user) || !living_user.stats?.cooldown_finished("examine_medical_flavortext_[REF(src)]"))

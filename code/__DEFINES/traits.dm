@@ -1022,3 +1022,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_MEMETIC_BLIND "TRAIT_MEMETIC_BLIND"
 ///Are we insulated to audible memetics?
 #define TRAIT_MEMETIC_DEAF "TRAIT_MEMETIC_DEAF"
+
+// Pestilence for SCP-049
+#define TRAIT_PESTILENCE "TRAIT_PESTILENCE"
