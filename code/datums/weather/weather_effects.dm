@@ -54,6 +54,7 @@
 		var/direction = direction
 
 		var/list/wind_sounds = list(
+			"sound/ambience/wind_gust_light1.ogg",
 			"sound/ambience/wind_gust_light2.ogg",
 			"sound/ambience/wind_gust_heavy1.ogg"
 		)
