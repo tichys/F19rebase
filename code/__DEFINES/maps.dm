@@ -70,6 +70,7 @@ require only minor tweaks.
 // boolean - weather types that occur on the level
 #define ZTRAIT_SNOWSTORM "Weather_Snowstorm"
 #define ZTRAIT_VOIDSTORM "Weather_Voidstorm"
+#define ZTRAIT_RAINSTORM "Weather_Rainstorm"
 
 /// boolean - does this z prevent ghosts from observing it
 #define ZTRAIT_SECRET "Secret"

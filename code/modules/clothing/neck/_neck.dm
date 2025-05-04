@@ -115,6 +115,9 @@
 	w_class = WEIGHT_CLASS_TINY
 	dog_fashion = /datum/dog_fashion/head
 	custom_price = PAYCHECK_ASSISTANT * 1.6
+	weather_protection_flags = CLOTHING_WINDPROOF
+	weather_protection_level = PROTECTION_LIGHT
+
 
 /obj/item/clothing/neck/scarf/black
 	name = "black scarf"

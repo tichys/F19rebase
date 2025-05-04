@@ -18,6 +18,12 @@ SUBSYSTEM_DEF(weather)
 		var/datum/weather/our_event = V
 		if(our_event.aesthetic || our_event.stage != MAIN_STAGE)
 			continue
+
+		//Ticking weather effects to reduce cooldown
+		for(var/datum/weather/effect/E in our_event.weather_effects)
+			if(world.time % E.tick_interval == 0)
+				E.tick()
+
 		for(var/mob/act_on as anything in GLOB.mob_living_list)
 			if(our_event.can_weather_act(act_on))
 				our_event.weather_act(act_on)
@@ -35,6 +41,13 @@ SUBSYSTEM_DEF(weather)
 	for(var/V in subtypesof(/datum/weather))
 		var/datum/weather/W = V
 		var/probability = initial(W.probability)
+
+		// Applying map-specific probability overrides first
+		var/datum/map_config/current_map_config = SSmapping.config
+		var/overrides = current_map_config.weather_overrides[V]
+		if((overrides && "probability") in overrides) //Do probability overrides specifically exist?
+			probability = overrides["probability"]
+
 		var/target_trait = initial(W.target_trait)
 
 		// any weather with a probability set may occur at random

@@ -7,6 +7,13 @@
  *
  */
 
+/**
+* When adding new weather, consider the following:
+* - code\__DEFINES\maps.dm needs to be updated with a ZTRAIT_WEATHERNAME define, so the weather occurs on that Z.
+* - code\__DEFINES\traits.dm needs to be updated with a TRAIT_WEATHERNAME_IMMUNE define, so mobs can be immune to it.
+*
+*/
+
 /datum/weather
 	/// name of weather
 	var/name = "space wind"
@@ -85,9 +92,64 @@
 	/// This causes the weather to only end if forced to
 	var/perpetual = FALSE
 
+	/// Mechanical Weather effects applied to this weather_type which are applied to mobs. (Wind Gust, etc)
+	/// Defaults to effect list in each weather type,  but can be overriden in the map config.
+	var/weather_effects = list()
+	//Used for wind gusts, if any are present. Useless if they're not included.
+	var/primary_wind_direction = null
+
 /datum/weather/New(z_levels)
 	..()
 	impacted_z_levels = z_levels
+
+	var/list/instantiated_effects = list()
+	for(var/effect_type in weather_effects)
+		if(!istype(effect_type, /datum/weather/effect))
+			world.log("Invalid weather effect type: [effect_type]")
+			continue
+		var/datum/weather/effect/effect_instance = new effect_type()
+		instantiated_effects += effect_instance
+	weather_effects = instantiated_effects
+
+	/*
+	* Applying map-specific overrides to things like descs, probabilities, durations, etc.
+	* Can be extended if you'd like to add more overrides, just update the map Json and this code.
+	*
+	*/
+
+	var/datum/map_config/current_map_config = SSmapping.config
+	var/overrides = current_map_config.weather_overrides[type]
+	if(overrides) //It's possible
+		if("desc" in overrides)
+			desc = overrides["desc"]
+		if("probability" in overrides)
+			probability = overrides["probability"]
+		if("telegraph_duration" in overrides)
+			telegraph_duration = overrides["telegraph_duration"]
+		if("weather_duration_lower" in overrides)
+			weather_duration_lower = overrides["weather_duration_lower"]
+		if("weather_duration_upper" in overrides)
+			weather_duration_upper = overrides["weather_duration_upper"]
+		if("end_duration" in overrides)
+			end_duration = overrides["end_duration"]
+		if("telegraph_message" in overrides)
+			telegraph_message = overrides["telegraph_message"]
+		if("weather_message" in overrides)
+			weather_message = overrides["weather_message"]
+		if("end_message" in overrides)
+			end_message = overrides["end_message"]
+		if("perpetual" in overrides)
+			perpetual = overrides["perpetual"]
+		if("barometer_predictable" in overrides)
+			barometer_predictable = overrides["barometer_predictable"]
+		if("area_type" in overrides)
+			area_type = overrides["area_type"]
+		if("protect_indoors" in overrides)
+			protect_indoors = overrides["protect_indoors"]
+		if("aesthetic" in overrides)
+			aesthetic = overrides["aesthetic"]
+
+
 
 /**
  * Telegraphs the beginning of the weather on the impacted z levels
