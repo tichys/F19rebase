@@ -24,23 +24,13 @@
 	barometer_predictable = TRUE
 	use_glow = FALSE
 	weather_effect = list(WEATHER_WINDGUST)
+	allowed_weather_effects = list(
+		WEATHER_WINDGUST = 5,
+		WEATHER_LIGHTNING_STRIKE = 2
+	)
 
-/datum/weather/snow_storm/weather_act(mob/living/L)
+/datum/weather/rain_storm/weather_act(mob/living/L)
 	..()
-
-
-	for(var/datum/weather/effect/E in weather_effects)
-		if(!istype(effect, /datum/weather/effect)) //Sanity check.
-			break
-
-		//Double checking cooldown so we don't bother Trying to apply the effect (and asking for cooldown again)
-		if(E.cooldown > 0)
-			break
-
-		if(istype(E, /datum/weather_effect/wind_gust))
-			E.apply_effect(L, primary_wind_direction)
-		else
-			E.apply_effect(L)
 
 /datum/weather/rain_storm/can_get_alert
 
@@ -50,7 +40,7 @@
 	//Unique alerts for old people and SD's
 	for(mob/living/L in GLOB.player_list)
 		if(!L.isdead && L.ishuman && L.age > 60)
-			to_chat(L, "<span class='warning'>You feel an ache in your knee...a storm is coming..</span>")
+			to_chat(L, span_warning("You feel an ache in your knee...a storm is coming..</span>"))
 			//Probably not my most efficient use of iterating a list, but.. it IS funny.
 		else if((is_captain_job(L.mind.assigned_role)) && (if(!get_area(L).outdoors)))
-			to_chat(L, "<span class='warning'>A storm is brewing out on the horizon..</span>")
+			to_chat(L, span_warning("A storm is brewing out on the horizon..</span>"))

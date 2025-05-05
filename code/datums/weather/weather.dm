@@ -92,23 +92,20 @@
 	/// This causes the weather to only end if forced to
 	var/perpetual = FALSE
 
-	/// Mechanical Weather effects applied to this weather_type which are applied to mobs. (Wind Gust, etc)
-	/// Defaults to effect list in each weather type,  but can be overriden in the map config.
+	/// Mechanical Weather effects applied to this weather_type which are applied to mobs. (Wind Gust, lightning, etc)
+
+	/// Override to effect list in each weather type, can also be overriden in the map config.
 	var/weather_effects = list()
-	//Used for wind gusts, if any are present. Useless if they're not included.
+	/// Weather effects that a given storm will Pull from randomly when initalizing.
+	var/allowed_weather_effects = list()
+	/// Used for wind gusts, if any are present. Useless if they're not included.
 	var/primary_wind_direction = null
+	//The maximum number of weather effects that can be picked for a given storm.
+	var/max_effects = 3
 
 /datum/weather/New(z_levels)
 	..()
 	impacted_z_levels = z_levels
-
-	var/list/instantiated_effects = list()
-	for(var/effect_type in weather_effects)
-		if(!istype(effect_type, /datum/weather/effect))
-			continue
-		var/datum/weather/effect/effect_instance = new effect_type()
-		instantiated_effects += effect_instance
-	weather_effects = instantiated_effects
 
 	/*
 	* Applying map-specific overrides to things like descs, probabilities, durations, etc.
@@ -204,6 +201,8 @@
 	stage = MAIN_STAGE
 	update_areas()
 
+	weather_effects = select_weather_effects()
+
 	send_alert(weather_message, weather_sound)
 	if(!perpetual)
 		addtimer(CALLBACK(src, PROC_REF(wind_down)), weather_duration)
@@ -289,12 +288,29 @@
 	return TRUE
 
 /**
- * Affects the mob with whatever the weather does
+ * Affects the mob, object, or area with whatever the weather does.
  *
  */
-/datum/weather/proc/weather_act(mob/living/L)
-	return
+/datum/weather/proc/weather_act(mob/living/L, /obj/O, /area/A)
+	for(var/datum/weather/effect/E in weather_effects)
+		if(!istype(effect, /datum/weather/effect)) //Sanity Check? AlmonD Water.
+			break
 
+		//Skip effects if cooling down.
+		if(E.cooldown > 0)
+			break
+
+		//Handling mob-specific effects
+		if(L)
+			E.apply_effect(L)
+
+		//Handling object-specific effects
+		if(O)
+			E.apply_effect(O)
+
+		//Handling area-specific effects
+		if(A)
+			E.apply_effect(A)
 /**
  * Updates the overlays on impacted areas
  *
@@ -335,3 +351,38 @@
 	gen_overlay_cache += weather_image
 
 	return gen_overlay_cache
+
+/**
+ * Selects random weather effects from the allowed list at the beginning of the storm.
+ *
+ */
+
+/datum/weather/proc/select_weather_effects()
+	if(weather_effects) //If we have a list of effects (from map config or otherwise), don't bother picking randomly.
+		return weather_effects
+	else
+		var/list/selected_effects = list()
+		var/total_weight = 0
+
+		for(var/effect in allowed_weather_effects)
+			total_weight += allowed_weather_effects[effect] //Adding each effects weight to the total weight.
+
+		if(max_effects)
+			var/num_effects = rand(1, max_effects) //If we have a max effects number, use that.
+		else
+			var/num_effects = rand(1, 5) //At least 1, at most 5.
+
+		while(num_effects > 0 && total_weight > 0) //Continue selecting until we hit the max effects, or no more weight.
+			var/random_weight = rand(1, total_weight)
+			var/current_weight = 0
+
+			for(var/effect in allowed_weather_effects)
+				current_weight += allowed_weather_effects[effect]
+				if(random_weight <= current_weight)
+					selected_effects += effect ///362-365, choose and remove the effect from the list, along with its weight.
+					total_weight -= allowed_weather_effects[effect]
+					allowed_weather_effects.Remove(effect)
+					num_effects--
+					break
+
+		return selected_effects

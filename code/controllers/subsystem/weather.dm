@@ -24,9 +24,31 @@ SUBSYSTEM_DEF(weather)
 			if(world.time % E.tick_interval == 0)
 				E.tick()
 
+		//Applying effects to mobs
 		for(var/mob/act_on as anything in GLOB.mob_living_list)
 			if(our_event.can_weather_act(act_on))
 				our_event.weather_act(act_on)
+
+		//Apply effects to objects
+		for(var/obj/O in GLOB.outdoor_weather_objects)
+			if(our_event.can_weather_act(O))
+				our_event.weather_act(O)
+
+		//Apply effects to areas (Flooding, Temp Changes, etc)
+		for(var/area/A in our_event.impacted_areas)
+			our_event.weather_act(A)
+
+
+		//A list of global effects to check for.
+		var/list/global_effect_types = list(
+			WEATHER_LIGHTNING_STRIKE,
+			WEATHER_WINDGUST
+		)
+
+		//Handle player independent effects (Such as lightning strikes)
+		for(var/datum/weather/effect/E in our_event.weather_effects)
+			if(is_type_in_list(E, global_effect_types))
+				E.apply_global_effect()
 
 	// start random weather on relevant levels
 	for(var/z in eligible_zlevels)
