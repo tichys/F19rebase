@@ -105,7 +105,6 @@
 	var/list/instantiated_effects = list()
 	for(var/effect_type in weather_effects)
 		if(!istype(effect_type, /datum/weather/effect))
-			world.log("Invalid weather effect type: [effect_type]")
 			continue
 		var/datum/weather/effect/effect_instance = new effect_type()
 		instantiated_effects += effect_instance
