@@ -9,6 +9,9 @@
 	return list()
 
 /datum/preference/blob/loadout/deserialize(input, datum/preferences/preferences)
+	if(!istext(input) || !length(input))
+		return create_default_value()
+
 	var/list/json
 	try
 		json = json_decode(input)

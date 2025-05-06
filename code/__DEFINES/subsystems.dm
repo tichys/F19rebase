@@ -239,6 +239,7 @@
 #define FIRE_PRIORITY_AMBIENCE 5
 #define FIRE_PRIORITY_CODEX 5
 #define FIRE_PRIORITY_TITLE 5
+#define FIRE_PRIORITY_DAYCYCLE 10 //Day cycle processing
 
 
 
