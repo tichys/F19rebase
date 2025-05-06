@@ -54,12 +54,6 @@
 
 	/// Types of area to affect
 	var/area_type = /area/space
-	/// TRUE value protects areas with outdoors marked as false, regardless of area type
-	var/protect_indoors = FALSE
-	/// Areas to be affected by the weather, calculated when the weather begins
-	var/list/impacted_areas = list()
-	/// Areas that are protected and excluded from the affected areas.
-	var/list/protected_areas = list()
 	/// The list of z-levels that this weather is actively affecting
 	var/impacted_z_levels
 
@@ -94,12 +88,10 @@
 
 	/// Mechanical Weather effects applied to this weather_type which are applied to mobs. (Wind Gust, lightning, etc)
 
+	/// Wind direction, passed from weather profile.
+	var/wind_direction = null
 	/// Override to effect list in each weather type, can also be overriden in the map config.
 	var/weather_effects = list()
-	/// Weather effects that a given storm will Pull from randomly when initalizing.
-	var/allowed_weather_effects = list()
-	/// Used for wind gusts, if any are present. Useless if they're not included.
-	var/primary_wind_direction = null
 	//The maximum number of weather effects that can be picked for a given storm.
 	var/max_effects = 3
 
@@ -163,23 +155,9 @@
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_TELEGRAPH(type))
 	stage = STARTUP_STAGE
 
-	var/list/affectareas = list()
-	for(var/V in get_areas(area_type))
-		affectareas += V
-
-	for(var/V in protected_areas)
-		affectareas -= get_areas(V)
-
-	for(var/V in affectareas)
-		var/area/A = V
-		if(protect_indoors && !A.outdoors)
-			continue
-		if(A.z in impacted_z_levels)
-			impacted_areas |= A
-
 	weather_duration = rand(weather_duration_lower, weather_duration_upper)
 	SSweather.processing |= src
-	update_areas()
+	update_turf_overlays()
 
 	if(get_to_the_good_part)
 		start()
@@ -201,7 +179,7 @@
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_START(type))
 
 	stage = MAIN_STAGE
-	update_areas()
+	update_turf_overlays()
 
 	weather_effects = select_weather_effects()
 
@@ -223,7 +201,7 @@
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_WINDDOWN(type))
 	stage = WIND_DOWN_STAGE
 
-	update_areas()
+	update_turf_overlays()
 
 	send_alert(end_message, end_sound)
 	addtimer(CALLBACK(src, PROC_REF(end)), end_duration)
@@ -243,7 +221,7 @@
 	stage = END_STAGE
 
 	SSweather.processing -= src
-	update_areas()
+	update_turf_overlays()
 
 /datum/weather/proc/send_alert(alert_msg, alert_sfx)
 	for(var/z_level in impacted_z_levels)
@@ -295,7 +273,7 @@
  */
 /datum/weather/proc/weather_act(mob/living/L, /obj/O, /area/A)
 	for(var/datum/weather/effect/E in weather_effects)
-		if(!istype(effect, /datum/weather/effect)) //Sanity Check? AlmonD Water.
+		if(!istype(E, /datum/weather/effect)) //Sanity Check? AlmonD Water.
 			break
 
 		//Skip effects if cooling down.
@@ -313,17 +291,29 @@
 		//Handling area-specific effects
 		if(A)
 			E.apply_effect(A)
+
 /**
  * Updates the overlays on impacted areas
  *
  */
-/datum/weather/proc/update_areas()
+/datum/weather/proc/update_turf_overlays()
 	var/list/new_overlay_cache = generate_overlay_cache()
-	for(var/area/impacted as anything in impacted_areas)
-		if(length(overlay_cache))
-			impacted.overlays -= overlay_cache
-		if(length(new_overlay_cache))
-			impacted.overlays += new_overlay_cache
+
+	var/list/chunk_keys = weather_chunking.get_all_turf_chunk_keys()
+
+	for(var/key in chunk_keys)
+		var/list/turfs = weather_chunking.get_turfs_in_chunks(list(key))
+		for(var/turf/T in turfs)
+			if(!isturf(T))
+				continue
+
+			//Clearing old overlays
+			if(length(overlay_cache))
+				T.overlays -= overlay_cache
+
+			//Adding new overlays
+			if(length(new_overlay_cache))
+				T.overlays += new_overlay-cache
 
 	overlay_cache = new_overlay_cache
 
@@ -360,6 +350,8 @@
  */
 
 /datum/weather/proc/select_weather_effects()
+	var/num_effects = 3 //Arbitrary
+
 	if(weather_effects) //If we have a list of effects (from map config or otherwise), don't bother picking randomly.
 		return weather_effects
 	else
@@ -370,9 +362,9 @@
 			total_weight += allowed_weather_effects[effect] //Adding each effects weight to the total weight.
 
 		if(max_effects)
-			var/num_effects = rand(1, max_effects) //If we have a max effects number, use that.
+			num_effects = rand(1, max_effects) //If we have a max effects number, use that.
 		else
-			var/num_effects = rand(1, 5) //At least 1, at most 5.
+			num_effects = rand(1, 5) //At least 1, at most 5.
 
 		while(num_effects > 0 && total_weight > 0) //Continue selecting until we hit the max effects, or no more weight.
 			var/random_weight = rand(1, total_weight)

@@ -1,0 +1,119 @@
+/*
+ * Weather Coverage Subsystem - It actually only handles init weather coverage and passes that info off to the chunking system
+ * since that's more efficient. Chunking handles realtime weather coverage information.
+ */
+
+#define UNCOVERED FALSE
+#define COVERED TRUE
+
+
+SUBSYSTEM_DEF(weather_coverage)
+	name = "Weather Coverage"
+	init_order = SS_INIT_LATE
+	flags = SS_BACKGROUND
+	wait = 10
+
+	var/list/exposed_turfs = list() //We keep a local list that we pass off to the chunking system for keying/sorting.
+	var/datum/weather/chunking/weather_chunking
+
+
+/datum/controller/subsystem/weather_coverage/Initialize(timeofday)
+	..()
+
+	weather_chunking = new()
+
+	registerSignal(COMSIG_ATOM_EXPLODE, /datum/controller/subsystem/weather_coverage/proc/rebuild_weather_cover_cache)
+	registerSignal(COMSIG_TURF_CREATED, /datum/controller/subsystem/weather_coverage/proc/)
+	registerSignal(COMSIG_TURF_DESTROYED, /datum/controller/subsystem/weather_coverage/proc/)
+
+	var/maxx = world.maxx
+	var/maxy = world.maxy
+	var/maxz = world.maxz
+
+	for (var/x = 1 to maxx)
+		for (var/y = 1 to maxy)
+
+			var/found_exposed = FALSE
+
+			// Scan from top to bottom in each (x, y) column.
+			for (var/z = maxz, z > 1, z--)
+
+				var/turf/T = locate(x, y, z)
+				if (!T)
+					continue
+
+				if (!T.blocks_weather)
+					// This turf doesn't block weather—mark the one below as exposed.
+					weather_update_below(T)
+					found_exposed = TRUE
+					break
+
+				// This turf blocks weather—everything below is covered.
+				break
+
+			// If there was no turf at the top or all were null, mark the one below maxz as exposed.
+			if(!found_exposed)
+				var/turf/top = locate(x, y, maxz)
+				weather_update_below(top)
+
+	finalize_exposed_turf_registration()
+
+/datum/controller/subsystem/weather_coverage/fire()
+	for(var/turf/T in exposed_turfs)
+		if (!T.weather_dirty)
+			continue
+
+		T.weather_dirty = FALSE
+		update_cover_cache(T)
+
+
+/datum/controller/subsystem/weather_coverage/proc/weather_update_below(var/turf/T)
+	if(!T)
+		return
+
+	var/turf/below = locate(T.x, T.y, T.z - 1)
+	if(below && !below.cover_cache)
+		below.cover_cache = UNCOVERED
+		exposed_turfs |= below
+		weather_chunking.register_exposed_turf(below)
+
+/datum/controller/subsystem/weather_coverage/proc/on_turf_created(turf/T)
+	if (!T || !T.z) return
+
+	var/turf/below = locate(T.x, T.y, T.z - 1)
+	if (!below) return
+
+	if (T.blocks_weather)
+		// Turf now blocks weather; below is no longer exposed
+		if (below.cover_cache != COVERED)
+			below.cover_cache = COVERED
+			exposed_turfs -= below
+			unregister_exposed_turf(below)
+
+		else
+			return
+
+
+/datum/controller/subsystem/weather_coverage/proc/on_turf_destroyed(turf/T)
+	if (!T || !T.z) return
+
+	var/turf/below = locate(T.x, T.y, T.z - 1)
+	if (!below) return
+
+	if (!T.blocks_weather)
+		// Turf that was destroyed didn't block weather, no effect
+		return
+
+	// Turf that blocked weather is now gone; below might be exposed
+	var/turf/above = locate(T.x, T.y, T.z)
+	if (!above || !above.blocks_weather)
+		if (below.cover_cache != UNCOVERED)
+			below.cover_cache = UNCOVERED
+			exposed_turfs |= below
+			register_exposed_turf(below)
+
+/datum/controller/subsystem/weather_coverage/proc/finalize_exposed_turf_registration()
+	if(!weather_chunking)
+		return
+	for(var/turf/T in exposed_turfs)
+		weather_chunking.register_exposed_turf(T)

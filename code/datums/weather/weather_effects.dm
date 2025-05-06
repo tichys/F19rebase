@@ -40,7 +40,6 @@
 
 /datum/weather/effect
 	name = "Generic weather Effect"
-	var/severity = 1 //1 = Light, 2 = Moderate, 3 = Severe
 	var/duration = 100 //How long the effect lasts, where relevant.
 	var/cooldown = 100 //Time before the effect can be reapplied.
 	var/cooldown_max = 100 //Maximum cooldown time.
@@ -191,11 +190,11 @@
 //25% chance per weather_act to switch the wind direction.
 /datum/weather/effect/wind_gust/proc/update_wind_direction()
 	if(prob(75))
-		primary_wind_direction = pick(NORTH, SOUTH, EAST, WEST) //Since there's only one storm active at a time (?), it's probably okay to keep this attached to all storms.
+		wind_direction = pick(NORTH, SOUTH, EAST, WEST) //Since there's only one storm active at a time (?), it's probably okay to keep this attached to all storms.
 
-/datum/weather/effect/wind_gust/proc/get_wind_alignment(mob/living/L, primary_wind_direction)
+/datum/weather/effect/wind_gust/proc/get_wind_alignment(mob/living/L, wind_direction)
 	var/player_facing = L.dir
-	var/wind_dir = primary_wind_direction
+	var/wind_dir = wind_direction
 
 	if(wind_dir == player_facing)
 		return 1 //Wind at back
@@ -407,5 +406,5 @@
 		if(istype(O, /obj/machinery))
 			short_machine(O)
 
-	if(prob(20)) //20% chance the strike produces a *Gentle* impact, ideally knocking things/equipment around.
+	if(prob(40 + (severity * 10))) //40% chance the strike produces a *Gentle* impact, ideally knocking things/equipment around.
 		explosion(T, light_impact_range = 3, flame_range = 1, flash_range = 2)

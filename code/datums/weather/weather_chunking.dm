@@ -11,6 +11,7 @@
 
 
 	var/list/chunks = list()  /// Chunk keys and atoms contained, Ex. [4_6_1], [x_y_z]
+	var/list/turf_chunks = list() // Chunk keys and exposed turfs contained.
 
 //Registering/Deregistering
 
@@ -103,3 +104,81 @@
 
 	return results
 
+//Same as above but now we're reusing logic for Turfs.
+//Weather coverage will handle init turf exposure determination, and then pass it here, chunking will handle distributing it to everyone else (Profiles, Effects, Subsystem, etc)
+
+/datum/weather/chunking/proc/register_exposed_turf(turf/T)
+	var/area/A = get_area(T)
+	if (!T || !T.z || !T.blocks_weather || !A.outdoors)
+		return
+
+	var/key = get_turf_chunk_key(T)
+	if (!(key in src.turf_chunks))
+		src.turf_chunks[key] = list()
+	src.turf_chunks[key] += T
+
+/datum/weather/chunking/proc/unregister_exposed_turf(turf/T)
+	var/key = get_turf_chunk_key(T)
+	if (key in src.turf_chunks)
+		src.turf_chunks[key] -= T
+		if (!src.turf_chunks[key].len)
+			src.turf_chunks -= key
+
+/datum/weather/chunking/proc/get_turf_chunk_coords(turf/T)
+	return list(
+		round(T.x / CHUNK_SIZE),
+		round(T.y / CHUNK_SIZE),
+		T.Z
+		)
+
+/datum/weather/chunking/proc/get_turf_chunk_key(turf/T)
+	var/list/coords = src.get_turf_chunk_coords(T)
+	return "[coords[1]]_[coords[2]]_[coords[3]]"
+
+
+/datum/weather/chunking/proc/get_turfs_in_chunks(list/chunk_keys)
+	var/list/results = list()
+	for (var/key in chunk_keys)
+		if (key in src.turf_chunks)
+			results += src.turf_chunks[key]
+	return results
+
+/datum/weather/chunking/proc/get_all_turf_chunk_keys()
+	. = list()
+	for (var/key in src.turf_chunks)
+		. += key
+
+/datum/controller/subsystem/weather_chunking/proc/on_turf_created(turf/T)
+	if (!T || !T.z) return
+
+	var/turf/below = locate(T.x, T.y, T.z - 1)
+	if (!below) return
+
+	if (T.blocks_weather)
+		// Turf now blocks weather; below is no longer exposed
+		if (below.cover_cache != COVERED)
+			below.cover_cache = COVERED
+			exposed_turfs -= below
+			unregister_exposed_turf(below)
+
+		else
+			return
+
+
+/datum/controller/subsystem/weather_chunking/proc/on_turf_destroyed(turf/T)
+	if (!T || !T.z) return
+
+	var/turf/below = locate(T.x, T.y, T.z - 1)
+	if (!below) return
+
+	if (!T.blocks_weather)
+		// Turf that was destroyed didn't block weather, no effect
+		return
+
+	// Turf that blocked weather is now gone; below might be exposed
+	var/turf/above = locate(T.x, T.y, T.z)
+	if (!above || !above.blocks_weather)
+		if (below.cover_cache != UNCOVERED)
+			below.cover_cache = UNCOVERED
+			exposed_turfs |= below
+			register_exposed_turf(below)

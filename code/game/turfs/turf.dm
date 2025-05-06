@@ -84,6 +84,9 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	/// WARNING: Currently to use a density shortcircuiting this does not support dense turfs with special allow through function
 	var/pathing_pass_method = TURF_PATHING_PASS_DENSITY
 
+	var/cover_cache = null // null, COVERED, or UNCOVERED.
+	var/blocks_weather = TRUE //We assume a turf blocks weather, unless we're told otherwise.
+
 /turf/vv_edit_var(var_name, new_value)
 	var/static/list/banned_edits = list(
 		NAMEOF_STATIC(src, x),
@@ -105,6 +108,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
  * [/turf/closed/mineral/Initialize]
  */
 /turf/Initialize(mapload)
+	SEND_SIGNAL(COMSIG_TURF_CREATED)
 	SHOULD_CALL_PARENT(FALSE)
 
 	if(initialized)
@@ -160,6 +164,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	return INITIALIZE_HINT_NORMAL
 
 /turf/Destroy(force)
+	SEND_SIGNAL(COMSIG_TURF_DESTROYED)
 	. = QDEL_HINT_IWILLGC
 	if(!changing_turf)
 		stack_trace("Incorrect turf deletion")

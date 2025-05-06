@@ -12,9 +12,12 @@ SUBSYSTEM_DEF(weather)
 	var/list/eligible_zlevels = list()
 	var/list/next_hit_by_zlevel = list() //Used by barometers to know when the next storm is coming
 
+	/// The current weather profile the round has chosen.
+	var/datum/weather_profile/current_profile
+
 /datum/controller/subsystem/weather/fire()
 
-	//Get Canidate Lists (From weather chunking system) to filter through.
+	//Get Candidate Lists (From weather chunking system) to filter through.
 	//Chunking does the heavy lifting, we just clean up whatever it gives us.
 	var/list/mob_canidates = weather_chunking.get_mobs_in_chunks(our_event.impacted_chunks) //TD: Impacted chunks takes from weather coverage subsystem otherwise what was this all for???
 	var/list/object_canidates = weather_chunking.get_objects_in_chunks(our_event.impacted_chunks)
@@ -32,14 +35,16 @@ SUBSYSTEM_DEF(weather)
 	var/list/mob_type_map = list() //Optional hashmap for more filtering of mobs.
 
 	for(var/mob/living/M in mob_canidates)
-		if(M.needs_weather_update)
-			mobs_to_affect += M
-			M.needs_weather_update = FALSE
+		if(!M.needs_weather_update)
+			continue
+		mobs_to_affect += M
+		M.needs_weather_update = FALSE
 
 	for(var/obj/O in object_canidates)
-		if(O.needs_weather_update)
-			objects_to_affect += M
-			O.needs_weather_update = FALSE
+		if(!O.needs_weather_update)
+			continue
+		objects_to_affect += M
+		O.needs_weather_update = FALSE
 
 	//We've populated our mobs and objects filtered lists, lets slice them now into batches.
 	var/list/mob_slice = mobs_to_affect.Copy(mob_batch_index, mob_batch_index, + batch_size)
@@ -51,7 +56,8 @@ SUBSYSTEM_DEF(weather)
 		if(our_event.aesthetic || our_event.stage != MAIN_STAGE)
 			continue
 
-		//Ticking weather effects to reduce cooldown
+		//Ticking weather effects to reduce cooldown.
+		//We handle evaluating if weather can act later so the subsystem is cleaner.
 		for(var/datum/weather/effect/E in our_event.weather_effects)
 			if(world.time % E.tick_interval == 0)
 				E.tick()
@@ -72,7 +78,7 @@ SUBSYSTEM_DEF(weather)
 			if(E.affects_areas)
 				E.apply_to_area
 
-		// start random weather on relevant levels
+	// start random weather on relevant levels
 	for(var/z in eligible_zlevels)
 		var/possible_weather = eligible_zlevels[z]
 		var/datum/weather/our_event = pick_weight(possible_weather)
