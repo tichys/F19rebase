@@ -28,17 +28,13 @@
 #define WIND_ALIGNMENT_TAILWIND 1
 #define WIND_ALIGNMENT_HEADWIND -1
 
-//Affectable Object Lists
-
-GLOBAL_LIST_INIT(outdoor_weather_objects) //Objects that can be affected by weather effects, such as wind gusts.
-
-//Signals
+//Custom Signals
 
 ///Called when an objects area moves from indoors to outdoors
-#define COMSIG_OUTDOOR_OBJECT_ADDED "outdoor_object_added"
+#define COMSIG_OUTDOOR_ATOM_ADDED "outdoor_object_added"
 
 ///Called when an objects area moves from outdoors to indoors
-#define COMSIG_OUTDOOR_OBJECT_REMOVED "outdoor_object_removed"
+#define COMSIG_OUTDOOR_ATOM_REMOVED "outdoor_object_removed"
 
 // End of Defines - - -
 
@@ -52,21 +48,29 @@ GLOBAL_LIST_INIT(outdoor_weather_objects) //Objects that can be affected by weat
 
 /datum/weather/effect/New()
 	..()
-	RegisterSignal(COMSIG_OUTDOOR_OBJECT_ADDED, /datum/weather/effect/proc/outdoor_object_added)
-	RegisterSignal(COMSIG_OUTDOOR_OBJECT_REMOVED, /datum/weather/effect/proc/outdoor_object_removed)
+	RegisterSignal(COMSIG_OUTDOOR_ATOM_ADDED, /datum/weather/effect/proc/outdoor_atom_added)
+	RegisterSignal(COMSIG_OUTDOOR_ATOM_REMOVED, /datum/weather/effect/proc/outdoor_atom_removed)
+	RegisterSignal(COMSIG_MOVABLE_MOVED, /datum/weather/effect/proc/outdoor_atom_moved)
 
-/datum/weather/effect/proc/outdoor_object_added(obj/O)
-	if(!O || O.anchored) //How did it get moved here if it was anchored? I don't know.
+/datum/weather/effect/proc/outdoor_atom_added(atom/movable/A)
+	if(!A || A.anchored) //How did it get moved here if it was anchored? I don't know.
 		return
 
-	if(!(O in outdoor_weather_objects))
-		outdoor_weather_objects += O //Adding the object to the list of objects that can be affected by weather effects.
+	weather_chunking.register(A)
+	needs_weather_update = TRUE
 
-/datum/weather/effect/proc/outdoor_object_removed(obj/O)
-	if(!O)
+/datum/weather/effect/proc/outdoor_object_removed(atom/movable/A)
+	if(!A)
 		return
 
-	outdoor_weather_objects -= O //Removing the object from the list of objects that can be affected by weather effects.
+	weather_chunking.unregister(A)
+
+//Used for chunking to determine if an atom entered a new chunk.
+/datum/weather/effect/proc/outdoor_object_moved(atom/movable/A)
+	if(!A)
+		return
+
+	weather_chunking.update_atom_location
 
 /datum/weather/effect/proc/apply_effect(mob/living/L, protection_flag)
 	var/protection_level = 0

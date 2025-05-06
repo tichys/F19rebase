@@ -103,6 +103,8 @@
 	//The maximum number of weather effects that can be picked for a given storm.
 	var/max_effects = 3
 
+	var/datum/weather/chunking/weather_chunking = new() //Builds the weather chunking controller.
+
 /datum/weather/New(z_levels)
 	..()
 	impacted_z_levels = z_levels

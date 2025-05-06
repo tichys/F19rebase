@@ -13,6 +13,38 @@ SUBSYSTEM_DEF(weather)
 	var/list/next_hit_by_zlevel = list() //Used by barometers to know when the next storm is coming
 
 /datum/controller/subsystem/weather/fire()
+
+	//Get Canidate Lists (From weather chunking system) to filter through.
+	//Chunking does the heavy lifting, we just clean up whatever it gives us.
+	var/list/mob_canidates = weather_chunking.get_mobs_in_chunks(our_event.impacted_chunks) //TD: Impacted chunks takes from weather coverage subsystem otherwise what was this all for???
+	var/list/object_canidates = weather_chunking.get_objects_in_chunks(our_event.impacted_chunks)
+
+	//Simulated threading setup for batch processing.
+	var/static/mob_batch_index = 1
+	var/static/obj_batch_index = 1
+	var/batch_size = 10
+
+	//Get actual lists for storage (Mobs, Obj, Area)
+	var/list/mobs_to_affect = list()
+	var/list/objects_to_affect = list()
+	var/list/areas_to_affect = our_event.impacted_areas
+
+	var/list/mob_type_map = list() //Optional hashmap for more filtering of mobs.
+
+	for(var/mob/living/M in mob_canidates)
+		if(M.needs_weather_update)
+			mobs_to_affect += M
+			M.needs_weather_update = FALSE
+
+	for(var/obj/O in object_canidates)
+		if(O.needs_weather_update)
+			objects_to_affect += M
+			O.needs_weather_update = FALSE
+
+	//We've populated our mobs and objects filtered lists, lets slice them now into batches.
+	var/list/mob_slice = mobs_to_affect.Copy(mob_batch_index, mob_batch_index, + batch_size)
+	var/list/obj_slice = objects_to_affect.Copy(obj_batch_index, obj_batch_index, + batch_size)
+
 	// process active weather
 	for(var/V in processing)
 		var/datum/weather/our_event = V
@@ -24,33 +56,23 @@ SUBSYSTEM_DEF(weather)
 			if(world.time % E.tick_interval == 0)
 				E.tick()
 
-		//Applying effects to mobs
-		for(var/mob/act_on as anything in GLOB.mob_living_list)
-			if(our_event.can_weather_act(act_on))
-				our_event.weather_act(act_on)
-
-		//Apply effects to objects
-		for(var/obj/O in GLOB.outdoor_weather_objects)
-			if(our_event.can_weather_act(O))
-				our_event.weather_act(O)
-
-		//Apply effects to areas (Flooding, Temp Changes, etc)
-		for(var/area/A in our_event.impacted_areas)
-			our_event.weather_act(A)
-
-
-		//A list of global effects to check for.
-		var/list/global_effect_types = list(
-			WEATHER_LIGHTNING_STRIKE,
-			WEATHER_WINDGUST
-		)
-
-		//Handle player independent effects (Such as lightning strikes)
-		for(var/datum/weather/effect/E in our_event.weather_effects)
+			//Global effects, once per weather effect.
 			if(is_type_in_list(E, global_effect_types))
-				E.apply_global_effect()
+				E.apply_global_effect
 
-	// start random weather on relevant levels
+			//Applying to Mobs
+			if(E.affects_mobs)
+				E.apply_to_mobs(mob_slice)
+
+			//Applying to Objects
+			if(E.affects_objects)
+				E.apply_to_objects(obj_slice)
+
+			//Applying to Areas
+			if(E.affects_areas)
+				E.apply_to_area
+
+		// start random weather on relevant levels
 	for(var/z in eligible_zlevels)
 		var/possible_weather = eligible_zlevels[z]
 		var/datum/weather/our_event = pick_weight(possible_weather)

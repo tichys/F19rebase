@@ -375,6 +375,6 @@
 
 		if(moved_outdoors)
 			if(new_area.outdoors)
-				SEND_SIGNAL(src, new_area.outdoors ? COMSIG_OUTDOOR_OBJECT_ADDED : COMSIG_OUTDOOR_OBJECT_REMOVED)
+				SEND_SIGNAL(src, new_area.outdoors ? COMSIG_OUTDOOR_ATOM_ADDED : COMSIG_OUTDOOR_ATOM_REMOVED)
 
 	return ..(new_loc, dir)
