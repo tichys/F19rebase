@@ -776,3 +776,15 @@ GLOBAL_LIST_EMPTY(station_turfs)
 
 
 	return TRUE
+
+/turf/var/current_daylight_color
+
+///
+/turf/proc/update_ambient_light()
+	var/datum/daycycle/dc = SSdaycycle.get_daycycle(src.z)
+	if(!dc || !dc.current_period) return
+
+	var/new_color = dc.current_period.color
+	if(current_daylight_color != new_color)
+		set_light_color(new_color)
+		current_daylight_color = new_color

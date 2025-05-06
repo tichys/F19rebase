@@ -246,7 +246,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		read_preference(preference_type)
 
 	//Load prefs
-	alt_job_titles = save_data["alt_job_titles"]
+	//Save_data is a list? "alt_job_titles" exists in list? If both true save_data["alt_job_titles] otherwise null
+	alt_job_titles = islist(save_data) && ("alt_job_titles" in save_data) ? save_data["alt_job_titles"] : null
 
 	//try to fix any outdated data if necessary
 	//preference updating will handle saving the updated data for us.

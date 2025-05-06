@@ -191,6 +191,9 @@
 #define LIGHT_COLOR_HALOGEN    "#F0FAFA"
 /// Extremely diluted yellow, close to skin color (for some reason). rgb(255, 214, 170)
 #define LIGHT_COLOR_TUNGSTEN "#FFD6AA"
+/// The color of Daylight, Allegedly. rgb(243, 230, 202)
+#define COLOR_DAYLIGHT "#f3e6ca"
+//A light
 
 //The GAGS greyscale_colors for each department's computer/machine circuits
 #define CIRCUIT_COLOR_GENERIC "#1A7A13"
