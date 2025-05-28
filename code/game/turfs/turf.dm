@@ -108,8 +108,8 @@ GLOBAL_LIST_EMPTY(station_turfs)
  * [/turf/closed/mineral/Initialize]
  */
 /turf/Initialize(mapload)
-	SEND_SIGNAL(COMSIG_TURF_CREATED)
 	SHOULD_CALL_PARENT(FALSE)
+	SEND_SIGNAL(src, COMSIG_TURF_CREATED)
 
 	if(initialized)
 		stack_trace("Warning: [src]([type]) initialized multiple times!")
@@ -164,7 +164,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	return INITIALIZE_HINT_NORMAL
 
 /turf/Destroy(force)
-	SEND_SIGNAL(COMSIG_TURF_DESTROYED)
+	SEND_SIGNAL(src, COMSIG_TURF_DESTROYED)
 	. = QDEL_HINT_IWILLGC
 	if(!changing_turf)
 		stack_trace("Incorrect turf deletion")

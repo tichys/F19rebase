@@ -3,8 +3,7 @@
  * I believe Mobs/items are generally more extensive to iterate than areas.
 */
 
-
-#define CHUNK_SIZE 8 //8x8 is considered a chunk.
+#define WEATHER_CHUNK_SIZE 8 //8x8 is considered a chunk. Believe it or not, the camera net system Also uses a chunking system, so ours is WEATHER_
 
 /datum/weather/chunking
 	name = "Chunk System"
@@ -28,20 +27,20 @@
 /datum/weather/chunking/proc/unregister(atom/movable/Q) //Keep Q for clarity
 	var/key = get_chunk_key(Q)
 	if(key in src.chunks)
-		src.chunks[key] - = Q
-		if(!src.chunks[key].len)
-			src.chunks -= key
+		src.chunks[key] -= Q
+		if(!src.chunks[key])
+			src.chunks[key] = null
 
 //Keys and Coords
 
 /datum/weather/chunking/proc/get_chunk_coords(atom/movable/Q) //Maybe misleading name, gets the chunk based on coords and chunk size.
 	return list(
-		round(Q.x / CHUNK_SIZE),
-		round(Q.y / CHUNK_SIZE),
+		round(Q.x / WEATHER_CHUNK_SIZE),
+		round(Q.y / WEATHER_CHUNK_SIZE),
 		Q.z
 	)
 
-/datum/weather/chunking/proc/get_chunk_key(atm/movable/Q) //Converts coordinates into key.
+/datum/weather/chunking/proc/get_chunk_key(atom/movable/Q) //Converts coordinates into key.
 	var/list/coords = src.get_chunk_coords(Q)
 	return "[coords[1]]_[coords[2]]_[coords[3]]"
 
@@ -57,7 +56,7 @@
 		if(Q.last_weather_chunk_key)
 			unregister(Q)
 		register(Q)
-		Q.last_weather_chunk_key = key_now //defined where?
+		Q.last_weather_chunk_key = key_now
 
 /datum/weather/chunking/proc/get_nearby_atoms(atom/origin, radius_in_chunks = 1) //Returns combined list of atoms in square of surrounding chunks
 	var/list/center = get_chunk_coords(origin)
@@ -121,14 +120,14 @@
 	var/key = get_turf_chunk_key(T)
 	if (key in src.turf_chunks)
 		src.turf_chunks[key] -= T
-		if (!src.turf_chunks[key].len)
-			src.turf_chunks -= key
+		if (!src.turf_chunks[key])
+			src.turf_chunks[key] = null
 
 /datum/weather/chunking/proc/get_turf_chunk_coords(turf/T)
 	return list(
-		round(T.x / CHUNK_SIZE),
-		round(T.y / CHUNK_SIZE),
-		T.Z
+		round(T.x / WEATHER_CHUNK_SIZE),
+		round(T.y / WEATHER_CHUNK_SIZE),
+		T.z
 		)
 
 /datum/weather/chunking/proc/get_turf_chunk_key(turf/T)
@@ -148,37 +147,52 @@
 	for (var/key in src.turf_chunks)
 		. += key
 
-/datum/controller/subsystem/weather_chunking/proc/on_turf_created(turf/T)
-	if (!T || !T.z) return
+/datum/weather/chunking/proc/get_all_turf_chunk_keys_on_z(z_level)
+	. = list()
+	for (var/key in src.turf_chunks)
+		var/list/coords = splittext(key, "_")
+		if (coords.len == 3 && text2num(coords[3]) == z_level)
+			. += key
 
-	var/turf/below = locate(T.x, T.y, T.z - 1)
-	if (!below) return
-
-	if (T.blocks_weather)
-		// Turf now blocks weather; below is no longer exposed
-		if (below.cover_cache != COVERED)
-			below.cover_cache = COVERED
-			exposed_turfs -= below
-			unregister_exposed_turf(below)
-
-		else
-			return
-
-
-/datum/controller/subsystem/weather_chunking/proc/on_turf_destroyed(turf/T)
-	if (!T || !T.z) return
-
-	var/turf/below = locate(T.x, T.y, T.z - 1)
-	if (!below) return
-
-	if (!T.blocks_weather)
-		// Turf that was destroyed didn't block weather, no effect
+/datum/weather/chunking/proc/get_impacted_chunk_keys(datum/weather/storm)
+	. = list()
+	if(!storm || !storm.impacted_z_levels || !islist(storm.impacted_z_levels) || !(storm.impacted_z_levels:list).len || !istype(storm.center_turf, /turf))
 		return
 
-	// Turf that blocked weather is now gone; below might be exposed
-	var/turf/above = locate(T.x, T.y, T.z)
-	if (!above || !above.blocks_weather)
-		if (below.cover_cache != UNCOVERED)
-			below.cover_cache = UNCOVERED
-			exposed_turfs |= below
-			register_exposed_turf(below)
+	var/start_z = (storm.center_turf:turf).z
+
+	// Iterate from the storm's center Z-level downwards to 1
+	for(var/current_z = start_z to 1 step -1)
+		// Only consider this Z-level if it's one of the storm's eligible impacted_z_levels
+		if(!(current_z in storm.impacted_z_levels))
+			continue
+
+		if(storm.radius_in_chunks == -1) // All-encompassing horizontally for this Z-level
+			var/list/z_chunk_keys = get_all_turf_chunk_keys_on_z(current_z)
+			for(var/key in z_chunk_keys)
+				// No need to check area_type, as turf_chunks already contains only exposed turfs
+				. |= key
+
+		else if(storm.radius_in_chunks > 0) // Radius-based horizontally for this Z-level
+			var/list/center_chunk_coords = get_turf_chunk_coords(storm.center_turf)
+			var/center_x = center_chunk_coords[1]
+			var/center_y = center_chunk_coords[2]
+
+			for(var/dx = -storm.radius_in_chunks to storm.radius_in_chunks)
+				for(var/dy = -storm.radius_in_chunks to storm.radius_in_chunks)
+					var/x = center_x + dx
+					var/y = center_y + dy
+					var/key = "[x]_[y]_[current_z]"
+					if(key in src.turf_chunks) // Check if this chunk actually exists and has exposed turfs
+						// No need to check area_type, as turf_chunks already contains only exposed turfs
+						. |= key
+
+	return
+
+/datum/weather/chunking/proc/get_mobs_in_chunks_around_storm(datum/weather/storm)
+	var/list/impacted_keys = get_impacted_chunk_keys(storm)
+	return get_mobs_in_chunks(impacted_keys)
+
+/datum/weather/chunking/proc/get_objects_in_chunks_around_storm(datum/weather/storm)
+	var/list/impacted_keys = get_impacted_chunk_keys(storm)
+	return get_objects_in_chunks(impacted_keys)

@@ -364,17 +364,19 @@
 
 /obj/Move(new_loc, dir = 0)
 	if(!new_loc)
-		return ..(new_loc, dir)
+		return ..()
 
 	var/old_loc = loc
-	var/old_area = get_area(old_loc)
-	var/new_area = get_area(new_loc)
+	var/area/old_area = get_area(old_loc)
+	var/area/new_area = get_area(new_loc)
 
 	if(old_area && new_area)
 		var/moved_outdoors = old_area.outdoors != new_area.outdoors
 
 		if(moved_outdoors)
 			if(new_area.outdoors)
-				SEND_SIGNAL(src, new_area.outdoors ? COMSIG_OUTDOOR_ATOM_ADDED : COMSIG_OUTDOOR_ATOM_REMOVED)
+				SEND_SIGNAL(src, COMSIG_OUTDOOR_ATOM_ADDED)
+			else
+				SEND_SIGNAL(src, COMSIG_OUTDOOR_ATOM_REMOVED)
 
 	return ..(new_loc, dir)

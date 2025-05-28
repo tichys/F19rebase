@@ -238,8 +238,6 @@
 		storm.telegraph()
 
 	storm.area_type = source_area.type
-	storm.impacted_areas = list(source_area)
-	storm.update_areas()
 
 /**
  * Signal proc for [COMSIG_LIVING_DEATH].

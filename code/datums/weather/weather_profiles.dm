@@ -1,12 +1,18 @@
 /* <==================================================> Weather Profiles! <===================================================>
  * Weather Profiles tell the Weather Subsystem what a given round should look like, including the base conditions such as temp,
  * humidity, wind direction, severity, pressure, etc. They're picked by the Weather Subsystem at the start of a round and are
- * (if I code them well enough) blacklist/whitelist-able from certain maps.
+ * (if I code them well enough) blacklist/whitelist-able from certain maps. Instead of having multiple storm "types", we'll just
+ * pretend to have many with different profiles that don't interact Too Much with the subsystem controller.
+ *
+ * If a profile picks a storm that doesn't support a included weather effect , it will be ignored.
  *
  */
 
+/// Weather datum reference
+var/datum/weather/weather = new /datum/weather()
 
- /datum/weather/profile
+
+/datum/weather/profile
 	name = "Weather Profile"
 	desc = "A profile to be randomly selected at the start of the round, which influences weather."
 
@@ -14,23 +20,45 @@
 	//Default environmental conditions
 
 	/// Determines temp
-	var/base_temperature = T20C // 293.15 K, 20C
+	var/list/base_temperature = list(
+		"LOW_TEMP" = list(),
+		"MEDIUM_TEMP" = list(),
+		"HIGH_TEMP" = list()
+
+	)
+
 	/// Determines Humidity
 	var/humidity_level = 50
 	/// Determines Main wind direction
 	var/primary_wind_direction = NORTH
-	/// The type of pressure in the profile (High, Medium, Low)
-	var/pressure_pattern = null
 
 	var/night_temp_reduction = 5.0 // How much should we reduce the temp at night?
 	var/minimum_temperature = 275.15 // 2C minimum, chilly but not too bad.
 
 	/// The weather effects that can be picked for a given profile.
 	var/list/allowed_weather_effects = list()
-	/// The types of smells a given profile might cause. (Ambient, probability played based on storm length)
-	var/list/flavor_smells_text = list()
+	/// The types of smell flavortexts a given profile might cause. (Ex. "You catch the scent of drying seaweed on the wind")
+	var/list/flavor_smells_long = list()
+	/// The short smells a given profile might cause (Ex. "dry earth", "salt brine", hooked into "You catch the scent of [thing] in the air.")
+	var/list/flavor_smells_short = list()
 	/// The types of storms permitted in this profile
 	var/list/allowed_storms = list()
+
+
+	//For convienence in assignments
+	#define LOW_PRESSURE "LOW_PRESSURE"
+	#define MEDIUM_PRESSURE "MEDIUM_PRESSURE"
+	#define HIGH_PRESSURE "HIGH_PRESSURE"
+
+	/// The type of pressure in the profile (High, Medium, Low) - TD: Pressure Affects Wind Gust rate??
+	var/list/pressure_pattern = list(
+		"LOW_PRESSURE" = list(98.7, 99.5, 100.3),
+		"MEDIUM_PRESSURE" = list(101.3, 100.8, 100.7),
+		"HIGH_PRESSURE" = list(102.3, 103.1, 103.8)
+	)
+
+	var/pressure_type = MEDIUM_PRESSURE //If not set, we assume pressure is normal.
+	var/current_pressure // Initialized in New()
 
 	/// Severity, which influences severity of weather effects, damage caused by lightning, strength of wind, etc.
 	var/severity = 1 //1 = Light, 2 = Moderate, 3 = Severe
@@ -38,22 +66,24 @@
 	// Tag whitelist/blacklist (Ex. Here we say "Coastal", "Stormy", etc, and someone in the map config says "I don't want any "coastal" or "stormy".)
 
 	/// Whitelist tags for storm types.
-	var/weather_tag_whitelist = list()
+	var/list/weather_tag_whitelist = list()
 	/// Blacklist tags for storm types
-	var/weather_tag_blacklist = list()
+	var/list/weather_tag_blacklist = list()
 
 	// Profile whitelist/blacklist (Ex. "WEATHER_PROFILE_ATLANTICSTORMFRONT")
 
 	/// Whitelist profiles for storm types.
-	var/weather_profile_whitelist = list()
+	var/list/weather_profile_whitelist = list()
 	/// Blacklist profiles for storm types
-	var/weather_profile_blacklist = list()
+	var/list/weather_profile_blacklist = list()
 
-	var/datum/weather/chunking/weather_chunking = new() //Builds the weather chunking controller.
+/datum/weather/profile/New()
+	. = ..()
+	current_pressure = pick(pressure_pattern[pressure_type])
 
 /datum/weather/profile/proc/apply_environment_settings()
 
-	SSweather.wind_direction = primary_wind_direction
+	weather.wind_direction = primary_wind_direction
 
 	var/list/chunk_keys = weather_chunking.get_all_turf_chunk_keys()
 	for(var/key in chunk_keys)
@@ -68,5 +98,156 @@
 				T.temperature = base_temperature
 
 
+/// --- Nautical Weather Profiles ---
 
+#define ATLANTIC_STORMFRONT /datum/weather/profile/atlanticstormfront
 
+/datum/weather/profile/atlanticstormfront
+	name = "Atlantic Storm Front"
+	desc = "A brewing Atlantic system with strong winds and shifting pressure. Common in the colder months."
+	base_temperature = 283.15 // 10C
+	humidity_level = 85
+	pressure_type = LOW_PRESSURE
+	night_temp_reduction = 8.0
+	minimum_temperature = 268.15 // -5C
+	allowed_weather_effects = list(WEATHER_WINDGUST)
+	allowed_storms = list()
+	weather_tag_whitelist = list("coastal", "stormy")
+
+	flavor_smells_short = list("salt air", "ocean spray", "seaweed", "briny wind", "stormy sea")
+	flavor_smells_long = list(
+		"The air smells faintly of salt and wet stone.",
+		"A briny, ocean breeze rolls in.",
+		"The faint tang of saltwater fills your nostrils.",
+		"The smell of wet steel lingers in the air.."
+	)
+
+/datum/weather/profile/atlanticstormfront/apply_environment_settings()
+	..()
+	//We can't put non-constants in the define, so we'll do it here.
+	primary_wind_direction = pick(NORTH, NORTHWEST)
+
+#define FOGGY_BANKS /datum/weather/profile/foggybanks
+
+/datum/weather/profile/foggybank
+	name = "Foggy Bank Drifts"
+	desc = "A dense fog creeping over the ocean, bringing high humidity and obscuring vision."
+	base_temperature = 288.15 //15C
+	humidity_level = 98
+	primary_wind_direction = EAST
+	pressure_type = MEDIUM_PRESSURE
+	night_temp_reduction = 3.0
+	minimum_temperature = 280.15 // 7C
+	allowed_weather_effects = list() //Fog My beloved??
+	allowed_storms = list()
+	weather_tag_whitelist = list("coastal", "foggy")
+	flavor_smells_short = list("salt air", "oil fumes", "wet rust", "damp concrete", "wet grease")
+	flavor_smells_long = list(
+		"A thick, salty fog hangs in the air, tinged with the scent of cold brine..",
+		"You smell oil fumes mingling with the sea mist.",
+		"The fog carries the faint aroma of grease, fuel, and chilled sea air.",
+		"A slick ocean breeze rolls through, heavy with moisture and the smell of old machinery."
+	)
+
+#define GALE_SURGES /datum/weather/profile/gale_surge
+
+/datum/weather/profile/gale_surge
+	name = "Gale Surges"
+	desc = "Brutal winds and freezing temps from the north. Cold exposure is a legitimate danger."
+	base_temperature = 265.15 // -8C
+	humidity_level = 60
+	primary_wind_direction = NORTH
+	pressure_type = LOW_PRESSURE
+	night_temp_reduction = 10.0
+	minimum_temperature = 261 //-12C
+	allowed_weather_effects = list(WEATHER_WINDGUST)
+	allowed_storms = list()
+	weather_tag_whitelist = list("windy", "cold", "freezing")
+	flavor_smells_short = list("frostbitten steel", "cold ozone", "dry salt", "windburn", "crackling static")
+	flavor_smells_long = list(
+		"The biting wind carries a sterile, metallic scent - like frostbitten steel.",
+		"You catch the faint smell of ozone and distant ice.",
+		"A dry wind whips through, carrying nothing but chill and windburn..",
+		"The cold air burns your nostrils, drowning out the scent of the sea."
+	)
+
+#define DIESEL_RAIN /datum/weather/profile/dieselrain
+
+/datum/weather/profile/dieselrain
+	name = "Diesel Rain"
+	desc = "Thick rain and industrial smells mix during this unusual low-pressure event."
+	base_temperature = 291.15 //18C
+	humidity_level = 90
+	pressure_type = LOW_PRESSURE
+	allowed_weather_effects = list()
+	allowed_storms = list()
+	weather_tag_whitelist = list("rain", "storm", "industrial")
+	flavor_smells_short = list("diesel", "ozone", "burnt plastic", "wet steel", "hot asphalt")
+	flavor_smells_long = list(
+		"Acrid diesel fumes linger in the rain-heavy air.",
+		"You smell ozone and something vaguely electric carried on the storm wind.",
+		"The air reeks of oil and storm-churned grime.",
+		"The slick scent of fuel mixes with the chemical tang of industrial runoff."
+	)
+
+/datum/weather/profile/dieselrain/apply_environment_settings()
+	..()
+	//We can't put non-constants in the define, so we'll do it here.
+	primary_wind_direction = pick(WEST, NORTHWEST)
+
+/// --- General Weather Profiles ---
+
+#define HEAT_HAZE /datum/weather/profile/hatehaze
+
+/datum/weather/profile/heathaze
+	name = "Heat Haze"
+	desc = "A rare warm spell causes sweltering conditions in the area.."
+	base_temperature = 303.15 //30C
+	humidity_level = 35
+	pressure_type = HIGH_PRESSURE
+	night_temp_reduction = 2.0
+	minimum_temperature = 290.15 //17C
+	allowed_weather_effects = list()
+	allowed_storms = list()
+	flavor_smells_short = list("dry earth", "hot air", "something burning")
+	flavor_smells_long = list(
+		"You catch the acrid scent of something distant.. maybe burning.",
+		"The wind smells dry and sour, like old rust baking in the sun.",
+		"The breeze is thick with radiated dust and baked minerals.",
+		"A wave of hot, dry air carriest the faint tang of heated metal."
+	)
+
+/datum/weather/profile/heathaze/apply_environment_settings()
+	..()
+	//We can't put non-constants in the define, so we'll do it here.
+	primary_wind_direction = pick(SOUTH, SOUTHEAST)
+
+#define CLEAR_SKIES /datum/weather/profile/clearskies
+
+/datum/weather/profile/clearskies
+	name = "Clear Skies"
+	desc = "A rare and pleasant weather pattern that brings clear skies and calm conditions."
+	base_temperature = T20C
+	humidity_level = 45
+	primary_wind_direction = SOUTHWEST
+	pressure_type = "High"
+	allowed_weather_effects = list()
+	allowed_storms = list()
+	flavor_smells_short = list("fresh air", "sun-warmed air", "a gentle light scent")
+	flavor_smells_long = list(
+		"The air smells clear and crisp, like a spring morning.",
+		"The wind is light, bringing only the faintest smells.",
+		"The breeze carries the scent of fresh air, and a hint of distant greenery."
+	)
+
+#define MONSOON /datum/weather/profile/eqmonsoon
+
+/datum/weather/profile/equatorialmonsoon
+	name = "Equatorial Monsoon"
+	desc = "Relentless rain with thick, humid air and high storm chances"
+	base_temperature = 305.15 //32C
+	humidity_level = 100
+	primary_wind_direction = SOUTH
+	pressure_type = LOW_PRESSURE
+	allowed_weather_effects = list() //Fog?
+	allowed_storms = list()

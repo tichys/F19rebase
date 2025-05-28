@@ -12,15 +12,24 @@ SUBSYSTEM_DEF(weather)
 	var/list/eligible_zlevels = list()
 	var/list/next_hit_by_zlevel = list() //Used by barometers to know when the next storm is coming
 
-	/// The current weather profile the round has chosen.
-	var/datum/weather_profile/current_profile
+	///Referencing the current weather profile the profile system has suggested.
+	var/datum/weather/profile/current_profile
+
+	//Referencing the weather chunking system
+	var/datum/weather/chunking/weather_chunking = new
 
 /datum/controller/subsystem/weather/fire()
 
 	//Get Candidate Lists (From weather chunking system) to filter through.
 	//Chunking does the heavy lifting, we just clean up whatever it gives us.
-	var/list/mob_canidates = weather_chunking.get_mobs_in_chunks(our_event.impacted_chunks) //TD: Impacted chunks takes from weather coverage subsystem otherwise what was this all for???
-	var/list/object_canidates = weather_chunking.get_objects_in_chunks(our_event.impacted_chunks)
+	var/list/mob_canidates = list()
+	var/list/object_canidates = list()
+	var/datum/weather/our_event
+
+	if(processing.len) // Check if there's at least one active storm
+		our_event = processing[1] // Use the first active storm as the "single current active storm"
+		mob_canidates += weather_chunking.get_mobs_in_chunks_around_storm(our_event) //TD: Impacted chunks takes from weather coverage subsystem otherwise what was this all for???
+		object_canidates += weather_chunking.get_objects_in_chunks_around_storm(our_event)
 
 	//Simulated threading setup for batch processing.
 	var/static/mob_batch_index = 1
@@ -30,10 +39,8 @@ SUBSYSTEM_DEF(weather)
 	//Get actual lists for storage (Mobs, Obj, Area)
 	var/list/mobs_to_affect = list()
 	var/list/objects_to_affect = list()
-	var/list/areas_to_affect = our_event.impacted_areas
 
-	var/list/mob_type_map = list() //Optional hashmap for more filtering of mobs.
-
+	//Determining the mobs/objs lists here and flagging them appropriately.
 	for(var/mob/living/M in mob_canidates)
 		if(!M.needs_weather_update)
 			continue
@@ -43,28 +50,28 @@ SUBSYSTEM_DEF(weather)
 	for(var/obj/O in object_canidates)
 		if(!O.needs_weather_update)
 			continue
-		objects_to_affect += M
+		objects_to_affect += O
 		O.needs_weather_update = FALSE
 
+
 	//We've populated our mobs and objects filtered lists, lets slice them now into batches.
-	var/list/mob_slice = mobs_to_affect.Copy(mob_batch_index, mob_batch_index, + batch_size)
-	var/list/obj_slice = objects_to_affect.Copy(obj_batch_index, obj_batch_index, + batch_size)
+	var/list/mob_slice = mobs_to_affect.Copy(mob_batch_index, mob_batch_index + batch_size)
+	var/list/obj_slice = objects_to_affect.Copy(obj_batch_index, obj_batch_index + batch_size)
 
 	// process active weather
-	for(var/V in processing)
-		var/datum/weather/our_event = V
-		if(our_event.aesthetic || our_event.stage != MAIN_STAGE)
+	for(var/datum/weather/current_storm in processing)
+		if(current_storm.aesthetic || current_storm.stage != MAIN_STAGE)
 			continue
 
 		//Ticking weather effects to reduce cooldown.
 		//We handle evaluating if weather can act later so the subsystem is cleaner.
-		for(var/datum/weather/effect/E in our_event.weather_effects)
+		for(var/datum/weather/effect/E in current_storm.weather_effects)
 			if(world.time % E.tick_interval == 0)
 				E.tick()
 
 			//Global effects, once per weather effect.
-			if(is_type_in_list(E, global_effect_types))
-				E.apply_global_effect
+			if(E.type in E.global_effect_types)
+				E.apply_global_effect()
 
 			//Applying to Mobs
 			if(E.affects_mobs)
@@ -74,14 +81,10 @@ SUBSYSTEM_DEF(weather)
 			if(E.affects_objects)
 				E.apply_to_objects(obj_slice)
 
-			//Applying to Areas
-			if(E.affects_areas)
-				E.apply_to_area
-
 	// start random weather on relevant levels
 	for(var/z in eligible_zlevels)
 		var/possible_weather = eligible_zlevels[z]
-		var/datum/weather/our_event = pick_weight(possible_weather)
+		our_event = pick_weight(possible_weather)
 		run_weather(our_event, list(text2num(z)))
 		eligible_zlevels -= z
 		var/randTime = rand(3000, 6000)
@@ -116,7 +119,9 @@ SUBSYSTEM_DEF(weather)
 			LAZYINITLIST(eligible_zlevels["[z]"])
 			eligible_zlevels["[z]"][weather] = probability
 
-/datum/controller/subsystem/weather/proc/run_weather(datum/weather/weather_datum_type, z_levels, skip_telegraph)
+/datum/controller/subsystem/weather/proc/run_weather(datum/weather/weather_datum_type, z_levels_param, skip_telegraph)
+	var/list/actual_z_levels = z_levels_param // Declare a typed local variable to ensure correct type inference
+
 	if (istext(weather_datum_type))
 		for (var/V in subtypesof(/datum/weather))
 			var/datum/weather/W = V
@@ -126,14 +131,44 @@ SUBSYSTEM_DEF(weather)
 	if (!ispath(weather_datum_type, /datum/weather))
 		CRASH("run_weather called with invalid weather_datum_type: [weather_datum_type || "null"]")
 
-	if (isnull(z_levels))
-		z_levels = SSmapping.levels_by_trait(initial(weather_datum_type.target_trait))
-	else if (isnum(z_levels))
-		z_levels = list(z_levels)
-	else if (!islist(z_levels))
-		CRASH("run_weather called with invalid z_levels: [z_levels || "null"]")
+	if (isnull(actual_z_levels))
+		actual_z_levels = SSmapping.levels_by_trait(initial(weather_datum_type.target_trait))
+		if (isnull(actual_z_levels))
+			actual_z_levels = list()
+	else if (isnum(actual_z_levels))
+		actual_z_levels = list(actual_z_levels)
+	else if (!islist(actual_z_levels))
+		CRASH("run_weather called with invalid z_levels: [actual_z_levels || "null"]")
 
-	var/datum/weather/W = new weather_datum_type(z_levels)
+	var/turf/storm_center_turf
+	if(actual_z_levels.len)
+		// Sort actual_z_levels in descending order to prioritize higher Z-levels
+		var/list/sorted_z_levels = list()
+		for(var/z_level in actual_z_levels)
+			var/inserted = FALSE
+			for(var/i = 1, i <= sorted_z_levels.len, i++)
+				if(z_level > sorted_z_levels[i])
+					sorted_z_levels.Insert(i, z_level)
+					inserted = TRUE
+					break
+			if(!inserted)
+				sorted_z_levels += z_level
+
+		// Find a suitable center turf on the highest impacted z-level first.
+		for(var/z_level in sorted_z_levels)
+			var/list/candidate_turfs = list()
+			// Iterate all turfs to find suitable ones on the current z_level
+			for(var/turf/T in world.contents)
+				if(T.z == z_level)
+					var/area/A = get_area(T)
+					// Only check if it's outdoors
+					if(A.outdoors)
+						candidate_turfs += T
+			if(candidate_turfs.len)
+				storm_center_turf = pick(candidate_turfs) // Pick a random suitable turf from the highest Z-level
+				break // Found a center, no need to check lower z-levels
+
+	var/datum/weather/W = new weather_datum_type(actual_z_levels, storm_center_turf)
 	W.telegraph(skip_telegraph)
 
 /datum/controller/subsystem/weather/proc/make_eligible(z, possible_weather)

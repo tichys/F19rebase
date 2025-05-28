@@ -91,15 +91,21 @@
 	/// Wind direction, passed from weather profile.
 	var/wind_direction = null
 	/// Override to effect list in each weather type, can also be overriden in the map config.
-	var/weather_effects = list()
-	//The maximum number of weather effects that can be picked for a given storm.
+	var/list/weather_effects = list()
+	///The maximum number of weather effects that can be picked for a given storm.
 	var/max_effects = 3
+	/// The radius of influence for this storm, -1 = entire map
+	var/radius_in_chunks = -1
+	/// Central turf of a storm's influence. Really only relevant if radius is not -1
+	var/center_turf
 
-	var/datum/weather/chunking/weather_chunking = new() //Builds the weather chunking controller.
+/datum/weather/storm
+	name = "Storm"
 
-/datum/weather/New(z_levels)
+/datum/weather/New(z_levels, turf/initial_center_turf)
 	..()
 	impacted_z_levels = z_levels
+	center_turf = initial_center_turf
 
 	/*
 	* Applying map-specific overrides to things like descs, probabilities, durations, etc.
@@ -134,8 +140,6 @@
 			barometer_predictable = overrides["barometer_predictable"]
 		if("area_type" in overrides)
 			area_type = overrides["area_type"]
-		if("protect_indoors" in overrides)
-			protect_indoors = overrides["protect_indoors"]
 		if("aesthetic" in overrides)
 			aesthetic = overrides["aesthetic"]
 
@@ -246,51 +250,30 @@
  */
 /datum/weather/proc/can_weather_act(mob/living/mob_to_check)
 	var/turf/mob_turf = get_turf(mob_to_check)
-
 	if(!mob_turf)
 		return
 
-	if(!(mob_turf.z in impacted_z_levels))
+	// Check if this turf is covered by weather (turf-based coverage system)
+	if(!weather_chunking.turf_chunks[weather_chunking.get_turf_chunk_key(mob_turf)])
 		return
 
+	// Immunity checks for mob
 	if((immunity_type && HAS_TRAIT(mob_to_check, immunity_type)) || HAS_TRAIT(mob_to_check, TRAIT_WEATHER_IMMUNE))
 		return
 
+	// Immunity checks for containers (e.g. bags, vehicles)
 	var/atom/loc_to_check = mob_to_check.loc
-	while(loc_to_check != mob_turf)
+	while(loc_to_check && loc_to_check != mob_turf)
 		if((immunity_type && HAS_TRAIT(loc_to_check, immunity_type)) || HAS_TRAIT(loc_to_check, TRAIT_WEATHER_IMMUNE))
 			return
 		loc_to_check = loc_to_check.loc
 
-	if(!(get_area(mob_to_check) in impacted_areas))
-		return
-
 	return TRUE
 
-/**
- * Affects the mob, object, or area with whatever the weather does.
- *
- */
-/datum/weather/proc/weather_act(mob/living/L, /obj/O, /area/A)
-	for(var/datum/weather/effect/E in weather_effects)
-		if(!istype(E, /datum/weather/effect)) //Sanity Check? AlmonD Water.
-			break
-
-		//Skip effects if cooling down.
-		if(E.cooldown > 0)
-			break
-
-		//Handling mob-specific effects
-		if(L)
-			E.apply_effect(L)
-
-		//Handling object-specific effects
-		if(O)
-			E.apply_effect(O)
-
-		//Handling area-specific effects
-		if(A)
-			E.apply_effect(A)
+///A hook for weather_types to apply specific effects that can't be captured in these generic effects.
+/datum/weather/proc/weather_act(mob/living/L, /obj/O)
+	// This proc is now a placeholder for child weather_types to add their specific effects.
+	// Generic weather effects (Wind Gusts, Lightning, Fog, etc) are applied by the SSweather subsystem directly.
 
 /**
  * Updates the overlays on impacted areas
@@ -313,7 +296,7 @@
 
 			//Adding new overlays
 			if(length(new_overlay_cache))
-				T.overlays += new_overlay-cache
+				T.overlays += new_overlay_cache
 
 	overlay_cache = new_overlay_cache
 
@@ -346,10 +329,11 @@
 
 /**
  * Selects random weather effects from the allowed list at the beginning of the storm.
- *
+ * TD: Needs UPDATE for profiles system!!!!
  */
 
 /datum/weather/proc/select_weather_effects()
+	var/datum/weather/profile/weather_profile = new /datum/weather/profile() // Initialize the profile
 	var/num_effects = 3 //Arbitrary
 
 	if(weather_effects) //If we have a list of effects (from map config or otherwise), don't bother picking randomly.
@@ -358,8 +342,11 @@
 		var/list/selected_effects = list()
 		var/total_weight = 0
 
-		for(var/effect in allowed_weather_effects)
-			total_weight += allowed_weather_effects[effect] //Adding each effects weight to the total weight.
+		if(!weather_profile || !weather_profile.allowed_weather_effects) // Ensure profile and its effects list exist
+			return selected_effects // Return empty list if no effects are defined
+
+		for(var/effect in weather_profile.allowed_weather_effects)
+			total_weight += weather_profile.allowed_weather_effects[effect] //Adding each effects weight to the total weight.
 
 		if(max_effects)
 			num_effects = rand(1, max_effects) //If we have a max effects number, use that.
@@ -370,12 +357,12 @@
 			var/random_weight = rand(1, total_weight)
 			var/current_weight = 0
 
-			for(var/effect in allowed_weather_effects)
-				current_weight += allowed_weather_effects[effect]
+			for(var/effect in weather_profile.allowed_weather_effects)
+				current_weight += weather_profile.allowed_weather_effects[effect]
 				if(random_weight <= current_weight)
 					selected_effects += effect ///362-365, choose and remove the effect from the list, along with its weight.
-					total_weight -= allowed_weather_effects[effect]
-					allowed_weather_effects.Remove(effect)
+					total_weight -= weather_profile.allowed_weather_effects[effect]
+					weather_profile.allowed_weather_effects.Remove(effect)
 					num_effects--
 					break
 
