@@ -17,51 +17,81 @@ SUBSYSTEM_DEF(weather)
 
 	//Referencing the weather chunking system
 	var/datum/weather/chunking/weather_chunking = new
+	var/next_flavor_smell_time = 0
+	var/flavor_smell_interval_min = 6000 // 10 minutes in deciseconds
+	var/flavor_smell_interval_max = 18000 // 30 minutes in deciseconds
 
 /datum/controller/subsystem/weather/fire()
-
-	//Get Candidate Lists (From weather chunking system) to filter through.
-	//Chunking does the heavy lifting, we just clean up whatever it gives us.
-	var/list/mob_canidates = list()
-	var/list/object_canidates = list()
-	var/datum/weather/our_event
-
-	if(processing.len) // Check if there's at least one active storm
-		our_event = processing[1] // Use the first active storm as the "single current active storm"
-		mob_canidates += weather_chunking.get_mobs_in_chunks_around_storm(our_event) //TD: Impacted chunks takes from weather coverage subsystem otherwise what was this all for???
-		object_canidates += weather_chunking.get_objects_in_chunks_around_storm(our_event)
 
 	//Simulated threading setup for batch processing.
 	var/static/mob_batch_index = 1
 	var/static/obj_batch_index = 1
 	var/batch_size = 10
 
-	//Get actual lists for storage (Mobs, Obj, Area)
-	var/list/mobs_to_affect = list()
-	var/list/objects_to_affect = list()
+	// Play flavor smells occasionally
+	if(world.time >= next_flavor_smell_time && current_profile)
+		var/list/all_smells = list()
+		if(current_profile.flavor_smells_long && current_profile.flavor_smells_long.len)
+			all_smells += current_profile.flavor_smells_long
+		if(current_profile.flavor_smells_short && current_profile.flavor_smells_short.len)
+			all_smells += current_profile.flavor_smells_short
 
-	//Determining the mobs/objs lists here and flagging them appropriately.
-	for(var/mob/living/M in mob_canidates)
-		if(!M.needs_weather_update)
-			continue
-		mobs_to_affect += M
-		M.needs_weather_update = FALSE
+		if(all_smells.len)
+			// Set the next time for a smell opportunity
+			next_flavor_smell_time = world.time + rand(flavor_smell_interval_min, flavor_smell_interval_max)
+			message_admins(span_adminnotice("Weather Subsystem: Next flavor smell scheduled for [next_flavor_smell_time] (in [round((next_flavor_smell_time - world.time)/10)] seconds). Picked smell: [smell_message_raw]"))
 
-	for(var/obj/O in object_canidates)
-		if(!O.needs_weather_update)
-			continue
-		objects_to_affect += O
-		O.needs_weather_update = FALSE
+			// Get all outdoor mobs using weather_chunking
+			var/list/outdoor_mobs = list()
+			for(var/key in weather_chunking.chunks)
+				for(var/atom/movable/A in weather_chunking.chunks[key])
+					if(ismob(A))
+						outdoor_mobs += A
 
+			// Broadcast to outdoor players with a per-player chance
+			for(var/mob/player as anything in outdoor_mobs)
+				// 20% chance for a player to receive a smell message
+				if(prob(20)) // TD: Make this probability configurable in weather_profiles or SSweather vars.
+					var/smell_message_raw = pick(all_smells)
+					var/smell_message_formatted = ""
 
-	//We've populated our mobs and objects filtered lists, lets slice them now into batches.
-	var/list/mob_slice = mobs_to_affect.Copy(mob_batch_index, mob_batch_index + batch_size)
-	var/list/obj_slice = objects_to_affect.Copy(obj_batch_index, obj_batch_index + batch_size)
+					if(smell_message_raw in current_profile.flavor_smells_long)
+						smell_message_formatted = smell_message_raw // Long message is used directly
+					else
+						smell_message_formatted = "You catch the scent of [smell_message_raw] in the air." // Short message is formatted
+
+					to_chat(player, span_notice(smell_message_formatted))
+
 
 	// process active weather
 	for(var/datum/weather/current_storm in processing)
 		if(current_storm.aesthetic || current_storm.stage != MAIN_STAGE)
 			continue
+
+		// Get Candidate Lists for the current storm
+		var/list/mob_canidates = weather_chunking.get_mobs_in_chunks_around_storm(current_storm)
+		var/list/object_canidates = weather_chunking.get_objects_in_chunks_around_storm(current_storm)
+
+		// Get actual lists for storage (Mobs, Obj) for the current storm
+		var/list/mobs_to_affect = list()
+		var/list/objects_to_affect = list()
+
+		// Determining the mobs/objs lists here and flagging them appropriately.
+		for(var/mob/living/M in mob_canidates)
+			if(!M.needs_weather_update)
+				continue
+			mobs_to_affect += M
+			M.needs_weather_update = FALSE
+
+		for(var/obj/O in object_canidates)
+			if(!O.needs_weather_update)
+				continue
+			objects_to_affect += O
+			O.needs_weather_update = FALSE
+
+		// We've populated our mobs and objects filtered lists, lets slice them now into batches.
+		var/list/mob_slice = mobs_to_affect.Copy(mob_batch_index, mob_batch_index + batch_size)
+		var/list/obj_slice = objects_to_affect.Copy(obj_batch_index, obj_batch_index + batch_size)
 
 		//Ticking weather effects to reduce cooldown.
 		//We handle evaluating if weather can act later so the subsystem is cleaner.
@@ -84,13 +114,25 @@ SUBSYSTEM_DEF(weather)
 	// start random weather on relevant levels
 	for(var/z in eligible_zlevels)
 		var/possible_weather = eligible_zlevels[z]
-		our_event = pick_weight(possible_weather)
+		var/datum/weather/our_event = pick_weight(possible_weather)
+		message_admins(span_adminnotice("Weather Subsystem: Picked storm: [initial(our_event.name)] for z-level [z]"))
 		run_weather(our_event, list(text2num(z)))
 		eligible_zlevels -= z
 		var/randTime = rand(3000, 6000)
 		next_hit_by_zlevel["[z]"] = addtimer(CALLBACK(src, PROC_REF(make_eligible), z, possible_weather), randTime + initial(our_event.weather_duration_upper), TIMER_UNIQUE|TIMER_STOPPABLE) //Around 5-10 minutes between weathers
 
 /datum/controller/subsystem/weather/Initialize(start_timeofday)
+	// Select a random weather profile for the round
+	var/list/all_profiles = list()
+	for(var/V in subtypesof(/datum/weather/profile))
+		all_profiles += V
+	message_admins(span_adminnotice("Weather Subsystem: Found [all_profiles.len] weather profiles."))
+	if(all_profiles.len)
+		current_profile = pick(all_profiles)
+		current_profile.apply_environment_settings() // Apply environment settings from the selected profile
+		message_admins("Weather Subsystem: About to log picked profile details.") //Temp for debug
+		message_admins(span_adminnotice("Weather Subsystem: Picked weather profile: [current_profile.name] (Temp: [current_profile.base_temperature_type] -> [num2text(current_profile.base_temperature)]K, Pressure: [current_profile.pressure_type] -> [num2text(current_profile.current_pressure)]kPa)"))
+
 	for(var/V in subtypesof(/datum/weather))
 		var/datum/weather/W = V
 		var/probability = initial(W.probability)
@@ -102,6 +144,11 @@ SUBSYSTEM_DEF(weather)
 			probability = overrides["probability"]
 
 		var/target_trait = initial(W.target_trait)
+
+		// Filter by allowed_storms in the current profile
+		if(current_profile && current_profile.allowed_storms && current_profile.allowed_storms.len)
+			if(!(W.type in current_profile.allowed_storms))
+				continue // Skip if this weather type is not allowed by the profile
 
 		// any weather with a probability set may occur at random
 		if (probability)
@@ -168,7 +215,9 @@ SUBSYSTEM_DEF(weather)
 				storm_center_turf = pick(candidate_turfs) // Pick a random suitable turf from the highest Z-level
 				break // Found a center, no need to check lower z-levels
 
+	//A storm is Born!
 	var/datum/weather/W = new weather_datum_type(actual_z_levels, storm_center_turf)
+
 	W.telegraph(skip_telegraph)
 
 /datum/controller/subsystem/weather/proc/make_eligible(z, possible_weather)

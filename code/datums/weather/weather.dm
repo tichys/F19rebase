@@ -329,41 +329,39 @@
 
 /**
  * Selects random weather effects from the allowed list at the beginning of the storm.
- * TD: Needs UPDATE for profiles system!!!!
  */
 
 /datum/weather/proc/select_weather_effects()
-	var/datum/weather/profile/weather_profile = new /datum/weather/profile() // Initialize the profile
-	var/num_effects = 3 //Arbitrary
+	var/list/selected_effects = list()
+	var/datum/weather/profile/active_profile = SSweather.current_profile
 
-	if(weather_effects) //If we have a list of effects (from map config or otherwise), don't bother picking randomly.
-		return weather_effects
-	else
-		var/list/selected_effects = list()
-		var/total_weight = 0
-
-		if(!weather_profile || !weather_profile.allowed_weather_effects) // Ensure profile and its effects list exist
-			return selected_effects // Return empty list if no effects are defined
-
-		for(var/effect in weather_profile.allowed_weather_effects)
-			total_weight += weather_profile.allowed_weather_effects[effect] //Adding each effects weight to the total weight.
-
-		if(max_effects)
-			num_effects = rand(1, max_effects) //If we have a max effects number, use that.
-		else
-			num_effects = rand(1, 5) //At least 1, at most 5.
-
-		while(num_effects > 0 && total_weight > 0) //Continue selecting until we hit the max effects, or no more weight.
-			var/random_weight = rand(1, total_weight)
-			var/current_weight = 0
-
-			for(var/effect in weather_profile.allowed_weather_effects)
-				current_weight += weather_profile.allowed_weather_effects[effect]
-				if(random_weight <= current_weight)
-					selected_effects += effect ///362-365, choose and remove the effect from the list, along with its weight.
-					total_weight -= weather_profile.allowed_weather_effects[effect]
-					weather_profile.allowed_weather_effects.Remove(effect)
-					num_effects--
-					break
-
+	if(!active_profile || !active_profile.allowed_weather_effects || !active_profile.allowed_weather_effects.len)
+		// If no active profile or no allowed effects, return empty list.
 		return selected_effects
+
+	var/num_effects = 3 //Arbitrary, but will be overridden by max_effects if set.
+	if(max_effects)
+		num_effects = rand(1, max_effects) //If we have a max effects number, use that.
+	else
+		num_effects = rand(1, 5) //At least 1, at most 5.
+
+	var/list/available_effects = active_profile.allowed_weather_effects.Copy() // Work on a copy to remove selected effects
+	var/total_weight = 0
+
+	for(var/effect in available_effects)
+		total_weight += available_effects[effect] //Adding each effects weight to the total weight.
+
+	while(num_effects > 0 && total_weight > 0 && available_effects.len > 0) //Continue selecting until we hit the max effects, or no more weight.
+		var/random_weight = rand(1, total_weight)
+		var/current_weight = 0
+
+		for(var/effect in available_effects)
+			current_weight += available_effects[effect]
+			if(random_weight <= current_weight)
+				selected_effects += effect
+				total_weight -= available_effects[effect]
+				available_effects.Remove(effect) // Remove from copy
+				num_effects--
+				break
+
+	return selected_effects

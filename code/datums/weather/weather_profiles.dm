@@ -1,6 +1,6 @@
 /* <==================================================> Weather Profiles! <===================================================>
  * Weather Profiles tell the Weather Subsystem what a given round should look like, including the base conditions such as temp,
- * humidity, wind direction, severity, pressure, etc. They're picked by the Weather Subsystem at the start of a round and are
+ * wind direction, severity, pressure, etc. They're picked by the Weather Subsystem at the start of a round and are
  * (if I code them well enough) blacklist/whitelist-able from certain maps. Instead of having multiple storm "types", we'll just
  * pretend to have many with different profiles that don't interact Too Much with the subsystem controller.
  *
@@ -8,8 +8,6 @@
  *
  */
 
-/// Weather datum reference
-var/datum/weather/weather = new /datum/weather()
 
 
 /datum/weather/profile
@@ -17,18 +15,9 @@ var/datum/weather/weather = new /datum/weather()
 	desc = "A profile to be randomly selected at the start of the round, which influences weather."
 
 
-	//Default environmental conditions
+	/// Default environmental conditions
 
-	/// Determines temp
-	var/list/base_temperature = list(
-		"LOW_TEMP" = list(),
-		"MEDIUM_TEMP" = list(),
-		"HIGH_TEMP" = list()
 
-	)
-
-	/// Determines Humidity
-	var/humidity_level = 50
 	/// Determines Main wind direction
 	var/primary_wind_direction = NORTH
 
@@ -50,7 +39,11 @@ var/datum/weather/weather = new /datum/weather()
 	#define MEDIUM_PRESSURE "MEDIUM_PRESSURE"
 	#define HIGH_PRESSURE "HIGH_PRESSURE"
 
-	/// The type of pressure in the profile (High, Medium, Low) - TD: Pressure Affects Wind Gust rate??
+	#define TEMP_LOW "LOW_TEMP"
+	#define TEMP_MEDIUM "MEDIUM_TEMP"
+	#define TEMP_HIGH "HIGH_TEMP"
+
+	/// The type of pressure in the profile (High, Medium, Low)
 	var/list/pressure_pattern = list(
 		"LOW_PRESSURE" = list(98.7, 99.5, 100.3),
 		"MEDIUM_PRESSURE" = list(101.3, 100.8, 100.7),
@@ -59,6 +52,18 @@ var/datum/weather/weather = new /datum/weather()
 
 	var/pressure_type = MEDIUM_PRESSURE //If not set, we assume pressure is normal.
 	var/current_pressure // Initialized in New()
+
+	/// Defines temperature ranges for different temperature types, if not overridden by base_temperature
+	var/list/temperature_ranges = list(
+		"LOW_TEMP" = list(263.15, 273.15), // -10C to 0C
+		"MEDIUM_TEMP" = list(283.15, 293.15), // 10C to 20C
+		"HIGH_TEMP" = list(303.15, 313.15) // 30C to 40C
+	)
+
+
+	/// Determines temp (single value for this profile, or a string key for temperature_ranges)
+	var/base_temperature_type = TEMP_MEDIUM // Default to medium temperature range
+	var/base_temperature // Initialized in New()
 
 	/// Severity, which influences severity of weather effects, damage caused by lightning, strength of wind, etc.
 	var/severity = 1 //1 = Light, 2 = Moderate, 3 = Severe
@@ -79,23 +84,42 @@ var/datum/weather/weather = new /datum/weather()
 
 /datum/weather/profile/New()
 	. = ..()
-	current_pressure = pick(pressure_pattern[pressure_type])
+	// Pick a random pressure value from the range defined by pressure_type
+	if(pressure_pattern && pressure_pattern[pressure_type] && length(pressure_pattern[pressure_type]) == 3) // Ensure it's a min, mid, max list
+		current_pressure = rand(pressure_pattern[pressure_type][1], pressure_pattern[pressure_type][3])
+	else
+		current_pressure = pick(pressure_pattern[MEDIUM_PRESSURE]) // Fallback to picking from default medium range
+
+	// Pick a random temperature value from the range defined by base_temperature_type
+	if(temperature_ranges && temperature_ranges[base_temperature_type] && length(temperature_ranges[base_temperature_type]) == 2)
+		base_temperature = rand(temperature_ranges[base_temperature_type][1], temperature_ranges[base_temperature_type][2])
+	else if(isnum(base_temperature_type)) // If base_temperature_type was set directly as a number
+		base_temperature = base_temperature_type
+	else
+		base_temperature = T20C // Fallback to default if not specified or invalid
 
 /datum/weather/profile/proc/apply_environment_settings()
+	message_admins(span_adminnotice("Weather Profile: Entering apply_environment_settings for profile: [name]."))
+	// TD: Implement how primary_wind_direction from the profile should influence the environment globally.
 
-	weather.wind_direction = primary_wind_direction
+	var/is_night = FALSE // TD: Implement proper check for night/day based on world.timeofday or similar.
+	// Example: if(world.timeofday >= NIGHT_START_TIME || world.timeofday < DAY_START_TIME) is_night = TRUE
 
+	message_admins(span_adminnotice("Weather Profile: Starting turf iteration in apply_environment_settings."))
 	var/list/chunk_keys = weather_chunking.get_all_turf_chunk_keys()
 	for(var/key in chunk_keys)
-		var/list/turfs = weather_chunking.get_turfs_in_chunks(list(key))
-
-
 		for(var/turf/T in turfs)
 			if(!isturf(T))
 				continue
 
 			else
-				T.temperature = base_temperature
+				var/selected_temp = base_temperature // Use the pre-calculated base_temperature
+
+				// Apply night temperature reduction
+				if(is_night)
+					selected_temp = max(minimum_temperature, selected_temp - night_temp_reduction)
+
+				T.temperature = selected_temp
 
 
 /// --- Nautical Weather Profiles ---
@@ -105,8 +129,7 @@ var/datum/weather/weather = new /datum/weather()
 /datum/weather/profile/atlanticstormfront
 	name = "Atlantic Storm Front"
 	desc = "A brewing Atlantic system with strong winds and shifting pressure. Common in the colder months."
-	base_temperature = 283.15 // 10C
-	humidity_level = 85
+	base_temperature_type = TEMP_LOW
 	pressure_type = LOW_PRESSURE
 	night_temp_reduction = 8.0
 	minimum_temperature = 268.15 // -5C
@@ -132,8 +155,7 @@ var/datum/weather/weather = new /datum/weather()
 /datum/weather/profile/foggybank
 	name = "Foggy Bank Drifts"
 	desc = "A dense fog creeping over the ocean, bringing high humidity and obscuring vision."
-	base_temperature = 288.15 //15C
-	humidity_level = 98
+	base_temperature_type = TEMP_MEDIUM
 	primary_wind_direction = EAST
 	pressure_type = MEDIUM_PRESSURE
 	night_temp_reduction = 3.0
@@ -154,8 +176,7 @@ var/datum/weather/weather = new /datum/weather()
 /datum/weather/profile/gale_surge
 	name = "Gale Surges"
 	desc = "Brutal winds and freezing temps from the north. Cold exposure is a legitimate danger."
-	base_temperature = 265.15 // -8C
-	humidity_level = 60
+	base_temperature_type = TEMP_LOW
 	primary_wind_direction = NORTH
 	pressure_type = LOW_PRESSURE
 	night_temp_reduction = 10.0
@@ -176,8 +197,7 @@ var/datum/weather/weather = new /datum/weather()
 /datum/weather/profile/dieselrain
 	name = "Diesel Rain"
 	desc = "Thick rain and industrial smells mix during this unusual low-pressure event."
-	base_temperature = 291.15 //18C
-	humidity_level = 90
+	base_temperature_type = TEMP_MEDIUM
 	pressure_type = LOW_PRESSURE
 	allowed_weather_effects = list()
 	allowed_storms = list()
@@ -202,8 +222,7 @@ var/datum/weather/weather = new /datum/weather()
 /datum/weather/profile/heathaze
 	name = "Heat Haze"
 	desc = "A rare warm spell causes sweltering conditions in the area.."
-	base_temperature = 303.15 //30C
-	humidity_level = 35
+	base_temperature_type = TEMP_HIGH
 	pressure_type = HIGH_PRESSURE
 	night_temp_reduction = 2.0
 	minimum_temperature = 290.15 //17C
@@ -227,10 +246,9 @@ var/datum/weather/weather = new /datum/weather()
 /datum/weather/profile/clearskies
 	name = "Clear Skies"
 	desc = "A rare and pleasant weather pattern that brings clear skies and calm conditions."
-	base_temperature = T20C
-	humidity_level = 45
+	base_temperature_type = TEMP_MEDIUM
 	primary_wind_direction = SOUTHWEST
-	pressure_type = "High"
+	pressure_type = HIGH_PRESSURE // Changed "High" to HIGH_PRESSURE define
 	allowed_weather_effects = list()
 	allowed_storms = list()
 	flavor_smells_short = list("fresh air", "sun-warmed air", "a gentle light scent")
@@ -245,8 +263,7 @@ var/datum/weather/weather = new /datum/weather()
 /datum/weather/profile/equatorialmonsoon
 	name = "Equatorial Monsoon"
 	desc = "Relentless rain with thick, humid air and high storm chances"
-	base_temperature = 305.15 //32C
-	humidity_level = 100
+	base_temperature_type = TEMP_HIGH
 	primary_wind_direction = SOUTH
 	pressure_type = LOW_PRESSURE
 	allowed_weather_effects = list() //Fog?

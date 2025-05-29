@@ -578,3 +578,4 @@ var/datum/weather/chunking/weather_chunking = new
 
 	L.strike_turf(target_turf)
 	to_chat(usr, "Lightning strike initiated at [target_turf].")
+	qdel(L) // Clean up the datum after the strike
