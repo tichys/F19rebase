@@ -156,10 +156,11 @@
 
 /datum/weather/chunking/proc/get_impacted_chunk_keys(datum/weather/storm)
 	. = list()
-	if(!storm || !storm.impacted_z_levels || !islist(storm.impacted_z_levels) || !(storm.impacted_z_levels:list).len || !istype(storm.center_turf, /turf))
+	if(!storm || !storm.impacted_z_levels || !islist(storm.impacted_z_levels) || !length(storm.impacted_z_levels) || !istype(storm.center_turf, /turf))
 		return
 
-	var/start_z = (storm.center_turf:turf).z
+	var/turf/center_turf_obj = storm.center_turf
+	var/start_z = center_turf_obj.z
 
 	// Iterate from the storm's center Z-level downwards to 1
 	for(var/current_z = start_z to 1 step -1)

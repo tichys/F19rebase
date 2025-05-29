@@ -55,7 +55,7 @@
 	/// Types of area to affect
 	var/area_type = /area/space
 	/// The list of z-levels that this weather is actively affecting
-	var/impacted_z_levels
+	var/list/impacted_z_levels
 
 	/// Since it's above everything else, this is the layer used by default. TURF_LAYER is below mobs and walls if you need to use that.
 	var/overlay_layer = AREA_LAYER
