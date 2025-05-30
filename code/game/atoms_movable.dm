@@ -114,6 +114,13 @@
 	/// The degree of pressure protection that mobs in list/contents have from the external environment, between 0 and 1
 	var/contents_pressure_protection = 0
 
+	/// The last weather chunk this atom was placed in.
+	var/last_weather_chunk_key = null
+
+	//Dirty check updated when a mob moves into or out of a outside area.
+	var/tmp/needs_weather_update = FALSE
+
+
 /mutable_appearance/emissive_blocker
 
 /mutable_appearance/emissive_blocker/New()

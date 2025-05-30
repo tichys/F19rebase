@@ -43,6 +43,9 @@
 	/// Do we run mapping standards unit tests on this map?
 	var/run_mapping_tests = FALSE
 
+	// Weather overrides unique to a given map.
+	var/list/weather_overrides = list()
+
 /**
  * Proc that simply loads the default map config, which should always be functional.
  */
@@ -213,6 +216,20 @@
 	if("run_mapping_tests" in json)
 		//This should be true, but just in case...
 		run_mapping_tests = json["run_mapping_tests"]
+
+	if("weather" in json)
+		var/weather_json = json["weather"]
+		if(islist(weather_json))
+			for(var/weather_type in weather_json)
+				var/overrides = weather_json[weather_type]
+				if(islist(overrides))
+					weather_overrides[weather_type] = overrides
+				else
+					log_world("Invalid weather overrides for [weather_type] in [filename]")
+					return
+		else
+			log_world("map_config \"weather\" field is not a list!")
+			return
 
 	defaulted = FALSE
 	return TRUE

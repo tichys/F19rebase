@@ -7,6 +7,13 @@
  *
  */
 
+/**
+* When adding new weather, consider the following:
+* - code\__DEFINES\maps.dm needs to be updated with a ZTRAIT_WEATHERNAME define, so the weather occurs on that Z.
+* - code\__DEFINES\traits.dm needs to be updated with a TRAIT_WEATHERNAME_IMMUNE define, so mobs can be immune to it.
+*
+*/
+
 /datum/weather
 	/// name of weather
 	var/name = "space wind"
@@ -45,16 +52,8 @@
 	/// Area overlay while weather is ending
 	var/end_overlay
 
-	/// Types of area to affect
-	var/area_type = /area/space
-	/// TRUE value protects areas with outdoors marked as false, regardless of area type
-	var/protect_indoors = FALSE
-	/// Areas to be affected by the weather, calculated when the weather begins
-	var/list/impacted_areas = list()
-	/// Areas that are protected and excluded from the affected areas.
-	var/list/protected_areas = list()
 	/// The list of z-levels that this weather is actively affecting
-	var/impacted_z_levels
+	var/list/impacted_z_levels
 
 	/// Since it's above everything else, this is the layer used by default. TURF_LAYER is below mobs and walls if you need to use that.
 	var/overlay_layer = AREA_LAYER
@@ -76,7 +75,7 @@
 	/// Weight amongst other eligible weather. If zero, will never happen randomly.
 	var/probability = 0
 	/// The z-level trait to affect when run randomly or when not overridden.
-	var/target_trait = ZTRAIT_STATION
+	var/target_trait = ZTRAIT_PLANETARY_ENVIRONMENT
 
 	/// Whether a barometer can predict when the weather will happen
 	var/barometer_predictable = FALSE
@@ -85,9 +84,62 @@
 	/// This causes the weather to only end if forced to
 	var/perpetual = FALSE
 
-/datum/weather/New(z_levels)
+	/// Mechanical Weather effects applied to this weather_type which are applied to mobs. (Wind Gust, lightning, etc)
+
+	/// Wind direction, passed from weather profile.
+	var/wind_direction = null
+	/// Override to effect list in each weather type, can also be overriden in the map config.
+	var/list/weather_effects = list()
+	///The maximum number of weather effects that can be picked for a given storm.
+	var/max_effects = 3
+	/// The radius of influence for this storm, -1 = entire map
+	var/radius_in_chunks = -1
+	/// Central turf of a storm's influence. Really only relevant if radius is not -1
+	var/center_turf
+
+/datum/weather/storm
+	name = "Storm"
+
+/datum/weather/New(z_levels, turf/initial_center_turf)
 	..()
 	impacted_z_levels = z_levels
+	center_turf = initial_center_turf
+
+	/*
+	* Applying map-specific overrides to things like descs, probabilities, durations, etc.
+	* Can be extended if you'd like to add more overrides, just update the map Json and this code.
+	*
+	*/
+
+	var/datum/map_config/current_map_config = SSmapping.config
+	var/overrides = current_map_config.weather_overrides[type]
+	if(overrides) //It's possible
+		if("desc" in overrides)
+			desc = overrides["desc"]
+		if("probability" in overrides)
+			probability = overrides["probability"]
+		if("telegraph_duration" in overrides)
+			telegraph_duration = overrides["telegraph_duration"]
+		if("weather_duration_lower" in overrides)
+			weather_duration_lower = overrides["weather_duration_lower"]
+		if("weather_duration_upper" in overrides)
+			weather_duration_upper = overrides["weather_duration_upper"]
+		if("end_duration" in overrides)
+			end_duration = overrides["end_duration"]
+		if("telegraph_message" in overrides)
+			telegraph_message = overrides["telegraph_message"]
+		if("weather_message" in overrides)
+			weather_message = overrides["weather_message"]
+		if("end_message" in overrides)
+			end_message = overrides["end_message"]
+		if("perpetual" in overrides)
+			perpetual = overrides["perpetual"]
+		if("barometer_predictable" in overrides)
+			barometer_predictable = overrides["barometer_predictable"]
+		if("aesthetic" in overrides)
+			aesthetic = overrides["aesthetic"]
+
+
 
 /**
  * Telegraphs the beginning of the weather on the impacted z levels
@@ -100,26 +152,13 @@
 	if(stage == STARTUP_STAGE)
 		return
 
+	message_admins(span_adminnotice("A storm of type []"))
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_TELEGRAPH(type))
 	stage = STARTUP_STAGE
 
-	var/list/affectareas = list()
-	for(var/V in get_areas(area_type))
-		affectareas += V
-
-	for(var/V in protected_areas)
-		affectareas -= get_areas(V)
-
-	for(var/V in affectareas)
-		var/area/A = V
-		if(protect_indoors && !A.outdoors)
-			continue
-		if(A.z in impacted_z_levels)
-			impacted_areas |= A
-
 	weather_duration = rand(weather_duration_lower, weather_duration_upper)
 	SSweather.processing |= src
-	update_areas()
+	update_turf_overlays()
 
 	if(get_to_the_good_part)
 		start()
@@ -141,7 +180,9 @@
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_START(type))
 
 	stage = MAIN_STAGE
-	update_areas()
+	update_turf_overlays()
+
+	weather_effects = select_weather_effects()
 
 	send_alert(weather_message, weather_sound)
 	if(!perpetual)
@@ -161,7 +202,7 @@
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_WINDDOWN(type))
 	stage = WIND_DOWN_STAGE
 
-	update_areas()
+	update_turf_overlays()
 
 	send_alert(end_message, end_sound)
 	addtimer(CALLBACK(src, PROC_REF(end)), end_duration)
@@ -181,7 +222,7 @@
 	stage = END_STAGE
 
 	SSweather.processing -= src
-	update_areas()
+	update_turf_overlays()
 
 /datum/weather/proc/send_alert(alert_msg, alert_sfx)
 	for(var/z_level in impacted_z_levels)
@@ -206,45 +247,53 @@
  */
 /datum/weather/proc/can_weather_act(mob/living/mob_to_check)
 	var/turf/mob_turf = get_turf(mob_to_check)
-
 	if(!mob_turf)
 		return
 
-	if(!(mob_turf.z in impacted_z_levels))
+	// Check if this turf is covered by weather (turf-based coverage system)
+	if(!SSweather.weather_chunking.turf_chunks[SSweather.weather_chunking.get_turf_chunk_key(mob_turf)])
 		return
 
+	// Immunity checks for mob
 	if((immunity_type && HAS_TRAIT(mob_to_check, immunity_type)) || HAS_TRAIT(mob_to_check, TRAIT_WEATHER_IMMUNE))
 		return
 
+	// Immunity checks for containers (e.g. bags, vehicles)
 	var/atom/loc_to_check = mob_to_check.loc
-	while(loc_to_check != mob_turf)
+	while(loc_to_check && loc_to_check != mob_turf)
 		if((immunity_type && HAS_TRAIT(loc_to_check, immunity_type)) || HAS_TRAIT(loc_to_check, TRAIT_WEATHER_IMMUNE))
 			return
 		loc_to_check = loc_to_check.loc
 
-	if(!(get_area(mob_to_check) in impacted_areas))
-		return
-
 	return TRUE
 
-/**
- * Affects the mob with whatever the weather does
- *
- */
-/datum/weather/proc/weather_act(mob/living/L)
-	return
+///A hook for weather_types to apply specific effects that can't be captured in these generic effects.
+/datum/weather/proc/weather_act(mob/living/L, /obj/O)
+	// This proc is now a placeholder for child weather_types to add their specific effects.
+	// Generic weather effects (Wind Gusts, Lightning, Fog, etc) are applied by the SSweather subsystem directly.
 
 /**
  * Updates the overlays on impacted areas
  *
  */
-/datum/weather/proc/update_areas()
+/datum/weather/proc/update_turf_overlays()
 	var/list/new_overlay_cache = generate_overlay_cache()
-	for(var/area/impacted as anything in impacted_areas)
-		if(length(overlay_cache))
-			impacted.overlays -= overlay_cache
-		if(length(new_overlay_cache))
-			impacted.overlays += new_overlay_cache
+
+	var/list/chunk_keys = SSweather.weather_chunking.get_all_turf_chunk_keys()
+
+	for(var/key in chunk_keys)
+		var/list/turfs = SSweather.weather_chunking.get_turfs_in_chunks(list(key))
+		for(var/turf/T in turfs)
+			if(!isturf(T))
+				continue
+
+			//Clearing old overlays
+			if(length(overlay_cache))
+				T.overlays -= overlay_cache
+
+			//Adding new overlays
+			if(length(new_overlay_cache))
+				T.overlays += new_overlay_cache
 
 	overlay_cache = new_overlay_cache
 
@@ -274,3 +323,42 @@
 	gen_overlay_cache += weather_image
 
 	return gen_overlay_cache
+
+/**
+ * Selects random weather effects from the allowed list at the beginning of the storm.
+ */
+
+/datum/weather/proc/select_weather_effects()
+	var/list/selected_effects = list()
+	var/datum/weather/profile/active_profile = SSweather.current_profile
+
+	if(!active_profile || !active_profile.allowed_weather_effects || !active_profile.allowed_weather_effects.len)
+		// If no active profile or no allowed effects, return empty list.
+		return selected_effects
+
+	var/num_effects = 3 //Arbitrary, but will be overridden by max_effects if set.
+	if(max_effects)
+		num_effects = rand(1, max_effects) //If we have a max effects number, use that.
+	else
+		num_effects = rand(1, 5) //At least 1, at most 5.
+
+	var/list/available_effects = active_profile.allowed_weather_effects.Copy() // Work on a copy to remove selected effects
+	var/total_weight = 0
+
+	for(var/effect in available_effects)
+		total_weight += available_effects[effect] //Adding each effects weight to the total weight.
+
+	while(num_effects > 0 && total_weight > 0 && available_effects.len > 0) //Continue selecting until we hit the max effects, or no more weight.
+		var/random_weight = rand(1, total_weight)
+		var/current_weight = 0
+
+		for(var/effect in available_effects)
+			current_weight += available_effects[effect]
+			if(random_weight <= current_weight)
+				selected_effects += effect
+				total_weight -= available_effects[effect]
+				available_effects.Remove(effect) // Remove from copy
+				num_effects--
+				break
+
+	return selected_effects

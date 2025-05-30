@@ -49,7 +49,7 @@
 
 		for(var/V in SSweather.processing)
 			var/datum/weather/W = V
-			if(W.barometer_predictable && (T.z in W.impacted_z_levels) && W.area_type == user_area.type && !(W.stage == END_STAGE))
+			if(W.barometer_predictable && (T.z in W.impacted_z_levels) && (SSweather.weather_chunking.get_turf_chunk_key(T) in SSweather.weather_chunking.get_impacted_chunk_keys(W)) && !(W.stage == END_STAGE))
 				ongoing_weather = W
 				break
 

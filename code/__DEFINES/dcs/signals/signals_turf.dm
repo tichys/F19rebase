@@ -27,3 +27,7 @@
 
 ///Called when turf no longer blocks light from passing through
 #define COMSIG_TURF_NO_LONGER_BLOCK_LIGHT "turf_no_longer_block_light"
+///Called when a turf is created
+#define COMSIG_TURF_DESTROYED "turf_destroyed"
+///Called when a turf is destroyed
+#define COMSIG_TURF_CREATED "turf_created"

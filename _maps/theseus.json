@@ -4,6 +4,26 @@
 	"map_path": "map_files/Theseus",
 	"map_file": "Theseus.dmm",
 	"webmap_id": "Theseus",
+	"weather": {
+		"/datum/weather/snow_storm": {
+			"telegraph_message": "<span class='warning'>Snow begins to fall lightly...</span>",
+			"probability": 1000,
+			"weather_message": "<span class='userdanger'>A fierce snowstorm begins! Seek shelter!</span>",
+			"weather_duration_lower": 800,
+			"weather_duration_upper": 1200,
+			"end_message": "<span class='boldannounce'>The snowstorm subsides, leaving a calm silence.</span>"
+		},
+
+		"/datum/weather/rain_storm": {
+			"telegraph_message": "<span class='warning'>Rain begins to fall lightly...</span>",
+			"probability": 1000,
+			"weather_message": "<span class='userdanger'>A fierce rainstorm begins! Seek shelter!</span>",
+			"weather_duration_lower": 800,
+			"weather_duration_upper": 1200,
+			"end_message": "<span class='boldannounce'>The rainstorm subsides, leaving a calm silence.</span>"
+		}
+
+	},
 	"shuttles": {
 		"cargo": "cargo_box",
 		"ferry": "ferry_fancy",

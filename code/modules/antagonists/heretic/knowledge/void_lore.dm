@@ -231,15 +231,11 @@
 		return
 	source_turf.TakeTemperature(-20)
 
-	var/area/source_area = get_area(source)
-
 	if(!storm)
 		storm = new /datum/weather/void_storm(list(source_turf.z))
 		storm.telegraph()
 
-	storm.area_type = source_area.type
-	storm.impacted_areas = list(source_area)
-	storm.update_areas()
+
 
 /**
  * Signal proc for [COMSIG_LIVING_DEATH].
