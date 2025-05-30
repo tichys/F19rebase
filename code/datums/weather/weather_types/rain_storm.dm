@@ -15,19 +15,12 @@
 	end_duration = 100
 	end_message = "<span class='boldannounce'>The downpour dies down, the smell of rainwater lingering in the air.</span>"
 
-	area_type = /area
-	protect_indoors = TRUE
-	target_trait = ZTRAIT_RAINSTORM
+	target_trait = ZTRAIT_PLANETARY_ENVIRONMENT
 
 	immunity_type = TRAIT_RAINSTORM_IMMUNE
 
 	barometer_predictable = TRUE
 	use_glow = FALSE
-	weather_effect = list(WEATHER_WINDGUST)
-	allowed_weather_effects = list(
-		WEATHER_WINDGUST = 5,
-		WEATHER_LIGHTNING_STRIKE = 2
-	)
 
 /datum/weather/rain_storm/weather_act(mob/living/L)
 	..()
@@ -38,9 +31,12 @@
 	. = ..()
 
 	//Unique alerts for old people and SD's
-	for(mob/living/L in GLOB.player_list)
-		if(!L.isdead && L.ishuman && L.age > 60)
-			to_chat(L, span_warning("You feel an ache in your knee...a storm is coming..</span>"))
-			//Probably not my most efficient use of iterating a list, but.. it IS funny.
-		else if((is_captain_job(L.mind.assigned_role)) && (if(!get_area(L).outdoors)))
-			to_chat(L, span_warning("A storm is brewing out on the horizon..</span>"))
+	var/list/impacted_mobs = SSweather.weather_chunking.get_mobs_in_chunks_around_storm(src)
+	for(var/mob/living/L in impacted_mobs)
+		if(istype(L, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = L
+			if(H.age > 60)
+				to_chat(L, span_warning("You feel an ache in your knee...a storm is coming..</span>"))
+				//Probably not my most efficient use of iterating a list, but.. it IS funny.
+			else if(is_captain_job(L.mind.assigned_role))
+				to_chat(L, span_warning("A storm is brewing out on the horizon..</span>"))

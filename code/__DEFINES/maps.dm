@@ -72,6 +72,8 @@ require only minor tweaks.
 #define ZTRAIT_VOIDSTORM "Weather_Voidstorm"
 #define ZTRAIT_RAINSTORM "Weather_Rainstorm"
 
+#define ZTRAIT_PLANETARY_ENVIRONMENT "Planetary_Environment"
+
 /// boolean - does this z prevent ghosts from observing it
 #define ZTRAIT_SECRET "Secret"
 

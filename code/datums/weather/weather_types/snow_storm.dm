@@ -15,7 +15,7 @@
 	end_duration = 100
 	end_message = "<span class='boldannounce'>The snowfall dies down, it should be safe to go outside again.</span>"
 
-	target_trait = ZTRAIT_SNOWSTORM
+	target_trait = ZTRAIT_PLANETARY_ENVIRONMENT
 
 	immunity_type = TRAIT_SNOWSTORM_IMMUNE
 
@@ -42,8 +42,8 @@
 	if(istype(get_area(player), /area/mine))
 		return TRUE
 
-	var/list/impacted_chunk_keys = weather_chunking.get_impacted_chunk_keys(src)
-	var/list/impacted_turfs = weather_chunking.get_turfs_in_chunks(impacted_chunk_keys)
+	var/list/impacted_chunk_keys = SSweather.weather_chunking.get_impacted_chunk_keys(src)
+	var/list/impacted_turfs = SSweather.weather_chunking.get_turfs_in_chunks(impacted_chunk_keys)
 
 	for(var/turf/snow_turf in impacted_turfs)
 		if(locate(snow_turf) in view(player))

@@ -9,6 +9,7 @@
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	#endif
 	pathing_pass_method = TURF_PATHING_PASS_PROC
+	blocks_weather = FALSE // Open space should not block weather
 
 	z_flags = Z_ATMOS_IN_DOWN|Z_ATMOS_IN_UP|Z_ATMOS_OUT_DOWN|Z_ATMOS_OUT_UP | Z_MIMIC_BELOW|Z_MIMIC_OVERWRITE|Z_MIMIC_NO_AO
 

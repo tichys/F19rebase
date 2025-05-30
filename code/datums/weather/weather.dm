@@ -52,8 +52,6 @@
 	/// Area overlay while weather is ending
 	var/end_overlay
 
-	/// Types of area to affect
-	var/area_type = /area/space
 	/// The list of z-levels that this weather is actively affecting
 	var/list/impacted_z_levels
 
@@ -77,7 +75,7 @@
 	/// Weight amongst other eligible weather. If zero, will never happen randomly.
 	var/probability = 0
 	/// The z-level trait to affect when run randomly or when not overridden.
-	var/target_trait = ZTRAIT_STATION
+	var/target_trait = ZTRAIT_PLANETARY_ENVIRONMENT
 
 	/// Whether a barometer can predict when the weather will happen
 	var/barometer_predictable = FALSE
@@ -138,8 +136,6 @@
 			perpetual = overrides["perpetual"]
 		if("barometer_predictable" in overrides)
 			barometer_predictable = overrides["barometer_predictable"]
-		if("area_type" in overrides)
-			area_type = overrides["area_type"]
 		if("aesthetic" in overrides)
 			aesthetic = overrides["aesthetic"]
 
@@ -156,6 +152,7 @@
 	if(stage == STARTUP_STAGE)
 		return
 
+	message_admins(span_adminnotice("A storm of type []"))
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_TELEGRAPH(type))
 	stage = STARTUP_STAGE
 
@@ -254,7 +251,7 @@
 		return
 
 	// Check if this turf is covered by weather (turf-based coverage system)
-	if(!weather_chunking.turf_chunks[weather_chunking.get_turf_chunk_key(mob_turf)])
+	if(!SSweather.weather_chunking.turf_chunks[SSweather.weather_chunking.get_turf_chunk_key(mob_turf)])
 		return
 
 	// Immunity checks for mob
@@ -282,10 +279,10 @@
 /datum/weather/proc/update_turf_overlays()
 	var/list/new_overlay_cache = generate_overlay_cache()
 
-	var/list/chunk_keys = weather_chunking.get_all_turf_chunk_keys()
+	var/list/chunk_keys = SSweather.weather_chunking.get_all_turf_chunk_keys()
 
 	for(var/key in chunk_keys)
-		var/list/turfs = weather_chunking.get_turfs_in_chunks(list(key))
+		var/list/turfs = SSweather.weather_chunking.get_turfs_in_chunks(list(key))
 		for(var/turf/T in turfs)
 			if(!isturf(T))
 				continue

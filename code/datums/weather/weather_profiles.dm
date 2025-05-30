@@ -99,16 +99,15 @@
 		base_temperature = T20C // Fallback to default if not specified or invalid
 
 /datum/weather/profile/proc/apply_environment_settings()
-	message_admins(span_adminnotice("Weather Profile: Entering apply_environment_settings for profile: [name]."))
 	// TD: Implement how primary_wind_direction from the profile should influence the environment globally.
 
 	var/is_night = FALSE // TD: Implement proper check for night/day based on world.timeofday or similar.
 	// Example: if(world.timeofday >= NIGHT_START_TIME || world.timeofday < DAY_START_TIME) is_night = TRUE
 
-	message_admins(span_adminnotice("Weather Profile: Starting turf iteration in apply_environment_settings."))
-	var/list/chunk_keys = weather_chunking.get_all_turf_chunk_keys()
+	var/list/chunk_keys = SSweather.weather_chunking.get_all_turf_chunk_keys()
 	for(var/key in chunk_keys)
-		for(var/turf/T in turfs)
+		var/list/turfs_in_chunk = SSweather.weather_chunking.get_turfs_in_chunks(list(key))
+		for(var/turf/T in turfs_in_chunk)
 			if(!isturf(T))
 				continue
 
@@ -133,8 +132,8 @@
 	pressure_type = LOW_PRESSURE
 	night_temp_reduction = 8.0
 	minimum_temperature = 268.15 // -5C
-	allowed_weather_effects = list(WEATHER_WINDGUST)
-	allowed_storms = list()
+	allowed_weather_effects = list(WEATHER_LIGHTNING_STRIKE, WEATHER_WINDGUST)
+	allowed_storms = list(/datum/weather/rain_storm, /datum/weather/snow_storm)
 	weather_tag_whitelist = list("coastal", "stormy")
 
 	flavor_smells_short = list("salt air", "ocean spray", "seaweed", "briny wind", "stormy sea")
@@ -150,7 +149,7 @@
 	//We can't put non-constants in the define, so we'll do it here.
 	primary_wind_direction = pick(NORTH, NORTHWEST)
 
-#define FOGGY_BANKS /datum/weather/profile/foggybanks
+#define FOGGY_BANKS /datum/weather/profile/foggybank
 
 /datum/weather/profile/foggybank
 	name = "Foggy Bank Drifts"
@@ -160,8 +159,8 @@
 	pressure_type = MEDIUM_PRESSURE
 	night_temp_reduction = 3.0
 	minimum_temperature = 280.15 // 7C
-	allowed_weather_effects = list() //Fog My beloved??
-	allowed_storms = list()
+	allowed_weather_effects = list(WEATHER_LIGHTNING_STRIKE, WEATHER_WINDGUST)  //Fog My beloved??
+	allowed_storms = list(/datum/weather/rain_storm, /datum/weather/snow_storm)
 	weather_tag_whitelist = list("coastal", "foggy")
 	flavor_smells_short = list("salt air", "oil fumes", "wet rust", "damp concrete", "wet grease")
 	flavor_smells_long = list(
@@ -181,8 +180,8 @@
 	pressure_type = LOW_PRESSURE
 	night_temp_reduction = 10.0
 	minimum_temperature = 261 //-12C
-	allowed_weather_effects = list(WEATHER_WINDGUST)
-	allowed_storms = list()
+	allowed_weather_effects = list(WEATHER_LIGHTNING_STRIKE, WEATHER_WINDGUST)
+	allowed_storms = list(/datum/weather/rain_storm, /datum/weather/snow_storm)
 	weather_tag_whitelist = list("windy", "cold", "freezing")
 	flavor_smells_short = list("frostbitten steel", "cold ozone", "dry salt", "windburn", "crackling static")
 	flavor_smells_long = list(
@@ -199,8 +198,8 @@
 	desc = "Thick rain and industrial smells mix during this unusual low-pressure event."
 	base_temperature_type = TEMP_MEDIUM
 	pressure_type = LOW_PRESSURE
-	allowed_weather_effects = list()
-	allowed_storms = list()
+	allowed_weather_effects = list(WEATHER_LIGHTNING_STRIKE, WEATHER_WINDGUST)
+	allowed_storms = list(/datum/weather/rain_storm, /datum/weather/snow_storm)
 	weather_tag_whitelist = list("rain", "storm", "industrial")
 	flavor_smells_short = list("diesel", "ozone", "burnt plastic", "wet steel", "hot asphalt")
 	flavor_smells_long = list(
@@ -217,7 +216,7 @@
 
 /// --- General Weather Profiles ---
 
-#define HEAT_HAZE /datum/weather/profile/hatehaze
+#define HEAT_HAZE /datum/weather/profile/heathaze
 
 /datum/weather/profile/heathaze
 	name = "Heat Haze"
@@ -226,8 +225,8 @@
 	pressure_type = HIGH_PRESSURE
 	night_temp_reduction = 2.0
 	minimum_temperature = 290.15 //17C
-	allowed_weather_effects = list()
-	allowed_storms = list()
+	allowed_weather_effects = list(WEATHER_LIGHTNING_STRIKE, WEATHER_WINDGUST)
+	allowed_storms = list(/datum/weather/rain_storm, /datum/weather/snow_storm) // Allow the generic weather type (targets ZTRAIT_STATION by default)
 	flavor_smells_short = list("dry earth", "hot air", "something burning")
 	flavor_smells_long = list(
 		"You catch the acrid scent of something distant.. maybe burning.",
@@ -244,13 +243,13 @@
 #define CLEAR_SKIES /datum/weather/profile/clearskies
 
 /datum/weather/profile/clearskies
-	name = "Clear Skies"
-	desc = "A rare and pleasant weather pattern that brings clear skies and calm conditions."
+	name = "Clear Skies (Test Profile)"
+	desc = "A rare and pleasant weather pattern that brings clear skies and calm conditions. Modified for testing lightning."
 	base_temperature_type = TEMP_MEDIUM
 	primary_wind_direction = SOUTHWEST
-	pressure_type = HIGH_PRESSURE // Changed "High" to HIGH_PRESSURE define
-	allowed_weather_effects = list()
-	allowed_storms = list()
+	pressure_type = HIGH_PRESSURE
+	allowed_weather_effects = list(WEATHER_LIGHTNING_STRIKE, WEATHER_WINDGUST)  // Allow lightning for testing
+	allowed_storms = list(/datum/weather/rain_storm, /datum/weather/snow_storm) // Allow the generic weather type (targets ZTRAIT_STATION by default)
 	flavor_smells_short = list("fresh air", "sun-warmed air", "a gentle light scent")
 	flavor_smells_long = list(
 		"The air smells clear and crisp, like a spring morning.",
@@ -258,7 +257,7 @@
 		"The breeze carries the scent of fresh air, and a hint of distant greenery."
 	)
 
-#define MONSOON /datum/weather/profile/eqmonsoon
+#define MONSOON /datum/weather/profile/equatorialmonsoon
 
 /datum/weather/profile/equatorialmonsoon
 	name = "Equatorial Monsoon"
@@ -266,5 +265,5 @@
 	base_temperature_type = TEMP_HIGH
 	primary_wind_direction = SOUTH
 	pressure_type = LOW_PRESSURE
-	allowed_weather_effects = list() //Fog?
-	allowed_storms = list()
+	allowed_weather_effects = list(WEATHER_LIGHTNING_STRIKE, WEATHER_WINDGUST) //Fog?
+	allowed_storms = list(/datum/weather/rain_storm, /datum/weather/snow_storm)

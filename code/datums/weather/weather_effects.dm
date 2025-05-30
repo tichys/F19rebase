@@ -42,8 +42,7 @@
 ///Called when an objects area moves from outdoors to indoors
 #define COMSIG_OUTDOOR_ATOM_REMOVED "outdoor_object_removed"
 
-///Chunking system Reference
-var/datum/weather/chunking/weather_chunking = new
+// Chunking system Reference - now accessed via SSweather.weather_chunking
 
 // End of Defines - - -
 
@@ -63,30 +62,6 @@ var/datum/weather/chunking/weather_chunking = new
 /datum/weather/effect/New()
 	..()
 	src.severity = SSweather.current_profile.severity
-	RegisterSignal(COMSIG_OUTDOOR_ATOM_ADDED, PROC_REF(outdoor_atom_added))
-	RegisterSignal(COMSIG_OUTDOOR_ATOM_REMOVED, PROC_REF(outdoor_atom_removed))
-	RegisterSignal(COMSIG_MOVABLE_MOVED, PROC_REF(outdoor_atom_moved))
-
-/datum/weather/effect/proc/outdoor_atom_added(atom/movable/A)
-	if(!A) //How did it get moved here if it was anchored? I don't know.
-		return
-
-	weather_chunking.register(A)
-	A.needs_weather_update = TRUE
-
-/datum/weather/effect/proc/outdoor_atom_removed(atom/movable/A)
-	if(!A)
-		return
-
-	weather_chunking.unregister(A)
-
-//Used for chunking to determine if an atom entered a new chunk.
-/datum/weather/effect/proc/outdoor_atom_moved(atom/movable/A)
-	if(!A)
-		return
-
-	weather_chunking.update_atom_location(A)
-
 
 //Determines if a mob has protection (of a protection_flag type), if it does the child procs which called us will stop.
 /datum/weather/effect/proc/apply_effect(mob/living/L, obj/O, protection_flag)
@@ -126,8 +101,6 @@ var/datum/weather/chunking/weather_chunking = new
 /datum/weather/effect/wind_gust
 	name = "Wind Gusts"
 	cooldown_max = 70 //7 Seconds
-	affects_objects = TRUE
-	affects_mobs = TRUE
 
 /datum/weather/effect/wind_gust/New()
 	..()
@@ -135,99 +108,23 @@ var/datum/weather/chunking/weather_chunking = new
 
 //Applying the Wind Gust effect to mobs/in view objects (Thespic)
 
-/datum/weather/effect/wind_gust/apply_to_mobs(list/mobs_to_affect)
-	var/direction = wind_direction // Assuming wind_direction is available in wind_gust
-	for(var/mob/living/L in mobs_to_affect)
-		//Playing the sounds first, incase there's any delay.
-		var/list/wind_sounds = list(
-			"sound/ambience/wind_gust_light1.ogg",
-			"sound/ambience/wind_gust_light2.ogg",
-			"sound/ambience/wind_gust_heavy1.ogg"
-		)
-
-		var/sound_path = pick(wind_sounds)
-		var/volume = rand(30, 50) //Rand volume for *Flavor*
-
-		playsound(L, sound_path, volume)
-
-		if(src.apply_effect(L, CLOTHING_WINDPROOF)) //We take different arguments than apply_effect, so it's not our parent, and we need to call it manually.
-			continue //If the player has full protection, don't apply the effect, otherwise continue.
-
-		//Moving the player in the wind direction gently if severity is high enough.
-		if(severity > 1)
-			L.forceMove(get_step(L, direction))
-		if(L.mob_size < MOB_SIZE_HUMAN) //Small and Tiny mobs || I'd like to also check weight preference set by players, but I don't know the var for that.
-			L.throw_at(get_step_away(L, direction), force = 5 * severity) // Comically strong wind if you are Tiny.
-
-		to_chat(L, span_warning("A strong gust of wind pushes you!"))
-
-		//Speed boost/reduction based on wind direction
-		var/wind_alignment = get_wind_alignment(L, direction)
-		var/datum/movespeed_modifier/mm = 0 //I ran out of variable names, okay??
-
-		switch(wind_alignment)
-			if(WIND_ALIGNMENT_TAILWIND) //Wind at back
-				mm = 0.2 // 20% boost
-			if(WIND_ALIGNMENT_HEADWIND) //Wind in face
-				mm = -0.1 // 10% reduction
-
-		if(mm != 0)
-			L.add_movespeed_modifier(mm)
-			//Revert the speed change after 3 seconds, we don't want it to be too beneficial or too crippling.
-			addtimer(CALLBACK(src, /datum/weather/effect/wind_gust/proc/remove_speed, L, mm), 30)
-
-/datum/weather/effect/wind_gust/apply_to_objects(list/objects_to_affect)
-	var/direction = wind_direction // Assuming wind_direction is available in wind_gust
-	for(var/obj/nearby_object in objects_to_affect)
-		if(nearby_object.anchored) //Wind gusts can't move anchored objects
-			continue
-
-		var/obj/item/I = nearby_object
-		if(istype(I, /obj/item))
-			if(HAS_TRAIT(I, TRAIT_NODROP)) //We don't want to accidentally move items that are not supposed to be moved.
-				continue
-
-		if(nearby_object.w_class < WEIGHT_CLASS_NORMAL) //Weight class small/tiny for objects.
-			nearby_object.throw_at(get_step_away(nearby_object, direction), force = 3 * severity)
-			nearby_object.visible_message(span_warning("The wind pushes the [nearby_object.name] away!")) // Changed to visible_message for objects
-
-		else if((nearby_object.w_class > WEIGHT_CLASS_NORMAL) && (nearby_object.w_class < WEIGHT_CLASS_GIGANTIC)) //Normal to Huge, ignoring Gigantic
-			var/probability = 25 * severity //Adjust probability of moving larger objects based on severity.
-			if(prob(probability))
-				nearby_object.throw_at(get_step_away(nearby_object, direction), force = 2 * severity)
-				nearby_object.visible_message(span_warning("The intense wind displaces the [nearby_object.name]!")) // Changed to visible_message for objects
 
 //Applying the wind gust effect independent of players, mostly for objects.
 
 /datum/weather/effect/wind_gust/apply_global_effect()
 	var/datum/weather/storm/current_storm
-	if(SSweather.processing.len) // Check if there's at least one active storm
-		current_storm = SSweather.processing[1] // Use the first active storm as the "single current active storm"
+	if(SSweather.processing.len)
+		current_storm = SSweather.processing[1]
 	if(!current_storm)
 		return
 
-	var/dir = pick(NORTH, SOUTH, EAST, WEST) // Define 'dir' for global effect
+	var/dir = pick(NORTH, SOUTH, EAST, WEST)
 
-	var/list/outdoor_objects = weather_chunking.get_objects_in_chunks_around_storm(current_storm)
-	for(var/obj/O in outdoor_objects)
-		if(!O)
-			continue
+	var/list/outdoor_mobs = SSweather.weather_chunking.get_mobs_in_chunks_around_storm(current_storm)
+	var/list/outdoor_objects = SSweather.weather_chunking.get_objects_in_chunks_around_storm(current_storm)
 
-		if(O.anchored || HAS_TRAIT(O, TRAIT_NODROP)) //No moving anchored objects/yucky nodrop items.
-			continue
-
-		if(O.w_class < WEIGHT_CLASS_NORMAL) //Weight class determinations same as before, see player dependent object interactions for clarification.
-			O.throw_at(get_step_away(O, dir), force = 3 * severity)
-			O.visible_message(span_warning("The wind pushes the [O.name] away!"))
-
-		else if((O.w_class > WEIGHT_CLASS_NORMAL) && (O.w_class < WEIGHT_CLASS_GIGANTIC))
-			var/probability = 25 * severity
-			if(prob(probability))
-				O.throw_at(get_step_away(O, dir), force = 2 * severity)
-				O.visible_message(span_warning("The intense wind displaces the [O.name]!"))
-
-			else if(O.w_class >= WEIGHT_CLASS_GIGANTIC) //Gigantic objects unaffected by gusts.
-				continue
+	process_wind_gust_mobs(outdoor_mobs, dir)
+	process_wind_gust_objects(outdoor_objects, dir)
 
 //25% chance per weather_act to switch the wind direction.
 /datum/weather/effect/wind_gust/proc/update_wind_direction()
@@ -248,6 +145,77 @@ var/datum/weather/chunking/weather_chunking = new
 // Helper to remove wind speed modifier after a few seconds.
 /datum/weather/effect/wind_gust/proc/remove_speed(mob/living/L, datum/movespeed_modifier/mm)
 	L.remove_movespeed_modifier(mm)
+
+///Wind Gust logic for objects
+/datum/weather/effect/wind_gust/proc/process_wind_gust_objects(list/objects_list, direction)
+	if(!objects_list)
+		return
+
+	for(var/obj/O in objects_list)
+		if(!O)
+			continue
+
+		if(O.anchored || HAS_TRAIT(O, TRAIT_NODROP))
+			continue
+
+		if(O.w_class < WEIGHT_CLASS_NORMAL)
+			O.throw_at(get_step_away(O, direction), force = 3 * severity)
+			O.visible_message(span_warning("The wind pushes the [O.name] away!"))
+
+		else if((O.w_class > WEIGHT_CLASS_NORMAL) && (O.w_class < WEIGHT_CLASS_GIGANTIC))
+			var/probability = 25 * severity
+			if(prob(probability))
+				O.throw_at(get_step_away(O, direction), force = 2 * severity)
+				O.visible_message(span_warning("The intense wind displaces the [O.name]!"))
+
+		else if(O.w_class >= WEIGHT_CLASS_GIGANTIC)
+			continue
+
+///Wind Gust logic for mobs
+/datum/weather/effect/wind_gust/proc/process_wind_gust_mobs(list/mobs_list, direction)
+	if(!mobs_list)
+		return
+
+	for(var/mob/living/L in mobs_list)
+		if(!L)
+			continue
+
+		//Playing the sounds first, incase there's any delay.
+		var/list/wind_sounds = list(
+			"sound/ambience/wind_gust_light1.ogg",
+			"sound/ambience/wind_gust_light2.ogg",
+			"sound/ambience/wind_gust_heavy1.ogg"
+		)
+
+		var/sound_path = pick(wind_sounds)
+		var/volume = rand(30, 50) //Rand volume for *Flavor*
+
+		playsound(L, sound_path, volume)
+
+		if(src.apply_effect(L, null, CLOTHING_WINDPROOF)) // Pass null for obj, as this is a mob effect
+			continue
+
+		//Moving the player in the wind direction gently if severity is high enough.
+		if(severity > 1)
+			L.forceMove(get_step(L, direction))
+		if(L.mob_size < MOB_SIZE_HUMAN)
+			L.throw_at(get_step_away(L, direction), force = 5 * severity)
+
+		to_chat(L, span_warning("A strong gust of wind pushes you!"))
+
+		//Speed boost/reduction based on wind direction
+		var/wind_alignment = get_wind_alignment(L, direction)
+		var/datum/movespeed_modifier/mm = 0
+
+		switch(wind_alignment)
+			if(WIND_ALIGNMENT_TAILWIND)
+				mm = 0.2
+			if(WIND_ALIGNMENT_HEADWIND)
+				mm = -0.1
+
+		if(mm != 0)
+			L.add_movespeed_modifier(mm)
+			addtimer(CALLBACK(src, /datum/weather/effect/wind_gust/proc/remove_speed, L, mm), 30)
 
 
 /*--- Lightning Strike Effect --- Rumble Rumble Crash!
@@ -277,26 +245,28 @@ var/datum/weather/chunking/weather_chunking = new
 /datum/weather/effect/lightning_strike/New()
 	..()
 
-/datum/weather/effect/lightning_strike/apply_to_mobs(list/mobs_to_affect)
-	for(var/mob/living/L in mobs_to_affect)
-		if(src.apply_effect(L, CLOTHING_LIGHTNINGPROOF))
-			continue
+/datum/weather/effect/lightning_strike/proc/apply_single_mob_lightning_effect(mob/living/L, protection_flag)
+	if(!L)
+		return
+	if(src.apply_effect(L, null, protection_flag)) // Pass null for obj, as this is a mob effect
+		return
 
-		// Apply direct lightning effect to the mob
-		L.take_damage(rand(20, 50) * severity, BURN, FIRE, 0)
-		var/turf/strike_turf = get_turf(L)
-		strike_turf.visible_message(span_warning("A jolt of lightning strikes [L.name]!"))
-		to_chat(L, span_warning("You feel an intense shock as lightning courses through you, overhwhelming your senses!"))
-		L.emote("scream")
-		L.Stun(4, TRUE)
-		ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_lightning")
-		addtimer(CALLBACK(L, PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_lightning"), 3)
-		// Did you know that ___TraitRemove exists *Specifically* for callbacks? I sure didn't.
+	L.take_damage(rand(20, 50) * severity, BURN, FIRE, 0)
+	var/turf/strike_turf = get_turf(L)
+	strike_turf.visible_message(span_warning("A jolt of lightning strikes [L.name]!"))
+	to_chat(L, span_warning("You feel an intense shock as lightning courses through you, overhwhelming your senses!"))
+	L.emote("scream")
+	L.Stun(4, TRUE)
+	ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_lightning")
+	addtimer(CALLBACK(L, GLOBAL_PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_lightning"), 3)
 
-/datum/weather/effect/lightning_strike/apply_to_objects(list/objects_to_affect)
-	for(var/obj/O in objects_to_affect)
+/datum/weather/effect/lightning_strike/proc/process_lightning_struck_objects(list/objects_list)
+	if(!objects_list)
+		return
+
+	for(var/obj/O in objects_list)
 		if(O.resistance_flags & FLAMMABLE)
-			O.fire_act(2000, 50, get_turf(O))
+			ignite_object(O)
 		if(istype(O, /obj/machinery))
 			short_machine(O)
 
@@ -305,24 +275,14 @@ var/datum/weather/chunking/weather_chunking = new
 	//Presumably fairly light *TURF SELECTION* process, but can be improved later if needed.
 
 	var/list/strike_candidates = list()
-	var/list/exposed_turfs = weather_chunking.turf_chunks
-	if(!exposed_turfs || exposed_turfs.len == 0)
+	var/list/all_exposed_turfs = SSweather.weather_chunking.get_turfs_in_chunks(SSweather.weather_chunking.get_all_turf_chunk_keys())
+	if(!all_exposed_turfs || all_exposed_turfs.len == 0)
 		return
 
-	// Try to collect valid strike targets (up to 10)
-	if(exposed_turfs.len < 10)
-		var/attempts = 0
-		var/max_attempts = 10
-		while(attempts++ < max_attempts && strike_candidates.len < 10)
-			var/turf/candidate = pick(exposed_turfs)
-			strike_candidates += candidate  // Use += instead of |=
-	else
-		var/max_candidates = 15  // Cap at a reasonable number
-		for(var/turf/T in exposed_turfs)
-			if(strike_candidates.len >= max_candidates)
-				break  // Exit once we have enough candidates
-			if(is_valid_lightning_target(T))
-				strike_candidates += T  // Use += instead of |=
+	// Collect all valid strike targets
+	for(var/turf/T in all_exposed_turfs)
+		if(is_valid_lightning_target(T))
+			strike_candidates += T
 
 	if(strike_candidates.len == 0)
 		return
@@ -349,6 +309,8 @@ var/datum/weather/chunking/weather_chunking = new
 // You can add your own criteria for validity here if for some ungodly reason being outside and not null isn't enough for you.
 /datum/weather/effect/lightning_strike/proc/is_valid_lightning_target(turf/T)
 	if(!T)
+		return FALSE
+	if(!SSweather.eligible_zlevels["[T.z]"]) // Ensure turf's Z-level is eligible for weather
 		return FALSE
 	// Additional checks can be added here if needed, e.g., if the turf is a specific type
 	return TRUE
@@ -394,13 +356,16 @@ var/datum/weather/chunking/weather_chunking = new
 
 		if(weight > highest_weight)
 			highest_weight = weight
-			highest_weight_obj = 0
+			highest_weight_obj = O
 
 		for(var/i = 1, i <= weight, i++) //Adds the object to the list multiple times depending on its weight (Conductivity)
 			weighted_targets += O
 
 	if(!weighted_targets.len) //If no objects with conductivity > 0, we just pick a random target from original list.
-		return pick(targets)
+		if(!targets.len) // If original targets list is also empty, return an empty list
+			message_admins(span_adminnotice("Weather System: build_multistrike_list: Both weighted_targets and original targets list are empty. This should not usually happen!"))
+			return list()
+		return list(pick(targets)) // Ensure a list is always returned
 
 	//Single Strike argument: If for some reason you just want to hit that One Fucking Bird.
 	if(single_strike_only)
@@ -412,12 +377,12 @@ var/datum/weather/chunking/weather_chunking = new
 	//Building unique targets, so we don't get duplicates from the weighting.
 	for(var/obj/O in weighted_targets)
 		if(O && !(O in unique_targets))
-			unique_targets += 0
+			unique_targets += O
 
 	//Rolling for each unique conductive object, to see if it will get struck.
 	for(var/obj/O in unique_targets)
 		if(prob(percent_chance))
-			objects_struck += 0
+			objects_struck += O
 
 	//If nothing passes the roll, just strike the highest weighted one.
 	if(!objects_struck.len && highest_weight_obj)
@@ -470,12 +435,9 @@ var/datum/weather/chunking/weather_chunking = new
 		return
 
 	//Lightning flash logic goes here.
-	T.set_light(l_power = 10, l_color = "#FFFFFF") // Brief bright white flash at the strike location
-	addtimer(CALLBACK(T, TYPE_PROC_REF(/atom, set_light), null, null, null, null, FALSE), 2) // Turn off light after 2 deciseconds
+	T.set_light(l_power = 100, l_color = "#FFFFFF") // Brief bright white flash at the strike location
+	addtimer(CALLBACK(T, TYPE_PROC_REF(/atom, set_light), 0, null, null, null, FALSE), 10) // Turn off light after 10 deciseconds
 	// I hate addtimer so Unspeakably much, why are you making me do this???
-
-	// Pre-strike rumble/buildup - plays a low volume distant lightning sound
-	playsound(T, "sound/weather/lightning_strike_far.ogg", 10, TRUE)
 
 	var/list/sound_profiles = list(
 		list("max_dist" = 10, "sound" = "sound/weather/lightning_strike_close.ogg", "volume" = 70),
@@ -485,15 +447,16 @@ var/datum/weather/chunking/weather_chunking = new
 
 	var/list/already_heard = list() //List of players who have already heard the sound, so we don't spam them.
 
-	for(var/mob/living/L in GLOB.player_list)
-		if((!L.client) || (L in already_heard)) //Ignore clientless mobs, and players who already heard it.
+	for(var/client/C in GLOB.clients)
+		var/mob/M = C.mob
+		if(!M || (M in already_heard)) // Ignore clientless mobs or mobs who already heard it.
 			continue
 
-		var/hearing_range = get_dist(T, L)
+		var/hearing_range = get_dist(T, M)
 
 		for(var/profile_map in sound_profiles)
 			if(hearing_range <= profile_map["max_dist"])
-				var/strike_turf = get_turf(L)
+				var/strike_turf = get_turf(M)
 
 				if(hearing_range <= 5)
 					//Close: Lets play the sound immediately
@@ -502,80 +465,169 @@ var/datum/weather/chunking/weather_chunking = new
 					//Mid/Far, lets delay for realism
 					var/pitch = rand(90, 110) / 100 // .9 to 1.1 pitch variation
 					var/delay = hearing_range * 3 // Calculate delay based on distance (3 deciseconds per tile)
-					addtimer(CALLBACK(null, PROC_REF(playsound), list(get_turf(L), profile_map["sound"], profile_map["volume"], TRUE, pitch)), delay) // "Cause Light travels faster than sound!"
+					addtimer(CALLBACK(null, PROC_REF(playsound), list(get_turf(M), profile_map["sound"], profile_map["volume"], TRUE, 44100 * pitch)), delay) // "Cause Light travels faster than sound!"
 
-				already_heard += L //Add the player to the already heard list.
+				already_heard += M //Add the mob to the already heard list.
 				break //break out of the loop, since we found a match.
 
 	//Affecting randomly struck mobs on a picked turf.
 	for(var/mob/living/L in T.contents)
-		L.take_damage(rand(20, 50) * severity, BURN, FIRE, 0) //This can get out of hand quickly if the severity increases.
-		var/turf/strike_turf = get_turf(L)
-		strike_turf.visible_message(span_warning("A jolt of lightning strikes [L.name]!"))
-		to_chat(L, span_warning("You feel an intense shock as lightning courses through you, overhwhelming your senses!"))
-		L.emote("scream")
-		L.Stun(4, TRUE) //You just got hit by lightning, shake it off..
-		ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_lightning")
-		addtimer(CALLBACK(L, PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_lightning"), 3) // Unblur eyes after 3 seconds
+		apply_single_mob_lightning_effect(L, CLOTHING_LIGHTNINGPROOF)
 
 	// Getting all nearby atoms from surrounding chunks
-	var/list/nearby_atoms = weather_chunking.get_nearby_atoms(T, 1)
+	var/list/nearby_atoms = SSweather.weather_chunking.get_nearby_atoms(T, 1)
 
 	var/list/nearby_objs = list()
 	for(var/atom/A in nearby_atoms)
 		if(istype(A, /obj))
 			nearby_objs += A
 
+	// NEW LOGIC: If no objects found via chunking, fallback to all objects on the turf and adjacent turfs
+	if(!nearby_objs.len)
+		message_admins(span_adminnotice("DEBUG: strike_turf: No objects found via chunking. Falling back to direct turf contents for lightning strike."))
+		for(var/atom/A in T.contents)
+			if(istype(A, /obj) && !(A in nearby_objs))
+				nearby_objs += A
+		for(var/direction in list(NORTH, SOUTH, EAST, WEST)) // Get adjacent turfs in cardinal directions
+			var/turf/adjacent_turf = get_step(T, direction)
+			if(!adjacent_turf)
+				continue
+			for(var/atom/A in adjacent_turf.contents)
+				if(istype(A, /obj) && !(A in nearby_objs))
+					nearby_objs += A
+
+	message_admins(span_adminnotice("DEBUG: nearby_atoms count: [nearby_atoms.len]. nearby_objs count (after fallback): [nearby_objs.len]."))
+
 	var/list/targets_to_strike = build_multistrike_list(nearby_objs, 50) //We have the nearby objs, lets check to see if any of them are conductive/high, etc.
 
 	if(targets_to_strike && targets_to_strike.len)
-		for(var/obj/O in targets_to_strike)
-			if(O.resistance_flags & FLAMMABLE)
-				ignite_object(O)
-			if(istype(O, /obj/machinery))
-				short_machine(O)
+		process_lightning_struck_objects(targets_to_strike)
 
 	if(prob(40 + (severity * 10))) //40% chance the strike produces a *Gentle* impact, ideally knocking things/equipment around.
 		explosion(T, light_impact_range = 3, flame_range = 1, flash_range = 2)
 
+
 /// --- Admin Utilities --- For both testing/debugging and the... Other Things... admins get up to..
+
+GLOBAL_LIST_INIT(weather_debug_verbs, list(
+	// These verbs are hidden by default and shown by toggle_weather_debug_verbs
+	/client/proc/lightning_strike_test,
+	/client/proc/toggle_weather_coverage_debug_messages,
+	/client/proc/debug_all_weather_effects
+))
+GLOBAL_PROTECT(weather_debug_verbs)
+
+/client/proc/toggle_weather_debug_verbs()
+	set category = "Debug"
+	set name = "Toggle Weather Debug Verbs"
+	set desc = "Toggles the visibility of weather-related debug verbs."
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if(verbs.Find(/client/proc/lightning_strike_test)) // Check if any weather verb is currently visible
+		remove_verb(src, GLOB.weather_debug_verbs)
+		to_chat(usr, span_interface("Weather debug verbs hidden."))
+	else
+		add_verb(src, GLOB.weather_debug_verbs)
+		to_chat(usr, span_interface("Weather debug verbs shown."))
+
+/client/proc/debug_all_weather_effects()
+	set name = "Enable All Weather Effects"
+	set category = "Debug"
+	set desc = "Enables all known weather effects regardless of the active weather profile."
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if(!SSweather)
+		to_chat(usr, span_warning("Weather subsystem not found."), confidential = TRUE)
+		return
+
+	// Clear existing weather effects
+	for(var/datum/weather/current_storm in SSweather.processing)
+		qdel(current_storm)
+	SSweather.processing.Cut()
+
+	var/list/enabled_effects = list()
+	for(var/effect_type in subtypesof(/datum/weather/effect))
+		var/datum/weather/effect/new_effect = new effect_type()
+		SSweather.processing += new_effect
+		enabled_effects += new_effect.name
+
+	to_chat(usr, span_notice("All weather effects enabled: [enabled_effects.Join(", ")]"), confidential = TRUE)
+	log_admin("[key_name(usr)] enabled all weather effects: [enabled_effects.Join(", ")]")
+	message_admins("[key_name_admin(usr)] enabled all weather effects: [enabled_effects.Join(", ")]")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Enable All Weather Effects")
 
 /client/proc/lightning_strike_test()
 	set category = "Debug"
 	set name = "Test Lightning Strike"
 	set desc = "Triggers a lightning strike at a selected turf."
 
-	var/turf/target_turf = input("Select a turf to strike (cancel for random):", "Lightning Strike Test") as turf
+	message_admins(span_adminnotice("DEBUG: lightning_strike_test verb called by [usr.key]"))
+	to_chat(usr, "DEBUG: Initiating lightning strike test.")
 
 	var/datum/weather/effect/lightning_strike/L = new // Instantiate once
+	var/turf/target_turf = null // Initialize to null, as there's no input
 
-	if(!target_turf)
-		var/list/strike_candidates = list()
-		var/list/exposed_turfs = weather_chunking.turf_chunks
-		if(exposed_turfs && exposed_turfs.len > 0)
-			// Try to collect valid strike targets (up to 10)
-			if(exposed_turfs.len < 10)
-				var/attempts = 0
-				var/max_attempts = 10
-				while(attempts++ < max_attempts && strike_candidates.len < 10)
-					var/turf/candidate = pick(exposed_turfs)
-					if(L.is_valid_lightning_target(candidate)) // Use the instantiated L's proc
-						strike_candidates += candidate
-			else
-				var/max_candidates = 15
-				for(var/turf/T in exposed_turfs)
-					if(strike_candidates.len >= max_candidates)
-						break
-					if(L.is_valid_lightning_target(T)) // Use the instantiated L's proc
-						strike_candidates += T
+	// Always attempt random strike first
+	to_chat(usr, span_debug("Attempting to find a random exposed turf for lightning strike."))
+	message_admins(span_adminnotice("DEBUG: Attempting to find a random exposed turf for lightning strike."))
 
-		if(strike_candidates.len == 0)
-			to_chat(usr, "No valid turfs found for a random lightning strike.")
-			qdel(L) // Clean up the datum if no strike occurs
-			return
-		target_turf = pick(strike_candidates)
-		to_chat(usr, "No turf selected, striking a random turf: [target_turf].")
+	var/list/all_exposed_turfs = SSweather.weather_chunking.get_turfs_in_chunks(SSweather.weather_chunking.get_all_turf_chunk_keys())
 
-	L.strike_turf(target_turf)
-	to_chat(usr, "Lightning strike initiated at [target_turf].")
+	var/list/eligible_strike_candidates = list()
+	if(all_exposed_turfs.len > 0)
+		for(var/turf/T in all_exposed_turfs)
+			if(L.is_valid_lightning_target(T)) // Use the existing validity check
+				eligible_strike_candidates += T
+
+	if(eligible_strike_candidates.len > 0)
+		to_chat(usr, span_debug("Found [eligible_strike_candidates.len] eligible strike candidates."))
+		message_admins(span_adminnotice("DEBUG: Found [eligible_strike_candidates.len] eligible strike candidates."))
+		target_turf = pick(eligible_strike_candidates)
+		to_chat(usr, "Striking a random eligible turf: [target_turf].")
+		message_admins(span_adminnotice("DEBUG: Random eligible turf selected: [target_turf]."))
+	else
+		target_turf = get_turf(usr) // Fallback to user's turf if no eligible turfs found
+		to_chat(usr, "No eligible exposed turfs found. Striking your current turf: [target_turf]. Note: This turf may not be eligible for weather effects.")
+		message_admins(span_adminnotice("DEBUG: No eligible exposed turfs found. Striking user's turf: [target_turf]."))
+
+	if(target_turf)
+		var/list/eligible_z_keys = list()
+		if(SSweather.eligible_zlevels)
+			for(var/z_key in SSweather.eligible_zlevels)
+				eligible_z_keys += z_key
+		var/joined_keys = eligible_z_keys.len ? eligible_z_keys.Join(", ") : "None"
+		message_admins(span_adminnotice("DEBUG: Target turf Z-level: [target_turf.z]. Eligible Z-levels: [joined_keys]. Is target Z-level eligible? [SSweather.eligible_zlevels["[target_turf.z]"] ? "TRUE" : "FALSE"]."))
+
+		// --- Start of new logic to ensure objects for testing build_multistrike_list ---
+		var/list/test_nearby_atoms = SSweather.weather_chunking.get_nearby_atoms(target_turf, 1)
+		var/list/test_nearby_objs = list()
+		for(var/atom/A in test_nearby_atoms)
+			if(istype(A, /obj))
+				test_nearby_objs += A
+
+		var/obj/dummy_obj_for_test
+		if(!test_nearby_objs.len)
+			// If no objects are found, spawn a temporary dummy object for the test
+			dummy_obj_for_test = new /obj/item/stack/sheet/iron(target_turf) // Use a common, simple object
+			message_admins(span_adminnotice("DEBUG: Spawning dummy object [dummy_obj_for_test] at [target_turf] for lightning strike test."))
+		// --- End of new logic ---
+
+		L.strike_turf(target_turf)
+
+		// --- Clean up dummy object after strike ---
+		if(dummy_obj_for_test)
+			qdel(dummy_obj_for_test)
+			message_admins(span_adminnotice("DEBUG: Deleting dummy object [dummy_obj_for_test] after lightning strike test."))
+		// --- End of clean up ---
+
+		to_chat(usr, "Lightning strike initiated at [target_turf].")
+		message_admins(span_adminnotice("DEBUG: Lightning strike initiated at [target_turf]."))
+	else
+		to_chat(usr, "Could not determine a valid turf to strike.")
+		message_admins(span_adminnotice("DEBUG: Could not determine a valid turf to strike."))
+
 	qdel(L) // Clean up the datum after the strike

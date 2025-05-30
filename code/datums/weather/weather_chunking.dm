@@ -11,12 +11,40 @@
 
 	var/list/chunks = list()  /// Chunk keys and atoms contained, Ex. [4_6_1], [x_y_z]
 	var/list/turf_chunks = list() // Chunk keys and exposed turfs contained.
+	var/list/exposed_turfs = list() // Temporary cache used for initial registration with the chunking system.
 
-//Registering/Deregistering
+//Registering/Deregistering for atoms.
+
+/datum/weather/chunking/proc/Initialize()
+
+	RegisterSignal(src, COMSIG_OUTDOOR_ATOM_ADDED, PROC_REF(outdoor_atom_added))
+	RegisterSignal(src, COMSIG_OUTDOOR_ATOM_REMOVED, PROC_REF(outdoor_atom_removed))
+	RegisterSignal(src, COMSIG_MOVABLE_MOVED, PROC_REF(outdoor_atom_moved))
+
+/datum/weather/chunking/proc/outdoor_atom_added(atom/movable/A)
+	if(!A) //How did it get moved here if it was anchored? I don't know.
+		return
+
+	register(A)
+	A.needs_weather_update = TRUE
+
+/datum/weather/chunking/proc/outdoor_atom_removed(atom/movable/A)
+	if(!A)
+		return
+
+	unregister(A)
+
+//Used for chunking to determine if an atom entered a new chunk.
+/datum/weather/chunking/proc/outdoor_atom_moved(atom/movable/A)
+	if(!A)
+		return
+
+	SSweather.weather_chunking.update_atom_location(A)
+
+/// Actual Chunk handeling logic
 
 /datum/weather/chunking/proc/register(atom/movable/Q)
-	var/area/A = get_area(Q)
-	if(!Q || !A.outdoors) //We only want outdoor atoms and atoms that exist.
+	if(!Q) //We only want outdoor atoms and atoms that exist.
 		return
 	var/key = get_chunk_key(Q) //What's the key for this atoms location?
 	if(!(key in src.chunks)) //If the key doesn't exist, we create the list and mark it.
@@ -47,8 +75,7 @@
 //Utilities
 
 /datum/weather/chunking/proc/update_atom_location(atom/movable/Q) //Detecting when atom moves between chunks, unregisters old, registers new.
-	var/area/A = get_area(Q)
-	if(!Q || !A.outdoors)
+	if(!Q)
 		return
 
 	var/key_now = get_chunk_key(Q)
@@ -107,8 +134,7 @@
 //Weather coverage will handle init turf exposure determination, and then pass it here, chunking will handle distributing it to everyone else (Profiles, Effects, Subsystem, etc)
 
 /datum/weather/chunking/proc/register_exposed_turf(turf/T)
-	var/area/A = get_area(T)
-	if (!T || !T.z || !T.blocks_weather || !A.outdoors)
+	if (!T || !T.z)
 		return
 
 	var/key = get_turf_chunk_key(T)
@@ -159,13 +185,13 @@
 	if(!storm || !storm.impacted_z_levels || !islist(storm.impacted_z_levels) || !length(storm.impacted_z_levels) || !istype(storm.center_turf, /turf))
 		return
 
-	var/turf/center_turf_obj = storm.center_turf
-	var/start_z = center_turf_obj.z
+	if(!storm || !storm.impacted_z_levels || !islist(storm.impacted_z_levels) || !length(storm.impacted_z_levels) || !istype(storm.center_turf, /turf))
+		return
 
-	// Iterate from the storm's center Z-level downwards to 1
-	for(var/current_z = start_z to 1 step -1)
-		// Only consider this Z-level if it's one of the storm's eligible impacted_z_levels
-		if(!(current_z in storm.impacted_z_levels))
+	// Iterate through all impacted Z-levels specified by the storm
+	for(var/current_z in storm.impacted_z_levels)
+		// Ensure current_z is a valid number
+		if(!isnum(current_z))
 			continue
 
 		if(storm.radius_in_chunks == -1) // All-encompassing horizontally for this Z-level
