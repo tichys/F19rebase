@@ -5,12 +5,14 @@
 
 SUBSYSTEM_DEF(weather)
 	name = "Weather"
+	init_order = INIT_ORDER_WEATHER // Mostly to avoid SSmapping info issues
 	flags = SS_BACKGROUND
 	wait = 10
 	runlevels = RUNLEVEL_LOBBY | RUNLEVEL_SETUP | RUNLEVEL_GAME
 	var/list/processing = list()
 	var/list/eligible_zlevels = list()
 	var/list/next_hit_by_zlevel = list() //Used by barometers to know when the next storm is coming
+	var/list/relevant_z_levels_for_coverage = list() // Used to determine which Z-levels are eligible for weather coverage and effects.
 
 	///Referencing the current weather profile the profile system has suggested.
 	var/datum/weather/profile/current_profile
@@ -150,8 +152,11 @@ SUBSYSTEM_DEF(weather)
 		var/datum/weather/W = V
 		all_weather_traits |= initial(W.target_trait) // Collect all unique target traits
 
+	message_admins(span_adminnotice("Weather Subsystem Debug: all_weather_traits before loop: [all_weather_traits.len] entries. Values: [all_weather_traits.len ? all_weather_traits.Join(", ") : "None"]."))
 	for(var/trait in all_weather_traits)
 		var/list/z_levels_with_trait = SSmapping.levels_by_trait(trait)
+		//message_admins(span_adminnotice("Weather Subsystem Debug: SSmapping.levels_by_trait([trait]) returned: [z_levels_with_trait.len] entries. Values: [z_levels_with_trait.len ? z_levels_with_trait.Join(", ") : "None"]."))
+
 		if(!z_levels_with_trait || !z_levels_with_trait.len)
 			continue
 
@@ -171,7 +176,11 @@ SUBSYSTEM_DEF(weather)
 		if(current_group.len)
 			contiguous_z_groups += current_group
 
+		message_admins(span_adminnotice("Weather Subsystem Debug: contiguous_z_groups before loop: [contiguous_z_groups.len] entries. Values: [contiguous_z_groups.len ? contiguous_z_groups.Join(", ") : "None"]."))
 		for(var/list/z_group in contiguous_z_groups)
+			message_admins(span_adminnotice("Weather Subsystem Debug: Entered z_group loop for trait: [trait] and z_group: [z_group.Join(", ")]"))
+			if(SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+				message_admins(span_adminnotice("Weather Subsystem: Processing Z-group: [z_group.Join(", ")] for trait: [trait]"))
 			// Check if this group is already processing a storm or is scheduled for one
 			var/group_eligible = TRUE
 			for(var/z_level in z_group)
@@ -179,6 +188,8 @@ SUBSYSTEM_DEF(weather)
 					group_eligible = FALSE
 					break
 			if(!group_eligible)
+				if (SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+					message_admins(span_adminnotice("Weather Subsystem: Z-group [z_group.Join(", ")] not eligible for new storm because a timer exists for one or more levels. Current timers: [next_hit_by_zlevel.len ? next_hit_by_zlevel.Join(", ") : "None"]."))
 				continue
 
 			var/list/possible_weather_types_for_trait = list()
@@ -204,9 +215,13 @@ SUBSYSTEM_DEF(weather)
 				if(probability)
 					possible_weather_types_for_trait[W] = probability
 
+			if (SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+				message_admins(span_adminnotice("Weather Subsystem: Possible weather types for trait [trait] on Z-levels [z_group.Join(", ")]: [possible_weather_types_for_trait.len] types found."))
 			if(possible_weather_types_for_trait.len)
 				var/datum/weather/our_event_type = pick_weight(possible_weather_types_for_trait)
-				message_admins(span_adminnotice("Weather Subsystem: Picked unified storm: [initial(our_event_type.name)] for Z-levels: [z_group.Join(", ")] (Trait: [trait])"))
+				if (SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+					message_admins(span_adminnotice("Weather Subsystem: Picked unified storm: [initial(our_event_type.name)] for Z-levels: [z_group.Join(", ")] (Trait: [trait])"))
+					message_admins(span_adminnotice("Weather Subsystem: Attempting to run weather: [initial(our_event_type.name)] on Z-levels: [z_group.Join(", ")]"))
 				run_weather(our_event_type, z_group)
 
 				// Schedule the next unified weather event for these Z-levels
@@ -245,6 +260,7 @@ SUBSYSTEM_DEF(weather)
 			message_admins(span_adminnotice("Weather Subsystem: No valid weather profile found! Defaulting to no profile."))
 
 	// Populate eligible_zlevels based on weather types and map traits
+	// This block is kept for future random weather generation, but initial coverage will use a direct approach.
 	for(var/V in subtypesof(/datum/weather))
 		var/datum/weather/W = V
 		var/probability = initial(W.probability)
@@ -252,7 +268,7 @@ SUBSYSTEM_DEF(weather)
 		// Applying map-specific probability overrides first
 		var/datum/map_config/current_map_config = SSmapping.config
 		var/overrides = current_map_config.weather_overrides[V]
-		if((overrides && "probability") in overrides) //Do probability overrides specifically exist?
+		if((overrides && "probability") in overrides)
 			probability = overrides["probability"]
 
 		var/target_trait = initial(W.target_trait)
@@ -268,10 +284,23 @@ SUBSYSTEM_DEF(weather)
 				LAZYINITLIST(eligible_zlevels["[z]"])
 				eligible_zlevels["[z]"][W] = probability
 
-	// Now that eligible_zlevels is populated, initialize weather_coverage_handler
-	var/list/relevant_z_levels_for_coverage = list()
-	for(var/z in eligible_zlevels) // eligible_zlevels is an assoc list, keys are z-levels
-		relevant_z_levels_for_coverage += text2num(z) // Convert key to number
+	SSweather.relevant_z_levels_for_coverage = list()
+	var/datum/map_config/current_map_config = SSmapping.config
+	if(current_map_config.weather_coverage_traits && current_map_config.weather_coverage_traits.len)
+		for(var/trait in current_map_config.weather_coverage_traits)
+			var/list/z_levels_from_trait = SSmapping.levels_by_trait(trait)
+			if(z_levels_from_trait && z_levels_from_trait.len)
+				for(var/z_level in z_levels_from_trait)
+					SSweather.relevant_z_levels_for_coverage += text2num(z_level)
+	else
+		// Fallback to ZTRAIT_PLANETARY_ENVIRONMENT if no specific traits are configured
+		var/list/planetary_z_levels = SSmapping.levels_by_trait(ZTRAIT_PLANETARY_ENVIRONMENT)
+		if(planetary_z_levels && planetary_z_levels.len)
+			for(var/z_level in planetary_z_levels) {
+				SSweather.relevant_z_levels_for_coverage += text2num(z_level)
+			}
+			message_admins(span_adminnotice("Weather Subsystem: eligible_zlevels after population loop: [eligible_zlevels.len] entries. Keys: [eligible_zlevels.len ? eligible_zlevels.Join(", ") : "None"].")) // DEBUG
+			message_admins(span_adminnotice("Weather Subsystem: relevant_z_levels_for_coverage: [relevant_z_levels_for_coverage.len] entries. Values: [relevant_z_levels_for_coverage.len ? relevant_z_levels_for_coverage.Join(", ") : "None"].")) // DEBUG
 
 	weather_coverage_handler.Initialize(start_timeofday, relevant_z_levels_for_coverage)
 
@@ -290,16 +319,21 @@ SUBSYSTEM_DEF(weather)
 			eligible_zlevels["[z]"][weather] = probability
 
 /datum/controller/subsystem/weather/proc/run_weather(datum/weather/weather_datum_type, z_levels_param, skip_telegraph)
+	message_admins(span_adminnotice("Weather Subsystem: run_weather called with initial weather_datum_type: [weather_datum_type] and z_levels_param: [z_levels_param]"))
 	var/list/actual_z_levels = z_levels_param // Declare a typed local variable to ensure correct type inference
 
 	if (istext(weather_datum_type))
-		for (var/V in subtypesof(/datum/weather))
-			var/datum/weather/W = V
-			if (initial(W.name) == weather_datum_type)
+		message_admins(span_adminnotice("Weather Subsystem: Attempting to convert text path '[weather_datum_type]' to type."))
+		for (var/V in (/datum/weather/weather_types))
+			var/datum/weather/W_temp = V // Use a temporary variable to avoid confusion with the outer W
+			if (W_temp.type == weather_datum_type)
 				weather_datum_type = V
+				message_admins(span_adminnotice("Weather Subsystem: Successfully converted to type: [weather_datum_type]"))
 				break
 	if (!ispath(weather_datum_type, /datum/weather))
 		CRASH("run_weather called with invalid weather_datum_type: [weather_datum_type || "null"]")
+
+	message_admins(span_adminnotice("Weather Subsystem: weather_datum_type after conversion attempt: [weather_datum_type] (ispath: [ispath(weather_datum_type, /datum/weather)])"))
 
 	if (isnull(actual_z_levels))
 		actual_z_levels = SSmapping.levels_by_trait(initial(weather_datum_type.target_trait))
@@ -345,9 +379,13 @@ SUBSYSTEM_DEF(weather)
 	next_hit_by_zlevel["[z]"] = null
 
 /datum/controller/subsystem/weather/proc/make_eligible_unified(list/z_levels, list/possible_weather)
+	message_admins(span_adminnotice("Weather Subsystem: make_eligible_unified called for Z-levels: [z_levels.Join(", ")]"))
 	for(var/z in z_levels)
 		eligible_zlevels["[z]"] = possible_weather // Re-add eligibility for each Z-level in the group
+		if(next_hit_by_zlevel["[z]"])
+			message_admins(span_adminnotice("Weather Subsystem: Clearing next_hit_by_zlevel for Z-level: [z]. Was: [next_hit_by_zlevel["[z]"]]"))
 		next_hit_by_zlevel["[z]"] = null // Clear the timer
+		message_admins(span_adminnotice("Weather Subsystem: next_hit_by_zlevel for Z-level [z] is now: [next_hit_by_zlevel["[z]"] || "null"]"))
 
 /datum/controller/subsystem/weather/proc/handle_turf_created(turf/T)
 	weather_coverage_handler.on_turf_created(T)
@@ -358,10 +396,10 @@ SUBSYSTEM_DEF(weather)
 
 /// Debug Utilities
 
-/client/proc/toggle_weather_coverage_debug_messages()
-	set name = "Toggle Weather Coverage Debug Messages"
-	set category = "Debug"
-	set desc = "Toggles verbose debug messages for initial weather coverage calculation."
+/client/proc/toggle_weather_verbose_messages()
+	set name = "Toggle Weather Verbose Messages"
+	set category = "Weather Debugging"
+	set desc = "Toggles verbose debug messages for weather subsystem operations."
 
 	if(!check_rights(R_DEBUG))
 		return
@@ -373,12 +411,64 @@ SUBSYSTEM_DEF(weather)
 	SSweather.weather_coverage_handler.debug_verbose_coverage_messages = !SSweather.weather_coverage_handler.debug_verbose_coverage_messages
 
 	if(SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
-		to_chat(usr, span_notice("Verbose weather coverage debug messages ENABLED."), confidential = TRUE)
-		log_admin("[key_name(usr)] enabled verbose weather coverage debug messages.")
-		message_admins("[key_name_admin(usr)] enabled verbose weather coverage debug messages.")
+		to_chat(usr, span_notice("Weather verbose debug messages ENABLED."), confidential = TRUE)
+		log_admin("[key_name(usr)] enabled weather verbose debug messages.")
+		message_admins("[key_name_admin(usr)] enabled weather verbose debug messages.")
 	else
-		to_chat(usr, span_notice("Verbose weather coverage debug messages DISABLED."), confidential = TRUE)
-		log_admin("[key_name(usr)] disabled verbose weather coverage debug messages.")
-		message_admins("[key_name_admin(usr)] disabled verbose weather coverage debug messages.")
+		to_chat(usr, span_notice("Weather verbose debug messages DISABLED."), confidential = TRUE)
+		log_admin("[key_name(usr)] disabled weather verbose debug messages.")
+		message_admins("[key_name_admin(usr)] disabled weather verbose debug messages.")
 
-	SSblackbox.record_feedback("tally", "admin_verb", 1, "Toggle Weather Coverage Debug Messages")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Toggle Weather Verbose Messages")
+
+/client/proc/force_weather_event()
+	set category = "Weather Debugging"
+	set name = "Force Weather Event"
+	set desc = "Forces a specific weather event to start on selected Z-levels."
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if(!SSweather || !SSweather.weather_coverage_handler || !SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+		return // Exit if debug verbs are not enabled or weather subsystem/handler not found
+
+	//Selecting Weather Type
+	var/list/weather_types = list()
+	for(var/V in subtypesof(/datum/weather/weather_types))
+		var/datum/weather/W = V
+		if(isabstract(W)) // Don't allow abstract types to be picked directly
+			continue
+		weather_types["[initial(W.name)] ([W.type])"] = W.type // Display name and path, store path
+
+	var/weather_type_path = tgui_input_list(usr, "Select weather event to force:", "Force Weather Event", sort_list(weather_types))
+	if(!weather_type_path)
+		return
+
+	// (Optionally) Selecting Z-levels
+	var/z_levels_input = tgui_input_text(usr, "Enter Z-levels (comma-separated, e.g., '1,2,3') or leave blank for default:", "Force Weather Event", "")
+	var/list/z_levels_to_impact = list()
+	if(z_levels_input)
+		var/list/z_level_strings = splittext(z_levels_input, ",")
+		for(var/z_str in z_level_strings)
+			var/z_num = text2num(trim(z_str))
+			if(isnum(z_num) && z_num >= 1 && z_num <= world.maxz)
+				z_levels_to_impact += z_num
+			else
+				to_chat(usr, span_warning("Invalid Z-level entered: [z_str]. Skipping."))
+
+	// Calling SSweather.run_weather
+	if(!SSweather)
+		to_chat(usr, span_warning("Weather subsystem not found."), confidential = TRUE)
+		return
+
+	if(z_levels_to_impact.len)
+		SSweather.run_weather(weather_type_path, z_levels_to_impact)
+		message_admins(span_adminnotice("[key_name_admin(usr)] forced weather event '[weather_types[weather_type_path]]' on Z-levels: [z_levels_to_impact.Join(", ")]"))
+		message_admins("[key_name(usr)] forced weather event '[weather_types[weather_type_path]]' on Z-levels: [z_levels_to_impact.Join(", ")]")
+	else
+		SSweather.run_weather(weather_type_path) // Let run_weather determine Z-levels based on target_trait
+		message_admins(span_adminnotice("[key_name_admin(usr)] forced weather event '[weather_types[weather_type_path]]' on default Z-levels (based on target trait)."))
+		message_admins("[key_name(usr)] forced weather event '[weather_types[weather_type_path]]' on default Z-levels (based on target trait).")
+
+	to_chat(usr, span_notice("Forced weather event: [weather_types[weather_type_path]] initiated."), confidential = TRUE)
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Force Weather Event")

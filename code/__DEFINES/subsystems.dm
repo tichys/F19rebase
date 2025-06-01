@@ -139,7 +139,8 @@
 #define INIT_ORDER_AI_CONTROLLERS 62 //So the controller can get the ref
 #define INIT_ORDER_TICKER 61
 #define INIT_ORDER_TCG 55
-#define INIT_ORDER_MAPPING 50
+#define INIT_ORDER_MAPPING 54
+#define INIT_ORDER_WEATHER 53 // Ensure weather initializes after mapping
 #define INIT_ORDER_EARLY_ASSETS 49
 #define INIT_ORDER_RESEARCH 47
 #define INIT_ORDER_TIMETRACK 46

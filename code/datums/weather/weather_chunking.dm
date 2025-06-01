@@ -3,6 +3,12 @@
  * I believe Mobs/items are generally more extensive to iterate than areas.
 */
 
+///Called when an objects area moves from indoors to outdoors
+#define COMSIG_OUTDOOR_ATOM_ADDED "outdoor_object_added"
+
+///Called when an objects area moves from outdoors to indoors
+#define COMSIG_OUTDOOR_ATOM_REMOVED "outdoor_object_removed"
+
 #define WEATHER_CHUNK_SIZE 8 //8x8 is considered a chunk. Believe it or not, the camera net system Also uses a chunking system, so ours is WEATHER_
 
 /datum/weather/chunking
@@ -12,6 +18,7 @@
 	var/list/chunks = list()  /// Chunk keys and atoms contained, Ex. [4_6_1], [x_y_z]
 	var/list/turf_chunks = list() // Chunk keys and exposed turfs contained.
 	var/list/exposed_turfs = list() // Temporary cache used for initial registration with the chunking system.
+	var/tmp/debug_message_count = 0 // Limit debug messages for chunking
 
 //Registering/Deregistering for atoms.
 
@@ -138,21 +145,54 @@
 		return
 
 	var/key = get_turf_chunk_key(T)
+	if(debug_message_count < 100)
+		message_admins(span_adminnotice("Weather Chunking Debug: Registering turf ([T.x],[T.y],[T.z]) with key [key]. turf_chunks.len before: [src.turf_chunks.len]"))
+		debug_message_count++
+
 	if (!(key in src.turf_chunks))
-		src.turf_chunks[key] = list()
-	src.turf_chunks[key] += T
+		src.turf_chunks[key] = list() // Initialize as a list if new chunk key
+		if(debug_message_count < 100)
+			message_admins(span_adminnotice("Weather Chunking Debug: New chunk key [key] created. turf_chunks.len now: [length(src.turf_chunks)]"))
+
+	var/list/turfs_in_chunk = src.turf_chunks[key]
+	if (!(T in turfs_in_chunk)) // Only add if not already present
+		turfs_in_chunk += T
+		if(debug_message_count < 100)
+			message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) added to chunk [key]. Turfs in chunk: [turfs_in_chunk.len]"))
+	else
+		if(debug_message_count < 100)
+			message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) already in chunk [key]. No change."))
+
+	if(debug_message_count < 100)
+		message_admins(span_adminnotice("Weather Chunking Debug: Chunk [key] now holds [length(src.turf_chunks[key])] turfs."))
 
 /datum/weather/chunking/proc/unregister_exposed_turf(turf/T)
 	var/key = get_turf_chunk_key(T)
+	if(debug_message_count < 100)
+		message_admins(span_adminnotice("Weather Chunking Debug: Unregistering turf ([T.x],[T.y],[T.z]) from key [key]."))
+		debug_message_count++
+
 	if (key in src.turf_chunks)
-		src.turf_chunks[key] -= T
-		if (!src.turf_chunks[key])
-			src.turf_chunks[key] = null
+		var/list/turfs_in_chunk = src.turf_chunks[key]
+		if (T in turfs_in_chunk)
+			turfs_in_chunk -= T
+			if(debug_message_count < 100)
+				message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) removed from chunk [key]. Turfs in chunk: [turfs_in_chunk.len]"))
+			if (!turfs_in_chunk.len) // If the list becomes empty, remove the chunk key
+				src.turf_chunks.Remove(key)
+				if(debug_message_count < 100)
+					message_admins(span_adminnotice("Weather Chunking Debug: Chunk key [key] removed (empty). turf_chunks.len now: [length(src.turf_chunks)]"))
+		else
+			if(debug_message_count < 100)
+				message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) not found in chunk [key]. No change."))
+	else
+		if(debug_message_count < 100)
+			message_admins(span_adminnotice("Weather Chunking Debug: Chunk key [key] not found. No turf to unregister."))
 
 /datum/weather/chunking/proc/get_turf_chunk_coords(turf/T)
 	return list(
-		round(T.x / WEATHER_CHUNK_SIZE),
-		round(T.y / WEATHER_CHUNK_SIZE),
+		floor((T.x - 1) / WEATHER_CHUNK_SIZE),
+		floor((T.y - 1) / WEATHER_CHUNK_SIZE),
 		T.z
 		)
 
@@ -165,7 +205,11 @@
 	var/list/results = list()
 	for (var/key in chunk_keys)
 		if (key in src.turf_chunks)
-			results += src.turf_chunks[key]
+			var/list/turfs_in_chunk = src.turf_chunks[key]
+			if (istype(turfs_in_chunk, /list)) // Ensure it's a list
+				results += turfs_in_chunk
+			else if (istype(turfs_in_chunk, /turf)) // Handle old format if any remain
+				results += turfs_in_chunk
 	return results
 
 /datum/weather/chunking/proc/get_all_turf_chunk_keys()
@@ -182,9 +226,6 @@
 
 /datum/weather/chunking/proc/get_impacted_chunk_keys(datum/weather/storm)
 	. = list()
-	if(!storm || !storm.impacted_z_levels || !islist(storm.impacted_z_levels) || !length(storm.impacted_z_levels) || !istype(storm.center_turf, /turf))
-		return
-
 	if(!storm || !storm.impacted_z_levels || !islist(storm.impacted_z_levels) || !length(storm.impacted_z_levels) || !istype(storm.center_turf, /turf))
 		return
 

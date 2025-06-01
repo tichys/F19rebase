@@ -45,6 +45,8 @@
 
 	// Weather overrides unique to a given map.
 	var/list/weather_overrides = list()
+	// Traits that define Z-levels relevant for weather coverage on this map.
+	var/list/weather_coverage_traits = list()
 
 /**
  * Proc that simply loads the default map config, which should always be functional.
@@ -229,6 +231,19 @@
 					return
 		else
 			log_world("map_config \"weather\" field is not a list!")
+			return
+
+	if("weather_coverage_traits" in json)
+		var/coverage_traits_json = json["weather_coverage_traits"]
+		if(islist(coverage_traits_json))
+			for(var/trait_name in coverage_traits_json)
+				if(istext(trait_name))
+					weather_coverage_traits += trait_name
+				else
+					log_world("Invalid trait name in weather_coverage_traits for [filename]")
+					return
+		else
+			log_world("map_config \"weather_coverage_traits\" field is not a list!")
 			return
 
 	defaulted = FALSE

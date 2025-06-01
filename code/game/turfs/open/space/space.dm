@@ -18,6 +18,7 @@ GLOBAL_REAL_VAR(space_appearances) = make_space_appearances()
 	var/destination_x
 	var/destination_y
 
+	blocks_weather = FALSE // Space should not block weather
 	plane = PLANE_SPACE
 	layer = SPACE_LAYER
 	light_power = 0.25

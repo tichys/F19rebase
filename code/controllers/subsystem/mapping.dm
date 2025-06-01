@@ -87,6 +87,7 @@ SUBSYSTEM_DEF(mapping)
 			config = old_config
 	initialize_biomes()
 	loadWorld()
+	sleep(1) // Give the engine a tick to fully process z_list updates after map loading
 	require_area_resort()
 	process_teleport_locs() //Sets up the wizard teleport locations
 	preloadTemplates()
@@ -112,6 +113,10 @@ SUBSYSTEM_DEF(mapping)
 #endif
 	// Run map generation after ruin generation to prevent issues
 	run_map_generation()
+	// Ensure Z-level linkages and gravities are calculated immediately after map loading
+	generate_z_level_linkages()
+	calculate_default_z_level_gravities()
+
 	// Add the first transit level
 	var/datum/space_level/base_transit = add_reservation_zlevel()
 	require_area_resort()
@@ -119,7 +124,6 @@ SUBSYSTEM_DEF(mapping)
 	setup_map_transitions()
 	generate_station_area_list()
 	initialize_reserved_level(base_transit.z_value)
-	calculate_default_z_level_gravities()
 
 	return ..()
 
@@ -385,6 +389,7 @@ Used by the AI doomsday and the self-destruct nuke.
 		map_max_y = world.maxy
 		message_admins(span_warning("Mapping Subsystem: No parsed maps loaded, defaulting map bounds to world dimensions."))
 
+	message_admins(span_adminnotice("Mapping Subsystem: Final map bounds after loadWorld(): min_x=[map_min_x], max_x=[map_max_x], min_y=[map_min_y], max_y=[map_max_y]."))
 
 	if(SSdbcore.Connect())
 		var/datum/db_query/query_round_map_name = SSdbcore.NewQuery({"

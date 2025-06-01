@@ -1,4 +1,4 @@
-/datum/weather/rain_storm
+/datum/weather/weather_types/rain_storm
 	name = "rain"
 	desc = "Cold raindrops pour down from the sky, soaking everything they touch in a thin layer of water. "
 	probability = 90

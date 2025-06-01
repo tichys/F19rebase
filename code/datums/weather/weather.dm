@@ -14,6 +14,8 @@
 *
 */
 
+/client/var/weather_debug_verbs_enabled = FALSE
+
 /datum/weather
 	/// name of weather
 	var/name = "space wind"
@@ -100,6 +102,8 @@
 /datum/weather/storm
 	name = "Storm"
 
+/datum/weather/weather_types
+
 /datum/weather/New(z_levels, turf/initial_center_turf)
 	..()
 	impacted_z_levels = z_levels
@@ -149,10 +153,10 @@
  *
  */
 /datum/weather/proc/telegraph(get_to_the_good_part)
+	message_admins(span_adminnotice("Weather Datum: [name] entering telegraph stage."))
 	if(stage == STARTUP_STAGE)
 		return
 
-	message_admins(span_adminnotice("A storm of type []"))
 	SEND_GLOBAL_SIGNAL(COMSIG_WEATHER_TELEGRAPH(type))
 	stage = STARTUP_STAGE
 
@@ -174,6 +178,7 @@
  *
  */
 /datum/weather/proc/start()
+	message_admins(span_adminnotice("Weather Datum: [name] entering start stage."))
 	if(stage >= MAIN_STAGE)
 		return
 
@@ -196,6 +201,7 @@
  *
  */
 /datum/weather/proc/wind_down()
+	message_admins(span_adminnotice("Weather Datum: [name] entering wind_down stage."))
 	if(stage >= WIND_DOWN_STAGE)
 		return
 
@@ -215,6 +221,7 @@
  *
  */
 /datum/weather/proc/end()
+	message_admins(span_adminnotice("Weather Datum: [name] entering end stage."))
 	if(stage == END_STAGE)
 		return
 

@@ -36,12 +36,6 @@
 
 //Custom Signals
 
-///Called when an objects area moves from indoors to outdoors
-#define COMSIG_OUTDOOR_ATOM_ADDED "outdoor_object_added"
-
-///Called when an objects area moves from outdoors to indoors
-#define COMSIG_OUTDOOR_ATOM_REMOVED "outdoor_object_removed"
-
 // Chunking system Reference - now accessed via SSweather.weather_chunking
 
 // End of Defines - - -
@@ -241,6 +235,11 @@
 	cooldown = 700 // At least 70 seconds between strikes by default
 	affects_objects = TRUE
 	affects_mobs = TRUE
+	var/list/sound_profiles = list(
+		list("max_dist" = 10, "sound" = "sound/weather/lightning_strike_close.ogg", "volume" = 90),
+		list("max_dist" = 50, "sound" = "sound/weather/lightning_strike_mid.ogg", "volume" = 70),
+		list("max_dist" = 150, "sound" = "sound/weather/lightning_strike_far.ogg", "volume" = 50)
+	)
 
 /datum/weather/effect/lightning_strike/New()
 	..()
@@ -259,6 +258,9 @@
 	L.Stun(4, TRUE)
 	ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_lightning")
 	addtimer(CALLBACK(L, GLOBAL_PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_lightning"), 3)
+	if(ishuman(L))
+		var/mob/living/carbon/human/human_target = L
+		human_target.electrocution_animation(LIGHTNING_BOLT_ELECTROCUTION_ANIMATION_LENGTH)
 
 /datum/weather/effect/lightning_strike/proc/process_lightning_struck_objects(list/objects_list)
 	if(!objects_list)
@@ -310,7 +312,10 @@
 /datum/weather/effect/lightning_strike/proc/is_valid_lightning_target(turf/T)
 	if(!T)
 		return FALSE
-	if(!SSweather.eligible_zlevels["[T.z]"]) // Ensure turf's Z-level is eligible for weather
+	if(istype(T, /turf/open/openspace)) // Do not strike open space.
+		return FALSE
+	// Ensure turf's Z-level is relevant for weather coverage, which implies it's a "weather active z"
+	if(!(T.z in SSweather.relevant_z_levels_for_coverage))
 		return FALSE
 	// Additional checks can be added here if needed, e.g., if the turf is a specific type
 	return TRUE
@@ -392,7 +397,7 @@
 
 ///Charging something on a turf
 /datum/weather/effect/lightning_strike/proc/charge_power_receptor(turf/T)
-	var/obj/structure/cable/C = locate(/obj/structure/cable) in T.contents
+	var/obj/structure/cable/C = locate(/obj/structure/cable) in T
 	if(C)
 		C.add_avail(rand(400000, 800000)) //Charge the cable with a random amount of power, between 400k and 800k.
 		T.visible_message(span_warning("The power cable on [T] sparks and crackles with energy as the lightning strikes!"))
@@ -403,7 +408,11 @@
 			qdel(C) //Delete the cable, since it has exploded.
 			playsound(T, 'sound/effects/explosion3.ogg', rand(30, 50), TRUE)
 
-	for(var/obj/O in T.contents)
+	var/list/objects_on_turf = list()
+	for(var/atom/A in T)
+		if(istype(A, /obj))
+			objects_on_turf += A
+	for(var/obj/O in objects_on_turf)
 		if(O == C)
 			continue //We already handeled cables
 
@@ -434,107 +443,154 @@
 	if(!T) //How did we get here without a turf?
 		return
 
-	//Lightning flash logic goes here.
-	T.set_light(l_power = 100, l_color = "#FFFFFF") // Brief bright white flash at the strike location
-	addtimer(CALLBACK(T, TYPE_PROC_REF(/atom, set_light), 0, null, null, null, FALSE), 10) // Turn off light after 10 deciseconds
-	// I hate addtimer so Unspeakably much, why are you making me do this???
+	// Lightning visual effect
+	var/turf/source_turf = locate(T.x, T.y, T.z + 1) // A turf directly above the target turf
+	if(!source_turf) // If there's no turf above, use the target turf itself as source
+		source_turf = T
+	source_turf.Beam(T, icon_state="lightning[rand(1,12)]", time = 5)
 
-	var/list/sound_profiles = list(
-		list("max_dist" = 10, "sound" = "sound/weather/lightning_strike_close.ogg", "volume" = 70),
-		list("max_dist" = 50, "sound" = "sound/weather/lightning_strike_mid.ogg", "volume" = 50),
-		list("max_dist" = 80, "sound" = "sound/weather/lightning_strike_far.ogg", "volume" = 30)
-	)
+	// Brief light flash at the strike location
+	T.set_light(l_power = 100, l_color = "#FFFFFF") // Pure white for a brighter flash
+	addtimer(CALLBACK(T, TYPE_PROC_REF(/atom, set_light), 0, null, null, null, FALSE), 15)
+
+	// Add a scorch mark/burnt decal to the struck turf
+	new /obj/effect/mapping_helpers/burnt_floor(T)
+
+	// Add a small chance for an explosion on the struck turf
+	if(prob(5)) // 5% chance for an explosion
+		explosion(T, 0, 0, 0) // Smallest possible explosion
+		T.visible_message(span_warning("The ground violently explodes as lightning strikes it!"))
+		message_admins(span_adminnotice("DEBUG: Lightning strike caused a turf explosion at [T]!"))
 
 	var/list/already_heard = list() //List of players who have already heard the sound, so we don't spam them.
 
-	for(var/client/C in GLOB.clients)
-		var/mob/M = C.mob
-		if(!M || (M in already_heard)) // Ignore clientless mobs or mobs who already heard it.
-			continue
+	// Iterate through Z-levels downwards from the strike turf's Z-level
+	for(var/current_z = T.z to 1 step -1) // From strike Z-level down to 1
+		var/z_level_offset = T.z - current_z
+		// Check for obstructions between T.z and current_z
+		var/is_obstructed = FALSE
+		for(var/z_check = T.z to current_z + 1 step -1) // Check turfs from T.z down to current_z + 1
+			var/turf/turf_above_current = locate(T.x, T.y, z_check)
+			if(turf_above_current && turf_above_current.blocks_weather) // If there's a blocking turf above, it's obstructed
+				is_obstructed = TRUE
+				break
+		if(is_obstructed)
+			continue // Skip this Z-level if obstructed
 
-		var/hearing_range = get_dist(T, M)
-
-		for(var/profile_map in sound_profiles)
-			if(hearing_range <= profile_map["max_dist"])
-				var/strike_turf = get_turf(M)
-
-				if(hearing_range <= 5)
-					//Close: Lets play the sound immediately
-					playsound(strike_turf, profile_map["sound"], profile_map["volume"], TRUE)
-				else
-					//Mid/Far, lets delay for realism
-					var/pitch = rand(90, 110) / 100 // .9 to 1.1 pitch variation
-					var/delay = hearing_range * 3 // Calculate delay based on distance (3 deciseconds per tile)
-					addtimer(CALLBACK(null, PROC_REF(playsound), list(get_turf(M), profile_map["sound"], profile_map["volume"], TRUE, 44100 * pitch)), delay) // "Cause Light travels faster than sound!"
-
-				already_heard += M //Add the mob to the already heard list.
-				break //break out of the loop, since we found a match.
-
-	//Affecting randomly struck mobs on a picked turf.
-	for(var/mob/living/L in T.contents)
-		apply_single_mob_lightning_effect(L, CLOTHING_LIGHTNINGPROOF)
-
-	// Getting all nearby atoms from surrounding chunks
-	var/list/nearby_atoms = SSweather.weather_chunking.get_nearby_atoms(T, 1)
-
-	var/list/nearby_objs = list()
-	for(var/atom/A in nearby_atoms)
-		if(istype(A, /obj))
-			nearby_objs += A
-
-	// NEW LOGIC: If no objects found via chunking, fallback to all objects on the turf and adjacent turfs
-	if(!nearby_objs.len)
-		message_admins(span_adminnotice("DEBUG: strike_turf: No objects found via chunking. Falling back to direct turf contents for lightning strike."))
-		for(var/atom/A in T.contents)
-			if(istype(A, /obj) && !(A in nearby_objs))
-				nearby_objs += A
-		for(var/direction in list(NORTH, SOUTH, EAST, WEST)) // Get adjacent turfs in cardinal directions
-			var/turf/adjacent_turf = get_step(T, direction)
-			if(!adjacent_turf)
+		for(var/client/C in GLOB.clients)
+			var/mob/M = C.mob
+			if(!M || (M in already_heard) || M.z != current_z)
 				continue
-			for(var/atom/A in adjacent_turf.contents)
-				if(istype(A, /obj) && !(A in nearby_objs))
-					nearby_objs += A
 
-	message_admins(span_adminnotice("DEBUG: nearby_atoms count: [nearby_atoms.len]. nearby_objs count (after fallback): [nearby_objs.len]."))
+			play_lightning_sound_for_mob(M, T, z_level_offset)
+			already_heard += M
 
-	var/list/targets_to_strike = build_multistrike_list(nearby_objs, 50) //We have the nearby objs, lets check to see if any of them are conductive/high, etc.
+// New helper proc for playing lightning sound for a mob, considering Z-level offset
+/datum/weather/effect/lightning_strike/proc/play_lightning_sound_for_mob(mob/M, turf/strike_turf, z_level_offset)
+	// z_level_offset is the difference in Z-levels between the strike and the mob's Z-level.
+	// 0 means same Z-level, 1 means mob is one Z-level below, etc.
 
-	if(targets_to_strike && targets_to_strike.len)
-		process_lightning_struck_objects(targets_to_strike)
+	var/effective_dist = get_dist(strike_turf, M) // Horizontal distance
+	effective_dist += z_level_offset * 10 // Add a penalty for vertical distance, e.g., 10 tiles per Z-level
 
-	if(prob(40 + (severity * 10))) //40% chance the strike produces a *Gentle* impact, ideally knocking things/equipment around.
-		explosion(T, light_impact_range = 3, flame_range = 1, flash_range = 2)
+
+	for(var/profile_map in sound_profiles)
+		if(effective_dist <= profile_map["max_dist"])
+			var/mob_turf = get_turf(M)
+			if(!mob_turf) continue
+
+			if(effective_dist <= 5) // Close: Play immediately
+				playsound(mob_turf, profile_map["sound"], profile_map["volume"], TRUE)
+			else // Mid/Far: Delay for realism
+				var/pitch = rand(90, 110) / 100
+				var/delay = effective_dist * 3 // Calculate delay based on distance
+				addtimer(CALLBACK(null, PROC_REF(playsound), list(mob_turf, profile_map["sound"], profile_map["volume"], TRUE, 44100 * pitch)), delay)
+			break // Found a match, stop checking profiles
+
+/datum/weather/effect/electrified_reagents
+	name = "Electrified Reagents"
+	var/turf/affected_turf
+	var/list/affected_mobs = list() // To prevent re-electrocution of the same mob repeatedly
+	var/reagent_tick_interval = 10 // Shock every 1 second (10 deciseconds)
+	var/shocks_processed = 0 // Counter for how many times process_shocks has run
+	var/max_shocks = 10 // Maximum number of shocks before the effect ends as a failsafe
+
+/datum/weather/effect/electrified_reagents/New(turf/T)
+	..()
+	affected_turf = T
+	RegisterSignal(affected_turf, COMSIG_ATOM_ENTERED, PROC_REF(on_atom_entered))
+	RegisterSignal(affected_turf, COMSIG_ATOM_EXITED, PROC_REF(on_atom_exited))
+
+/datum/weather/effect/electrified_reagents/proc/start_effect()
+	max_shocks = duration / reagent_tick_interval // Calculate max shocks based on duration and tick interval
+	shocks_processed = 0 // Reset counter when effect starts
+	addtimer(CALLBACK(src, PROC_REF(end_effect)), duration)
+	addtimer(CALLBACK(src, PROC_REF(process_shocks)), reagent_tick_interval) // Start periodic shocking
+
+/datum/weather/effect/electrified_reagents/proc/end_effect()
+	// When the effect ends, we need to ensure any pending process_shocks timers are stopped.
+	// Since process_shocks re-adds itself, we need to explicitly deltimer it.
+	deltimer(CALLBACK(src, PROC_REF(process_shocks)))
+	UnregisterSignal(affected_turf, COMSIG_ATOM_ENTERED)
+	UnregisterSignal(affected_turf, COMSIG_ATOM_EXITED)
+	qdel(src)
+
+/datum/weather/effect/electrified_reagents/proc/process_shocks()
+	shocks_processed++ // Increment the counter
+
+	if(!affected_turf || !affected_turf.reagents || affected_turf.reagents.total_volume == 0 || shocks_processed >= max_shocks)
+		end_effect() // No reagents left, or max shocks reached, end the effect
+		return
+
+	for(var/mob/living/L in affected_turf.contents)
+		if(L.loc == affected_turf) // Ensure mob is directly on the turf
+			L.electrocute_act(rand(5, 15) * severity, L, 0.2) // Weaker shock for continuous effect
+			L.visible_message(span_warning("The electrified reagents on [affected_turf] shock [L.name]!"))
+			to_chat(L, span_warning("You feel a continuous jolt from the electrified reagents!"))
+			L.Stun(1, TRUE)
+			ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_lightning_liquid_continuous")
+			addtimer(CALLBACK(L, GLOBAL_PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_lightning_liquid_continuous"), reagent_tick_interval)
+
+	// Re-add the timer for the next shock
+	addtimer(CALLBACK(src, PROC_REF(process_shocks)), reagent_tick_interval)
+
+/datum/weather/effect/electrified_reagents/proc/on_atom_entered(atom/source, atom/movable/arrived, atom/old_loc, list/old_locs)
+	if(istype(arrived, /mob/living/))
+		var/mob/living/L = arrived
+		if(L.loc == affected_turf && !(L in affected_mobs)) // Ensure mob is on the turf and not already affected
+			affected_mobs += L // Add to affected list to be shocked by process_shocks
+
+/datum/weather/effect/electrified_reagents/proc/on_atom_exited(atom/source, atom/movable/gone, direction)
+	if(istype(gone, /mob/living/))
+		var/mob/living/L = gone
+		if(L in affected_mobs)
+			affected_mobs -= L // Remove from affected list when mob leaves the turf
 
 
 /// --- Admin Utilities --- For both testing/debugging and the... Other Things... admins get up to..
 
-GLOBAL_LIST_INIT(weather_debug_verbs, list(
-	// These verbs are hidden by default and shown by toggle_weather_debug_verbs
-	/client/proc/lightning_strike_test,
-	/client/proc/toggle_weather_coverage_debug_messages,
-	/client/proc/debug_all_weather_effects
-))
-GLOBAL_PROTECT(weather_debug_verbs)
-
-/client/proc/toggle_weather_debug_verbs()
+/client/proc/toggle_weather_debug_admin_verbs()
+	set name = "Toggle Weather Debug Admin Verbs"
 	set category = "Debug"
-	set name = "Toggle Weather Debug Verbs"
-	set desc = "Toggles the visibility of weather-related debug verbs."
+	set desc = "Toggles the visibility of weather debug admin verbs."
 
 	if(!check_rights(R_DEBUG))
 		return
 
-	if(verbs.Find(/client/proc/lightning_strike_test)) // Check if any weather verb is currently visible
-		remove_verb(src, GLOB.weather_debug_verbs)
-		to_chat(usr, span_interface("Weather debug verbs hidden."))
+	if(src.weather_debug_verbs_enabled)
+		remove_verb(src, GLOB.admin_verbs_debug_weather)
+		src.weather_debug_verbs_enabled = FALSE
+		to_chat(src, span_interface("Weather debug verbs are now hidden."), confidential = TRUE)
 	else
-		add_verb(src, GLOB.weather_debug_verbs)
-		to_chat(usr, span_interface("Weather debug verbs shown."))
+		add_verb(src, GLOB.admin_verbs_debug_weather)
+		src.weather_debug_verbs_enabled = TRUE
+		to_chat(src, span_interface("Weather debug verbs are now visible."), confidential = TRUE)
+
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Toggle Weather Debug Verbs")
 
 /client/proc/debug_all_weather_effects()
 	set name = "Enable All Weather Effects"
-	set category = "Debug"
+	set category = "Weather Debugging"
 	set desc = "Enables all known weather effects regardless of the active weather profile."
 
 	if(!check_rights(R_DEBUG))
@@ -561,73 +617,79 @@ GLOBAL_PROTECT(weather_debug_verbs)
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Enable All Weather Effects")
 
 /client/proc/lightning_strike_test()
-	set category = "Debug"
+	set category = "Weather Debugging"
 	set name = "Test Lightning Strike"
-	set desc = "Triggers a lightning strike at a selected turf."
+	set desc = "Manually triggers a lightning strike at a random eligible turf."
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	if(!SSweather)
+		to_chat(usr, span_warning("Weather subsystem not found."), confidential = TRUE)
+		return
+
+	if(!SSweather.initial_coverage_processing_complete)
+		to_chat(usr, span_warning("Weather system is still initializing turf coverage. Please wait a moment and try again."), confidential = TRUE)
+		message_admins(span_adminnotice("DEBUG: lightning_strike_test verb called by [usr.key] but weather coverage not complete."))
+		return
 
 	message_admins(span_adminnotice("DEBUG: lightning_strike_test verb called by [usr.key]"))
-	to_chat(usr, "DEBUG: Initiating lightning strike test.")
+	to_chat(usr, "DEBUG: Manually triggering lightning strike.")
 
-	var/datum/weather/effect/lightning_strike/L = new // Instantiate once
-	var/turf/target_turf = null // Initialize to null, as there's no input
+	var/datum/weather/effect/lightning_strike/L = new
+	var/turf/target_turf = null
 
-	// Always attempt random strike first
-	to_chat(usr, span_debug("Attempting to find a random exposed turf for lightning strike."))
-	message_admins(span_adminnotice("DEBUG: Attempting to find a random exposed turf for lightning strike."))
-
+	to_chat(usr, "DEBUG: Turf Chunks Keys: [length(SSweather.weather_chunking.get_all_turf_chunk_keys())]")
 	var/list/all_exposed_turfs = SSweather.weather_chunking.get_turfs_in_chunks(SSweather.weather_chunking.get_all_turf_chunk_keys())
-
 	var/list/eligible_strike_candidates = list()
+
 	if(all_exposed_turfs.len > 0)
 		for(var/turf/T in all_exposed_turfs)
-			if(L.is_valid_lightning_target(T)) // Use the existing validity check
+			if(L.is_valid_lightning_target(T))
 				eligible_strike_candidates += T
 
 	if(eligible_strike_candidates.len > 0)
-		to_chat(usr, span_debug("Found [eligible_strike_candidates.len] eligible strike candidates."))
-		message_admins(span_adminnotice("DEBUG: Found [eligible_strike_candidates.len] eligible strike candidates."))
 		target_turf = pick(eligible_strike_candidates)
-		to_chat(usr, "Striking a random eligible turf: [target_turf].")
-		message_admins(span_adminnotice("DEBUG: Random eligible turf selected: [target_turf]."))
 	else
 		target_turf = get_turf(usr) // Fallback to user's turf if no eligible turfs found
-		to_chat(usr, "No eligible exposed turfs found. Striking your current turf: [target_turf]. Note: This turf may not be eligible for weather effects.")
-		message_admins(span_adminnotice("DEBUG: No eligible exposed turfs found. Striking user's turf: [target_turf]."))
 
 	if(target_turf)
-		var/list/eligible_z_keys = list()
-		if(SSweather.eligible_zlevels)
-			for(var/z_key in SSweather.eligible_zlevels)
-				eligible_z_keys += z_key
-		var/joined_keys = eligible_z_keys.len ? eligible_z_keys.Join(", ") : "None"
-		message_admins(span_adminnotice("DEBUG: Target turf Z-level: [target_turf.z]. Eligible Z-levels: [joined_keys]. Is target Z-level eligible? [SSweather.eligible_zlevels["[target_turf.z]"] ? "TRUE" : "FALSE"]."))
-
-		// --- Start of new logic to ensure objects for testing build_multistrike_list ---
-		var/list/test_nearby_atoms = SSweather.weather_chunking.get_nearby_atoms(target_turf, 1)
-		var/list/test_nearby_objs = list()
-		for(var/atom/A in test_nearby_atoms)
-			if(istype(A, /obj))
-				test_nearby_objs += A
-
-		var/obj/dummy_obj_for_test
-		if(!test_nearby_objs.len)
-			// If no objects are found, spawn a temporary dummy object for the test
-			dummy_obj_for_test = new /obj/item/stack/sheet/iron(target_turf) // Use a common, simple object
-			message_admins(span_adminnotice("DEBUG: Spawning dummy object [dummy_obj_for_test] at [target_turf] for lightning strike test."))
-		// --- End of new logic ---
-
 		L.strike_turf(target_turf)
-
-		// --- Clean up dummy object after strike ---
-		if(dummy_obj_for_test)
-			qdel(dummy_obj_for_test)
-			message_admins(span_adminnotice("DEBUG: Deleting dummy object [dummy_obj_for_test] after lightning strike test."))
-		// --- End of clean up ---
-
-		to_chat(usr, "Lightning strike initiated at [target_turf].")
-		message_admins(span_adminnotice("DEBUG: Lightning strike initiated at [target_turf]."))
+		to_chat(usr, "Lightning strike triggered at [target_turf].")
+		message_admins(span_adminnotice("DEBUG: Lightning strike triggered by [usr.key] at [target_turf] ([target_turf.x],[target_turf.y],[target_turf.z]). <A HREF='?_src_=holder;admin_jump_to=[target_turf.x],[target_turf.y],[target_turf.z]'>Jump to</A>"))
 	else
 		to_chat(usr, "Could not determine a valid turf to strike.")
-		message_admins(span_adminnotice("DEBUG: Could not determine a valid turf to strike."))
+		message_admins(span_adminnotice("DEBUG: Could not determine a valid turf to strike for lightning strike test."))
 
-	qdel(L) // Clean up the datum after the strike
+	qdel(L)
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Test Lightning Strike")
+
+/datum/weather/effect/lightning_strike/proc/electrocute_in_liquid(turf/T)
+	if(!T)
+		return
+
+	if(T.reagents && T.reagents.total_volume > 0)
+		var/list/turf_contents = list()
+		for(var/atom/A in T)
+			if(istype(A, /mob/living))
+				turf_contents += A
+		for(var/mob/living/L in turf_contents)
+			if(L.loc == T) // Ensure mob is directly on the turf
+				// Apply electrocution effect to mob
+				L.electrocute_act(rand(10, 30) * severity, L, 0.5) // Electrocute with some damage and a chance to stun
+				L.visible_message(span_warning("A jolt of lightning strikes the spilled reagents around [L.name], electrocuting them and the liquid!"))
+				to_chat(L, span_warning("You feel an intense shock as the spilled reagents around you become electrified!"))
+				L.Stun(2, TRUE)
+				ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_lightning_liquid")
+				addtimer(CALLBACK(L, GLOBAL_PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_lightning_liquid"), 2)
+
+		// Electrocute the reagents themselves (e.g., evaporate some of it, or cause a visual effect)
+		T.visible_message(span_warning("The spilled reagents on [T] crackle with electricity!"))
+		if(prob(25)) // 25% chance to remove some of the reagents
+			T.reagents.remove_all(0.25, relative = TRUE) // Remove 25% of the total volume proportionally
+
+		// Apply a lasting electric effect to the reagents
+		var/datum/weather/effect/electrified_reagents/E = new(T)
+		E.duration = rand(300, 600) // Lasts 30 to 60 seconds
+		E.severity = src.severity // Inherit severity from the lightning strike
+		E.start_effect()

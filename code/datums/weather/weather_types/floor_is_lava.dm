@@ -1,5 +1,5 @@
 //Causes fire damage to anyone not standing on a dense object.
-/datum/weather/floor_is_lava
+/datum/weather/weather_types/floor_is_lava
 	name = "the floor is lava"
 	desc = "The ground turns into surprisingly cool lava, lightly damaging anything on the floor."
 
