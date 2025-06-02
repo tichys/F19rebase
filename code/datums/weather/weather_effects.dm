@@ -17,11 +17,13 @@
 
 #define WEATHER_WINDGUST /datum/weather/effect/wind_gust
 #define WEATHER_LIGHTNING_STRIKE /datum/weather/effect/lightning_strike
+#define WEATHER_FOG /datum/weather/effect/fog
 
 //Clothing Protection Types
 
 #define CLOTHING_WINDPROOF 1
 #define CLOTHING_LIGHTNINGPROOF 2
+#define CLOTHING_FOGPROOF 4 // Next power of 2 after 2
 
 //Clothing Protection Levels
 
@@ -50,8 +52,9 @@
 	var/affects_mobs = FALSE
 	var/affects_objects = FALSE
 	var/severity = 1 // This effect's current severity, initialized from the global weather profile.
+	var/needs_overlay_cleanup = FALSE // Set to TRUE if this effect manages its own visual overlays (I.E: Fog)
 
-	var/global_effect_types = list(WEATHER_WINDGUST, WEATHER_LIGHTNING_STRIKE)
+	var/global_effect_types = list(WEATHER_WINDGUST, WEATHER_LIGHTNING_STRIKE, WEATHER_FOG)
 
 /datum/weather/effect/New()
 	..()
@@ -89,6 +92,9 @@
 
 /datum/weather/effect/proc/apply_global_effect() //If a child (claiming to be a global effect) doesn't override, we do nothing.
 	return
+
+/datum/weather/effect/proc/cleanup_visual_overlays()
+	return // Child classes that manage overlays should override this.
 
 //--- Wind Gust Effect ---
 
@@ -236,13 +242,20 @@
 	affects_objects = TRUE
 	affects_mobs = TRUE
 	var/list/sound_profiles = list(
-		list("max_dist" = 10, "sound" = "sound/weather/lightning_strike_close.ogg", "volume" = 90),
-		list("max_dist" = 50, "sound" = "sound/weather/lightning_strike_mid.ogg", "volume" = 70),
-		list("max_dist" = 150, "sound" = "sound/weather/lightning_strike_far.ogg", "volume" = 50)
+		list("max_dist" = 50, "sound" = "sound/weather/lightning_strike_close.ogg", "volume" = 90),
+		list("max_dist" = 100, "sound" = "sound/weather/lightning_strike_mid.ogg", "volume" = 70),
+		list("max_dist" = 1000, "sound" = "sound/weather/lightning_strike_far.ogg", "volume" = 60) // Increased max_dist and volume for better audibility across large maps and Z-levels
 	)
 
 /datum/weather/effect/lightning_strike/New()
 	..()
+
+/datum/weather/effect/lightning_strike/apply_to_mobs(list/mobs_to_affect)
+	if(!mobs_to_affect)
+		return
+
+	for(var/mob/living/L in mobs_to_affect)
+		apply_single_mob_lightning_effect(L, CLOTHING_LIGHTNINGPROOF)
 
 /datum/weather/effect/lightning_strike/proc/apply_single_mob_lightning_effect(mob/living/L, protection_flag)
 	if(!L)
@@ -273,8 +286,6 @@
 			short_machine(O)
 
 /datum/weather/effect/lightning_strike/apply_global_effect()
-
-	//Presumably fairly light *TURF SELECTION* process, but can be improved later if needed.
 
 	var/list/strike_candidates = list()
 	var/list/all_exposed_turfs = SSweather.weather_chunking.get_turfs_in_chunks(SSweather.weather_chunking.get_all_turf_chunk_keys())
@@ -444,23 +455,25 @@
 		return
 
 	// Lightning visual effect
-	var/turf/source_turf = locate(T.x, T.y, T.z + 1) // A turf directly above the target turf
-	if(!source_turf) // If there's no turf above, use the target turf itself as source
-		source_turf = T
-	source_turf.Beam(T, icon_state="lightning[rand(1,12)]", time = 5)
+	var/obj/effect/temp_visual/thunderbolt/lightning_visual = new(T)
+	lightning_visual.pixel_x = rand(-16, 16) // Random offset for visual variety
+	lightning_visual.pixel_y = rand(-16, 16)
 
 	// Brief light flash at the strike location
-	T.set_light(l_power = 100, l_color = "#FFFFFF") // Pure white for a brighter flash
-	addtimer(CALLBACK(T, TYPE_PROC_REF(/atom, set_light), 0, null, null, null, FALSE), 15)
+	T.set_light(l_power = 100, l_color = "#ffffffe8", l_outer_range = 5, l_falloff_curve = 2, l_inner_range = 1) // Dynamic light for lightning flash
+	addtimer(CALLBACK(T, TYPE_PROC_REF(/atom, set_light), 0, null, null, null, FALSE), 6)
 
 	// Add a scorch mark/burnt decal to the struck turf
 	new /obj/effect/mapping_helpers/burnt_floor(T)
 
+	// Attempt to charge power receptors on the turf
+	charge_power_receptor(T)
+
 	// Add a small chance for an explosion on the struck turf
-	if(prob(5)) // 5% chance for an explosion
+	if(prob(15)) // 15% chance for an explosion
 		explosion(T, 0, 0, 0) // Smallest possible explosion
 		T.visible_message(span_warning("The ground violently explodes as lightning strikes it!"))
-		message_admins(span_adminnotice("DEBUG: Lightning strike caused a turf explosion at [T]!"))
+		message_admins(span_adminnotice("Weather Subsystem: Lightning strike caused a turf explosion at [T]!"))
 
 	var/list/already_heard = list() //List of players who have already heard the sound, so we don't spam them.
 
@@ -566,6 +579,109 @@
 		if(L in affected_mobs)
 			affected_mobs -= L // Remove from affected list when mob leaves the turf
 
+/*--- Fog Effect ---
+	  _
+	 / \
+	/ _ \
+   | (_) |
+   \ ___ /
+	 `-'
+*/
+
+/datum/weather/effect/fog
+	name = "Dense Fog"
+	desc = "A thick, swirling fog that reduces visibility."
+	affects_areas = TRUE // This effect now manages area overlays
+	affects_mobs = TRUE
+	tick_interval = 10 // Every 1 second
+	cooldown_max = 0 // Continuous effect, no cooldown
+	needs_overlay_cleanup = TRUE // This effect manages its own visual overlays
+	var/list/active_visual_overlays = list() // To store the overlays created by this effect
+
+/datum/weather/effect/fog/apply_global_effect()
+	var/datum/weather/current_storm
+	if(SSweather.processing.len)
+		current_storm = SSweather.processing[1] // Get the current active storm
+	if(!current_storm || !current_storm.impacted_z_levels || !current_storm.impacted_z_levels.len)
+		cleanup_visual_overlays() // If no storm or no impacted levels, clean up
+		return
+
+	// Only apply overlays if they haven't been applied yet for this storm
+	if(!active_visual_overlays.len)
+		var/icon/fog_icon = 'icons/obj/watercloset.dmi'
+		var/icon_state_name = "mist"
+		var/overlay_color = "#A0A0A0" // Light grey
+
+		for(var/z_level in current_storm.impacted_z_levels)
+			var/list/z_chunk_keys = SSweather.weather_chunking.get_all_turf_chunk_keys_on_z(z_level)
+			if(!z_chunk_keys || !z_chunk_keys.len)
+				continue
+
+			var/list/exposed_turfs_on_z = SSweather.weather_chunking.get_turfs_in_chunks(z_chunk_keys)
+			for(var/turf/T in exposed_turfs_on_z)
+				if(!isturf(T))
+					continue
+
+				var/mutable_appearance/fog_overlay = mutable_appearance(fog_icon, icon_state_name, AREA_LAYER, ABOVE_LIGHTING_PLANE, 100)
+				fog_overlay.color = overlay_color
+				T.overlays += fog_overlay
+				active_visual_overlays += fog_overlay // Store reference to remove later
+
+/datum/weather/effect/fog/apply_to_mobs(list/mobs_to_affect)
+	// Fog is a continuous effect, so we don't use the cooldown for application frequency
+	// The tick_interval handles how often this proc is called by the subsystem.
+
+	for(var/mob/living/L in mobs_to_affect)
+		if(!L || !can_weather_act(L)) // Check if mob is valid and exposed
+			continue
+
+		if(apply_effect(L, null, CLOTHING_FOGPROOF)) // Check for fog protection
+			continue
+
+		// Apply vision impairment based on severity
+		var/vision_trait_duration = 3 // Short duration, reapplied every tick_interval
+		switch(severity)
+			if(1) // Light fog
+				ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_fog_light")
+				addtimer(CALLBACK(L, GLOBAL_PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_fog_light"), vision_trait_duration)
+				to_chat(L, span_notice("The fog makes it hard to see clearly."))
+			if(2) // Moderate fog
+				ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_fog_moderate")
+				addtimer(CALLBACK(L, GLOBAL_PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_fog_moderate"), vision_trait_duration)
+				to_chat(L, span_warning("The dense fog significantly reduces your visibility."))
+			if(3) // Severe fog
+				ADD_TRAIT(L, TRAIT_BLURRY_VISION, "weather_fog_severe")
+				addtimer(CALLBACK(L, GLOBAL_PROC_REF(___TraitRemove), L, TRAIT_BLURRY_VISION, "weather_fog_severe"), vision_trait_duration)
+				to_chat(L, span_userdanger("You can barely see through the oppressive fog!"))
+
+/datum/weather/effect/fog/cleanup_visual_overlays()
+	// Get the current storm to access impacted_z_levels for cleanup
+	var/datum/weather/current_storm
+	if(SSweather.processing.len)
+		current_storm = SSweather.processing[1]
+
+	if(!current_storm || !current_storm.impacted_z_levels || !current_storm.impacted_z_levels.len)
+		// If no storm or no impacted levels, try to clean up from all known chunks
+		var/list/all_chunk_keys = SSweather.weather_chunking.get_all_turf_chunk_keys()
+		for(var/key in all_chunk_keys)
+			var/list/turfs = SSweather.weather_chunking.get_turfs_in_chunks(list(key))
+			for(var/turf/T in turfs)
+				if(!isturf(T))
+					continue
+				T.overlays -= active_visual_overlays
+	else
+		for(var/z_level in current_storm.impacted_z_levels)
+			var/list/z_chunk_keys = SSweather.weather_chunking.get_all_turf_chunk_keys_on_z(z_level)
+			if(!z_chunk_keys || !z_chunk_keys.len)
+				continue
+
+			var/list/exposed_turfs_on_z = SSweather.weather_chunking.get_turfs_in_chunks(z_chunk_keys)
+			for(var/turf/T in exposed_turfs_on_z)
+				if(!isturf(T))
+					continue
+				T.overlays -= active_visual_overlays
+	active_visual_overlays.Cut() // Clear the list
+
 
 /// --- Admin Utilities --- For both testing/debugging and the... Other Things... admins get up to..
 
@@ -619,7 +735,7 @@
 /client/proc/lightning_strike_test()
 	set category = "Weather Debugging"
 	set name = "Test Lightning Strike"
-	set desc = "Manually triggers a lightning strike at a random eligible turf."
+	set desc = "Manually triggers a lightning strike at a random eligible turf, or near the user."
 
 	if(!check_rights(R_DEBUG))
 		return
@@ -638,25 +754,33 @@
 
 	var/datum/weather/effect/lightning_strike/L = new
 	var/turf/target_turf = null
+	var/force_near_user = input("Force strike near your current location?", "Lightning Strike Target") as null|anything in list("Yes", "No")
 
 	to_chat(usr, "DEBUG: Turf Chunks Keys: [length(SSweather.weather_chunking.get_all_turf_chunk_keys())]")
 	var/list/all_exposed_turfs = SSweather.weather_chunking.get_turfs_in_chunks(SSweather.weather_chunking.get_all_turf_chunk_keys())
 	var/list/eligible_strike_candidates = list()
 
-	if(all_exposed_turfs.len > 0)
-		for(var/turf/T in all_exposed_turfs)
-			if(L.is_valid_lightning_target(T))
-				eligible_strike_candidates += T
+	if(force_near_user == "Yes")
+		target_turf = get_turf(usr)
+		if(!L.is_valid_lightning_target(target_turf))
+			to_chat(usr, span_warning("Your current turf is not a valid lightning target. Falling back to random eligible turf."))
+			target_turf = null // Reset to null to allow random selection below
 
-	if(eligible_strike_candidates.len > 0)
-		target_turf = pick(eligible_strike_candidates)
-	else
-		target_turf = get_turf(usr) // Fallback to user's turf if no eligible turfs found
+	if(!target_turf) // If not forced near user, or user's turf was invalid
+		if(all_exposed_turfs.len > 0)
+			for(var/turf/T in all_exposed_turfs)
+				if(L.is_valid_lightning_target(T))
+					eligible_strike_candidates += T
+
+		if(eligible_strike_candidates.len > 0)
+			target_turf = pick(eligible_strike_candidates)
+		else
+			target_turf = get_turf(usr) // Fallback to user's turf if no eligible turfs found at all
 
 	if(target_turf)
 		L.strike_turf(target_turf)
 		to_chat(usr, "Lightning strike triggered at [target_turf].")
-		message_admins(span_adminnotice("DEBUG: Lightning strike triggered by [usr.key] at [target_turf] ([target_turf.x],[target_turf.y],[target_turf.z]). <A HREF='?_src_=holder;admin_jump_to=[target_turf.x],[target_turf.y],[target_turf.z]'>Jump to</A>"))
+		message_admins(span_adminnotice("DEBUG: Lightning strike triggered by [usr.key] at [target_turf] ([target_turf.x],[target_turf.y],[target_turf.z]). <A HREF='?_src_=holder;_authorize=1;admin_jump_to=[target_turf.x],[target_turf.y],[target_turf.z]'>Jump to</A>"))
 	else
 		to_chat(usr, "Could not determine a valid turf to strike.")
 		message_admins(span_adminnotice("DEBUG: Could not determine a valid turf to strike for lightning strike test."))

@@ -16,6 +16,9 @@
 
 /client/var/weather_debug_verbs_enabled = FALSE
 
+/// Global counter for unique weather sound channels
+GLOBAL_VAR_INIT(next_weather_sound_channel, 10000) // Start at a high number to avoid conflicts with other sounds
+
 /datum/weather
 	/// name of weather
 	var/name = "space wind"
@@ -40,6 +43,18 @@
 	var/weather_duration_upper = 1500
 	/// Looping sound while weather is occuring
 	var/weather_sound
+	/// Sound profiles for continuous ambient weather sounds, based on distance from storm center
+	var/list/ambient_sound_profiles
+	/// Unique channel for ambient weather sounds to allow stopping them
+	var/sound_channel
+	/// List of mobs currently playing ambient sounds for this weather datum
+	var/list/mobs_with_ambient_sound = list()
+	/// Sound dampening profiles for mobs indoors, based on zone size. Each map contains "max_turfs" and "dampen_volume_multiplier".
+	var/list/indoors_dampening_profiles = list( \
+		list("max_turfs" = 10, "dampen_volume_multiplier" = 0.2), \
+		list("max_turfs" = 50, "dampen_volume_multiplier" = 0.5), \
+		list("max_turfs" = 200, "dampen_volume_multiplier" = 0.8) \
+	)
 	/// Area overlay while the weather is occuring
 	var/weather_overlay
 	/// Color to apply to the area while weather is occuring
@@ -108,6 +123,7 @@
 	..()
 	impacted_z_levels = z_levels
 	center_turf = initial_center_turf
+	sound_channel = GLOB.next_weather_sound_channel++
 
 	/*
 	* Applying map-specific overrides to things like descs, probabilities, durations, etc.
@@ -193,6 +209,13 @@
 	if(!perpetual)
 		addtimer(CALLBACK(src, PROC_REF(wind_down)), weather_duration)
 
+	// Initial check for mobs already in range and register their movement signals
+	var/list/initial_mobs_in_storm_area = SSweather.weather_chunking.get_mobs_in_chunks_around_storm(src)
+	for(var/mob/living/M in initial_mobs_in_storm_area)
+		if(M && M.client)
+			RegisterSignal(M, COMSIG_MOVABLE_MOVED, PROC_REF(handle_mob_moved))
+			check_mob_ambient_sound(M)
+
 /**
  * Weather enters the winding down phase, stops effects
  *
@@ -230,6 +253,18 @@
 
 	SSweather.processing -= src
 	update_turf_overlays()
+
+	// Unregister signals and stop ambient sounds for all affected mobs
+	for(var/mob/living/M in mobs_with_ambient_sound)
+		if(M && M.client)
+			UnregisterSignal(M, COMSIG_MOVABLE_MOVED, PROC_REF(handle_mob_moved))
+			SEND_SOUND(M, sound(null, channel = sound_channel))
+	mobs_with_ambient_sound.Cut() // Clear the list
+
+	// Clean up visual overlays from effects that manage their own
+	for(var/datum/weather/effect/E in weather_effects)
+		if(E && E.needs_overlay_cleanup)
+			E.cleanup_visual_overlays()
 
 /datum/weather/proc/send_alert(alert_msg, alert_sfx)
 	for(var/z_level in impacted_z_levels)
@@ -274,9 +309,107 @@
 
 	return TRUE
 
+
+/// Signal handler for mob movement.
+/datum/weather/proc/handle_mob_moved(mob/living/M, turf/old_loc, turf/new_loc)
+	if(!M || !M.client || !(M.z in impacted_z_levels)) // Only process for mobs on impacted Z-levels
+		return
+	check_mob_ambient_sound(M)
+
+/// Checks if a mob should be hearing ambient weather sounds and plays/stops them accordingly.
+/datum/weather/proc/check_mob_ambient_sound(mob/living/M)
+	if(!M || !M.client || !ambient_sound_profiles || !ambient_sound_profiles.len)
+		return
+
+	var/turf/mob_turf = get_turf(M)
+	if(!mob_turf || !(mob_turf.z in impacted_z_levels)) // Mob not on an impacted Z-level
+		if(M in mobs_with_ambient_sound)
+			SEND_SOUND(M, sound(null, channel = sound_channel))
+			mobs_with_ambient_sound -= M
+		return
+
+	var/should_play_sound = FALSE
+	var/sound_to_play
+	var/volume_to_play = 0
+	var/falloff_to_use = 0
+
+
+	var/current_dampen_multiplier = 1.0 // Default to no dampening (full volume)
+
+	var/area/A = get_area(mob_turf)
+	if(A && A.outdoors) // Primary check: If the area is explicitly marked as outdoors, no dampening.
+		current_dampen_multiplier = 1.0
+	else
+		// Fallback: If not an explicit outdoor area, use zone-size based dampening.
+		// This is silly, but gives us a Psuedo way to Guess if a mob
+		// is "More" or "Less" indoors.
+		var/zone/Z = mob_turf.zone
+		if(Z) // Only apply dampening if mob is in a valid ZAS zone
+			var/zone_size = length(Z.contents)
+			for(var/profile_map in indoors_dampening_profiles)
+				if(zone_size <= profile_map["max_turfs"])
+					current_dampen_multiplier = profile_map["dampen_volume_multiplier"]
+					break // Found the appropriate profile, stop searching
+
+	// Find the closest exposed turf to the mob within the storm's impacted Z-levels
+	var/turf/closest_exposed_turf = null
+	var/min_dist = INFINITY
+
+	// Iterate through all turfs in the storm's impacted Z-levels
+	for(var/z_level in impacted_z_levels)
+		var/list/z_chunk_keys = SSweather.weather_chunking.get_all_turf_chunk_keys_on_z(z_level)
+		if(z_chunk_keys && z_chunk_keys.len)
+			var/list/exposed_turfs_on_z = SSweather.weather_chunking.get_turfs_in_chunks(z_chunk_keys)
+			for(var/turf/T in exposed_turfs_on_z)
+				if(T.z != mob_turf.z) // Only consider turfs on the same Z-level for direct distance calculation
+					continue
+				var/dist = get_dist(mob_turf, T)
+				if(dist < min_dist)
+					min_dist = dist
+					closest_exposed_turf = T
+
+	if(closest_exposed_turf)
+		for(var/profile_map in ambient_sound_profiles)
+			if(min_dist <= profile_map["max_dist"])
+				sound_to_play = profile_map["sound"]
+				volume_to_play = profile_map["volume"]
+				falloff_to_use = profile_map["falloff"]
+				should_play_sound = TRUE
+				break
+	else // No exposed turf found within range, or storm is global
+		// If no specific exposed turf is found, but the storm is active, play a global sound
+		for(var/profile_map in ambient_sound_profiles)
+			if(profile_map["max_dist"] == -1 || profile_map["max_dist"] > 1000) // Arbitrary large number for global
+				sound_to_play = profile_map["sound"]
+				volume_to_play = profile_map["volume"]
+				falloff_to_use = 0 // No falloff for global sounds
+				should_play_sound = TRUE
+				break
+		if(!sound_to_play) // Fallback if no specific global profile found
+			sound_to_play = weather_sound // Use the old weather_sound as a fallback
+			volume_to_play = 70 // Default volume for global fallback
+			falloff_to_use = 0
+			should_play_sound = TRUE // Even if fallback, we should play it
+
+	if(should_play_sound)
+		volume_to_play *= current_dampen_multiplier // Apply dampening
+		if(!(M in mobs_with_ambient_sound)) // Only start sound if not already playing
+			// Start the sound for this mob
+			var/sound/S = sound(sound_to_play, volume = volume_to_play, channel = sound_channel)
+			S.falloff = falloff_to_use
+			S.repeat = TRUE
+			S.frequency = get_rand_frequency()
+			SEND_SOUND(M, S)
+			mobs_with_ambient_sound += M
+	else
+		if(M in mobs_with_ambient_sound)
+			// Stop the sound if it was playing but shouldn't be now
+			SEND_SOUND(M, sound(null, channel = sound_channel))
+			mobs_with_ambient_sound -= M
+
 ///A hook for weather_types to apply specific effects that can't be captured in these generic effects.
 /datum/weather/proc/weather_act(mob/living/L, /obj/O)
-	// This proc is now a placeholder for child weather_types to add their specific effects.
+	// This proc is a placeholder for child weather_types to add their specific effects.
 	// Generic weather effects (Wind Gusts, Lightning, Fog, etc) are applied by the SSweather subsystem directly.
 
 /**
@@ -320,6 +453,17 @@
 			weather_state = end_overlay
 
 	var/list/gen_overlay_cache = list()
+
+	// Check if any active effect manages its own overlays. If so, the storm should not apply its generic overlay.
+	var/effect_manages_overlay = FALSE
+	for(var/datum/weather/effect/E in weather_effects)
+		if(E && E.needs_overlay_cleanup)
+			effect_manages_overlay = TRUE
+			break
+
+	if(effect_manages_overlay)
+		return list() // Return empty list if an effect is handling overlays
+
 	if(use_glow)
 		var/mutable_appearance/glow_image = mutable_appearance('icons/effects/glow_weather.dmi', weather_state, overlay_layer, ABOVE_LIGHTING_PLANE, 100)
 		glow_image.color = weather_color

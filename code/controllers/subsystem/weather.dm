@@ -79,6 +79,7 @@ SUBSYSTEM_DEF(weather)
 		if(!current_storm || current_storm.aesthetic || current_storm.stage != MAIN_STAGE)
 			continue
 
+		// Manage mob signal registration and unregistration based on storm presence.
 		// Get Candidate Lists for the current storm
 		var/list/mob_canidates = weather_chunking.get_mobs_in_chunks_around_storm(current_storm)
 		var/list/object_canidates = weather_chunking.get_objects_in_chunks_around_storm(current_storm)
@@ -86,6 +87,28 @@ SUBSYSTEM_DEF(weather)
 		// Get actual lists for storage (Mobs, Obj) for the current storm
 		var/list/mobs_to_affect = list()
 		var/list/objects_to_affect = list()
+
+		// Mobs that entered the storm's area
+		// We're just gonna iterate the playerlist here because chunking is kind of overkill for this.
+		for(var/mob/M in GLOB.player_list)
+			if(!M) // No mob attached to client
+				continue
+			if(!(M.z in current_storm.impacted_z_levels)) // Mob not on an impacted Z-level
+				continue
+			// The check_mob_ambient_sound proc will handle adding the mob to mobs_with_ambient_sound and playing the sound.
+			RegisterSignal(M, COMSIG_MOVABLE_MOVED, TYPE_PROC_REF(/datum/weather, handle_mob_moved))
+			current_storm.check_mob_ambient_sound(M) // Start sound immediately for new mobs
+
+		// Mobs that left the storm's area
+		// Iterate over a copy of mobs_with_ambient_sound to safely remove elements during iteration.
+		var/list/mobs_to_check_for_exit = current_storm.mobs_with_ambient_sound.Copy()
+		for(var/mob/M in mobs_to_check_for_exit) // Iterate over mobs currently playing sound
+			if(!M || !M.client) // Mob might have been deleted or logged out
+				current_storm.mobs_with_ambient_sound -= M // Remove from list if mob is gone
+				continue
+
+			// Same as before, proc below handles removing and stopping sound.
+			current_storm.check_mob_ambient_sound(M)
 
 		// Determining the mobs/objs lists here and flagging them appropriately.
 		for(var/mob/living/M in mob_canidates)
@@ -146,16 +169,15 @@ SUBSYSTEM_DEF(weather)
 				if(E.affects_objects && obj_slice)
 					E.apply_to_objects(obj_slice)
 
+
 	// Start random weather on relevant levels, grouping Z-levels by their weather traits and contiguity.
 	var/list/all_weather_traits = list()
-	for(var/V in subtypesof(/datum/weather))
-		var/datum/weather/W = V
+	for(var/V in subtypesof(/datum/weather/weather_types))
+		var/datum/weather/weather_types/W = V
 		all_weather_traits |= initial(W.target_trait) // Collect all unique target traits
 
-	message_admins(span_adminnotice("Weather Subsystem Debug: all_weather_traits before loop: [all_weather_traits.len] entries. Values: [all_weather_traits.len ? all_weather_traits.Join(", ") : "None"]."))
 	for(var/trait in all_weather_traits)
 		var/list/z_levels_with_trait = SSmapping.levels_by_trait(trait)
-		//message_admins(span_adminnotice("Weather Subsystem Debug: SSmapping.levels_by_trait([trait]) returned: [z_levels_with_trait.len] entries. Values: [z_levels_with_trait.len ? z_levels_with_trait.Join(", ") : "None"]."))
 
 		if(!z_levels_with_trait || !z_levels_with_trait.len)
 			continue
@@ -171,19 +193,25 @@ SUBSYSTEM_DEF(weather)
 			if(!current_group.len || current_z == current_group[current_group.len] + 1)
 				current_group += current_z
 			else
-				contiguous_z_groups += current_group
+				contiguous_z_groups.Add(list(current_group))
 				current_group = list(current_z)
 		if(current_group.len)
-			contiguous_z_groups += current_group
+			contiguous_z_groups.Add(list(current_group))
 
-		message_admins(span_adminnotice("Weather Subsystem Debug: contiguous_z_groups before loop: [contiguous_z_groups.len] entries. Values: [contiguous_z_groups.len ? contiguous_z_groups.Join(", ") : "None"]."))
-		for(var/list/z_group in contiguous_z_groups)
-			message_admins(span_adminnotice("Weather Subsystem Debug: Entered z_group loop for trait: [trait] and z_group: [z_group.Join(", ")]"))
+		// Had a lot of trouble with non-indexed iterations on these loops, so I'm falling back to what works.
+		for(var/i = 1, i <= contiguous_z_groups.len, i++)
+			var/list/z_group = contiguous_z_groups[i]
 			if(SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+				message_admins(span_adminnotice("Weather Subsystem Debug: Entered z_group loop for trait: [trait] and z_group: [z_group.Join(", ")]"))
 				message_admins(span_adminnotice("Weather Subsystem: Processing Z-group: [z_group.Join(", ")] for trait: [trait]"))
+
 			// Check if this group is already processing a storm or is scheduled for one
+			// We assume a group is eligible, until something tells us otherwise. (Timers, etc)
 			var/group_eligible = TRUE
-			for(var/z_level in z_group)
+			for(var/j = 1, j <= z_group.len, j++)
+				var/z_level = z_group[j]
+				if(SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+					message_admins(span_adminnotice("Weather Subsystem Debug: After z_level check for trait: [trait], z_group: [z_group.Join(", ")]. group_eligible: [group_eligible]. next_hit_by_zlevel: [next_hit_by_zlevel.len ? next_hit_by_zlevel.Join(", ") : "None"]."))
 				if(next_hit_by_zlevel["[z_level]"]) // If a timer exists, it's not eligible yet
 					group_eligible = FALSE
 					break
@@ -193,7 +221,7 @@ SUBSYSTEM_DEF(weather)
 				continue
 
 			var/list/possible_weather_types_for_trait = list()
-			for(var/V in subtypesof(/datum/weather))
+			for(var/V in subtypesof(/datum/weather/weather_types))
 				var/datum/weather/W = V
 				var/probability = initial(W.probability)
 				var/weather_target_trait = initial(W.target_trait)
@@ -261,7 +289,7 @@ SUBSYSTEM_DEF(weather)
 
 	// Populate eligible_zlevels based on weather types and map traits
 	// This block is kept for future random weather generation, but initial coverage will use a direct approach.
-	for(var/V in subtypesof(/datum/weather))
+	for(var/V in subtypesof(/datum/weather/weather_types))
 		var/datum/weather/W = V
 		var/probability = initial(W.probability)
 
@@ -299,8 +327,6 @@ SUBSYSTEM_DEF(weather)
 			for(var/z_level in planetary_z_levels) {
 				SSweather.relevant_z_levels_for_coverage += text2num(z_level)
 			}
-			message_admins(span_adminnotice("Weather Subsystem: eligible_zlevels after population loop: [eligible_zlevels.len] entries. Keys: [eligible_zlevels.len ? eligible_zlevels.Join(", ") : "None"].")) // DEBUG
-			message_admins(span_adminnotice("Weather Subsystem: relevant_z_levels_for_coverage: [relevant_z_levels_for_coverage.len] entries. Values: [relevant_z_levels_for_coverage.len ? relevant_z_levels_for_coverage.Join(", ") : "None"].")) // DEBUG
 
 	weather_coverage_handler.Initialize(start_timeofday, relevant_z_levels_for_coverage)
 
@@ -311,12 +337,42 @@ SUBSYSTEM_DEF(weather)
 
 /datum/controller/subsystem/weather/proc/update_z_level(datum/space_level/level)
 	var/z = level.z_value
-	for(var/datum/weather/weather as anything in subtypesof(/datum/weather))
-		var/probability = initial(weather.probability)
-		var/target_trait = initial(weather.target_trait)
-		if(probability && level.traits[target_trait])
-			LAZYINITLIST(eligible_zlevels["[z]"])
-			eligible_zlevels["[z]"][weather] = probability
+	var/list/possible_weather_for_z = list()
+
+	// Determine relevant traits for this Z-level
+	var/list/z_level_traits = level.traits
+	if(!z_level_traits || !z_level_traits.len)
+		return // No traits, no weather eligibility
+
+	for(var/V in subtypesof(/datum/weather/weather_types))
+		var/datum/weather/W = V
+		var/probability = initial(W.probability)
+		var/target_trait = initial(W.target_trait)
+
+		// Check if this weather type's target trait matches any trait of the current Z-level
+		if(!(target_trait in z_level_traits))
+			continue
+
+		// Apply map-specific probability overrides
+		var/datum/map_config/current_map_config = SSmapping.config
+		var/overrides = current_map_config.weather_overrides[V]
+		if((overrides && "probability") in overrides)
+			probability = overrides["probability"]
+
+		// Filter by allowed_storms in the current profile
+		if(current_profile && current_profile.allowed_storms && current_profile.allowed_storms.len)
+			if(!(W.type in current_profile.allowed_storms))
+				continue
+
+		if(probability)
+			possible_weather_for_z[W] = probability
+
+	// Update eligible_zlevels for this Z-level
+	eligible_zlevels["[z]"] = possible_weather_for_z
+
+	// Clear any existing timer for this Z-level, making it immediately eligible for a new storm
+	if(next_hit_by_zlevel["[z]"])
+		next_hit_by_zlevel["[z]"] = null
 
 /datum/controller/subsystem/weather/proc/run_weather(datum/weather/weather_datum_type, z_levels_param, skip_telegraph)
 	message_admins(span_adminnotice("Weather Subsystem: run_weather called with initial weather_datum_type: [weather_datum_type] and z_levels_param: [z_levels_param]"))

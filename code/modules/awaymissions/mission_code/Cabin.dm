@@ -9,7 +9,7 @@
 /area/awaymission/cabin/snowforest
 	name = "Snow Forest"
 	icon_state = "away"
-	area_lighting = AREA_LIGHTING_STATIC
+	area_lighting = AREA_LIGHTING_DYNAMIC
 
 /area/awaymission/cabin/snowforest/sovietsurface
 	name = "Snow Forest"

@@ -70,8 +70,8 @@
 
 /datum/weather/chunking/proc/get_chunk_coords(atom/movable/Q) //Maybe misleading name, gets the chunk based on coords and chunk size.
 	return list(
-		round(Q.x / WEATHER_CHUNK_SIZE),
-		round(Q.y / WEATHER_CHUNK_SIZE),
+		floor((Q.x - 1) / WEATHER_CHUNK_SIZE),
+		floor((Q.y - 1) / WEATHER_CHUNK_SIZE),
 		Q.z
 	)
 
@@ -145,48 +145,34 @@
 		return
 
 	var/key = get_turf_chunk_key(T)
-	if(debug_message_count < 100)
-		message_admins(span_adminnotice("Weather Chunking Debug: Registering turf ([T.x],[T.y],[T.z]) with key [key]. turf_chunks.len before: [src.turf_chunks.len]"))
-		debug_message_count++
-
 	if (!(key in src.turf_chunks))
 		src.turf_chunks[key] = list() // Initialize as a list if new chunk key
-		if(debug_message_count < 100)
-			message_admins(span_adminnotice("Weather Chunking Debug: New chunk key [key] created. turf_chunks.len now: [length(src.turf_chunks)]"))
 
 	var/list/turfs_in_chunk = src.turf_chunks[key]
 	if (!(T in turfs_in_chunk)) // Only add if not already present
 		turfs_in_chunk += T
-		if(debug_message_count < 100)
-			message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) added to chunk [key]. Turfs in chunk: [turfs_in_chunk.len]"))
 	else
 		if(debug_message_count < 100)
 			message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) already in chunk [key]. No change."))
 
-	if(debug_message_count < 100)
-		message_admins(span_adminnotice("Weather Chunking Debug: Chunk [key] now holds [length(src.turf_chunks[key])] turfs."))
-
 /datum/weather/chunking/proc/unregister_exposed_turf(turf/T)
 	var/key = get_turf_chunk_key(T)
-	if(debug_message_count < 100)
-		message_admins(span_adminnotice("Weather Chunking Debug: Unregistering turf ([T.x],[T.y],[T.z]) from key [key]."))
-		debug_message_count++
 
 	if (key in src.turf_chunks)
 		var/list/turfs_in_chunk = src.turf_chunks[key]
 		if (T in turfs_in_chunk)
 			turfs_in_chunk -= T
-			if(debug_message_count < 100)
+			if(debug_message_count < 100 && SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
 				message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) removed from chunk [key]. Turfs in chunk: [turfs_in_chunk.len]"))
 			if (!turfs_in_chunk.len) // If the list becomes empty, remove the chunk key
 				src.turf_chunks.Remove(key)
-				if(debug_message_count < 100)
+				if(debug_message_count < 100 && SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
 					message_admins(span_adminnotice("Weather Chunking Debug: Chunk key [key] removed (empty). turf_chunks.len now: [length(src.turf_chunks)]"))
 		else
-			if(debug_message_count < 100)
+			if(debug_message_count < 100 && SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
 				message_admins(span_adminnotice("Weather Chunking Debug: Turf ([T.x],[T.y],[T.z]) not found in chunk [key]. No change."))
 	else
-		if(debug_message_count < 100)
+		if(debug_message_count < 100 && SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
 			message_admins(span_adminnotice("Weather Chunking Debug: Chunk key [key] not found. No turf to unregister."))
 
 /datum/weather/chunking/proc/get_turf_chunk_coords(turf/T)
@@ -254,8 +240,6 @@
 					if(key in src.turf_chunks) // Check if this chunk actually exists and has exposed turfs
 						// No need to check area_type, as turf_chunks already contains only exposed turfs
 						. |= key
-
-	return
 
 /datum/weather/chunking/proc/get_mobs_in_chunks_around_storm(datum/weather/storm)
 	var/list/impacted_keys = get_impacted_chunk_keys(storm)

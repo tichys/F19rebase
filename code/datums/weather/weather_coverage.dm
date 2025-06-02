@@ -85,7 +85,6 @@
 	message_admins(span_adminnotice("Weather Coverage Debug: End of initialize_weather_coverage. processing_turfs.len: [processing_turfs.len]")) // NEW DEBUG
 
 /datum/weather/weather_coverage/proc/process_next_turf_batch(batch_size)
-	message_admins(span_adminnotice("Weather Coverage Debug: Start of process_next_turf_batch. processing_turfs.len: [processing_turfs.len]")) // NEW DEBUG
 	if(!processing_turfs.len)
 		return FALSE // No more columns to process
 

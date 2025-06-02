@@ -39,8 +39,6 @@
 		message_admins(span_adminnotice("SSmapping.levels_by_trait: z_list.len = [_z_list ? _z_list.len : "NULL"]"))
 	for(var/A in _z_list)
 		var/datum/space_level/S = A
-		if (SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
-			message_admins(span_adminnotice("SSmapping.levels_by_trait: Checking Z=[S.z_value], S.traits=[S.traits ? S.traits.Join(", ") : "NULL"]. S.traits[trait]=[S.traits ? S.traits[trait] : "NULL"]."))
 		if (S.traits[trait])
 			. += S.z_value
 	var/list/found_levels = .
