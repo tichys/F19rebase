@@ -1,5 +1,5 @@
 //Radiation storms occur when the station passes through an irradiated area, and irradiate anyone not standing in protected areas (maintenance, emergency storage, etc.)
-/datum/weather/rad_storm
+/datum/weather/weather_types/rad_storm
 	name = "radiation storm"
 	desc = "A cloud of intense radiation passes through the area dealing rad damage to those who are unprotected."
 
@@ -16,11 +16,6 @@
 	end_duration = 100
 	end_message = "<span class='notice'>The air seems to be cooling off again.</span>"
 
-	area_type = /area
-	protected_areas = list(/area/station/maintenance, /area/station/ai_monitored/turret_protected/ai_upload, /area/station/ai_monitored/turret_protected/ai_upload_foyer,
-							/area/station/ai_monitored/turret_protected/aisat/maint, /area/station/ai_monitored/command/storage/satellite,
-							/area/station/ai_monitored/turret_protected/ai, /area/station/commons/storage/emergency/starboard, /area/station/commons/storage/emergency/port,
-							/area/shuttle, /area/station/security/prison/safe, /area/station/security/prison/toilet)
 	target_trait = ZTRAIT_STATION
 	immunity_type = TRAIT_RADSTORM_IMMUNE
 

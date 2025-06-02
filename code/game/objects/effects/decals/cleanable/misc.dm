@@ -20,6 +20,16 @@
 	pixel_x = base_pixel_x + rand(-5, 5)
 	pixel_y = base_pixel_y + rand(-5, 5)
 
+/obj/effect/decal/cleanable/burnt_wire
+	name = "burnt wire goop"
+	desc = "The remnants of a completely fried power cable."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "ash"
+	mergeable_decal = FALSE
+	beauty = -50
+	decal_reagent = /datum/reagent/ash
+	reagent_amount = 30
+
 /obj/effect/decal/cleanable/ash/crematorium
 //crematoriums need their own ash cause default ash deletes itself if created in an obj
 	turf_loc_check = FALSE

@@ -88,3 +88,7 @@
 
 /// from the base of /mob/proc/playsound_local, sent whenever an atom's audio is heard (/mob/hearer, sound)
 #define COMSIG_ATOM_SOUND_HEARD "atom_sound_heard"
+
+// Weather-related signals
+#define COMSIG_ELECTRIFIED_REAGENTS_ENTERED "electrified_reagents_entered"
+#define COMSIG_ELECTRIFIED_REAGENTS_EXITED "electrified_reagents_exited"

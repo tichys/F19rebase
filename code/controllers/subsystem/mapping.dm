@@ -33,6 +33,12 @@ SUBSYSTEM_DEF(mapping)
 	/// List of lists of turfs to reserve
 	var/list/lists_to_reserve = list()
 
+	// Store actual map bounds after loading. These represent the min/max X/Y of the loaded .dmm files.
+	var/map_min_x = 0
+	var/map_max_x = 0
+	var/map_min_y = 0
+	var/map_max_y = 0
+
 	var/list/reservation_ready = list()
 	var/clearing_reserved_turfs = FALSE
 
@@ -81,6 +87,7 @@ SUBSYSTEM_DEF(mapping)
 			config = old_config
 	initialize_biomes()
 	loadWorld()
+	sleep(1) // Give the engine a tick to fully process z_list updates after map loading
 	require_area_resort()
 	process_teleport_locs() //Sets up the wizard teleport locations
 	preloadTemplates()
@@ -106,6 +113,10 @@ SUBSYSTEM_DEF(mapping)
 #endif
 	// Run map generation after ruin generation to prevent issues
 	run_map_generation()
+	// Ensure Z-level linkages and gravities are calculated immediately after map loading
+	generate_z_level_linkages()
+	calculate_default_z_level_gravities()
+
 	// Add the first transit level
 	var/datum/space_level/base_transit = add_reservation_zlevel()
 	require_area_resort()
@@ -113,7 +124,6 @@ SUBSYSTEM_DEF(mapping)
 	setup_map_transitions()
 	generate_station_area_list()
 	initialize_reserved_level(base_transit.z_value)
-	calculate_default_z_level_gravities()
 
 	return ..()
 
@@ -354,7 +364,32 @@ Used by the AI doomsday and the self-destruct nuke.
 	// load the station
 	station_start = world.maxz + 1
 	INIT_ANNOUNCE("Loading [config.map_name]...")
-	LoadGroup(FailedZs, "Station", config.map_path, config.map_file, config.traits, ZTRAITS_STATION)
+	var/list/loaded_parsed_maps = LoadGroup(FailedZs, "Station", config.map_path, config.map_file, config.traits, ZTRAITS_STATION)
+
+	// Calculate overall map bounds from loaded parsed maps
+	// Initialize with values that will be correctly updated by min/max
+	map_min_x = world.maxx + 1
+	map_max_x = 0
+	map_min_y = world.maxy + 1
+	map_max_y = 0
+
+	if (loaded_parsed_maps && loaded_parsed_maps.len)
+		for (var/datum/parsed_map/pm in loaded_parsed_maps)
+			var/list/bounds = pm.bounds
+			if (bounds)
+				map_min_x = min(map_min_x, bounds[MAP_MINX])
+				map_max_x = max(map_max_x, bounds[MAP_MAXX])
+				map_min_y = min(map_min_y, bounds[MAP_MINY])
+				map_max_y = max(map_max_y, bounds[MAP_MAXY])
+	else
+		// Fallback if no parsed maps were loaded (e.g., map loading failed)
+		map_min_x = 1
+		map_max_x = world.maxx
+		map_min_y = 1
+		map_max_y = world.maxy
+		message_admins(span_warning("Mapping Subsystem: No parsed maps loaded, defaulting map bounds to world dimensions."))
+
+	message_admins(span_adminnotice("Mapping Subsystem: Final map bounds after loadWorld(): min_x=[map_min_x], max_x=[map_max_x], min_y=[map_min_y], max_y=[map_max_y]."))
 
 	if(SSdbcore.Connect())
 		var/datum/db_query/query_round_map_name = SSdbcore.NewQuery({"

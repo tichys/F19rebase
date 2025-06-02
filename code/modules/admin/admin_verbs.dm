@@ -103,7 +103,6 @@ GLOBAL_LIST_INIT(admin_verbs_fun, list(
 	/client/proc/forceEvent,
 	/client/proc/admin_change_sec_level,
 	/client/proc/toggle_nuke,
-	/client/proc/run_weather,
 	/client/proc/mass_zombie_infection,
 	/client/proc/mass_zombie_cure,
 	/client/proc/polymorph_all,
@@ -188,6 +187,8 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	/client/proc/validate_cards,
 	/client/proc/test_cardpack_distribution,
 	/client/proc/print_cards,
+	/client/proc/toggle_weather_debug_admin_verbs,
+	//Weather Debug Verbs - Hidden by default, shown by toggle_weather_debug_verbs
 	#ifdef TESTING
 	/client/proc/check_missing_sprites,
 	/client/proc/run_dynamic_simulations,
@@ -213,12 +214,24 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	/client/proc/debug_health,
 )
 
+/world/proc/AVerbsDebugWeather()
+	return list(
+	/client/proc/run_weather,
+	/client/proc/force_weather_event,
+	/client/proc/lightning_strike_test,
+	/client/proc/toggle_weather_verbose_messages,
+	/client/proc/debug_all_weather_effects
+	)
+
 GLOBAL_LIST_INIT(admin_verbs_possess, list(/proc/possess, GLOBAL_PROC_REF(release)))
 GLOBAL_PROTECT(admin_verbs_possess)
 GLOBAL_LIST_INIT(admin_verbs_permissions, list(/client/proc/edit_admin_permissions))
 GLOBAL_PROTECT(admin_verbs_permissions)
 GLOBAL_LIST_INIT(admin_verbs_poll, list(/client/proc/poll_panel))
 GLOBAL_PROTECT(admin_verbs_poll)
+
+GLOBAL_LIST_INIT(admin_verbs_debug_weather, world.AVerbsDebugWeather())
+GLOBAL_PROTECT(admin_verbs_debug_weather)
 
 //verbs which can be hidden - needs work
 GLOBAL_LIST_INIT(admin_verbs_hideable, list(
@@ -284,7 +297,8 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	/client/proc/toggle_nuke,
 	/client/proc/cmd_display_del_log,
 	/client/proc/toggle_combo_hud,
-	/client/proc/debug_huds
+	/client/proc/debug_huds,
+	/client/proc/toggle_weather_debug_admin_verbs
 	))
 GLOBAL_PROTECT(admin_verbs_hideable)
 

@@ -12,6 +12,7 @@
 	allowed = list()
 	armor = list(BLUNT = 0, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 10, FIRE = 0, ACID = 0)
 	supports_variations_flags = CLOTHING_TESHARI_VARIATION | CLOTHING_VOX_VARIATION
+	weather_protection_flags = CLOTHING_WINDPROOF
 
 /obj/item/clothing/suit/hooded/wintercoat/Initialize(mapload)
 	. = ..()

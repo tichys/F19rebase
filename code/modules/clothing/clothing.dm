@@ -33,6 +33,11 @@
 
 	/// Flags for clothing
 	var/clothing_flags = NONE
+	/// Flags for protection against various weather_effects
+	var/weather_protection_flags = NONE
+
+	var/weather_protection_level = 0 //Default: No protection
+
 
 	var/can_be_bloody = TRUE
 

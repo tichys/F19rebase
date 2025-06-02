@@ -32,11 +32,18 @@
 /// Get a list of all z which have the specified trait
 /datum/controller/subsystem/mapping/proc/levels_by_trait(trait)
 	. = list()
+	if (SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+		message_admins(span_adminnotice("SSmapping.levels_by_trait called for trait: [trait]"))
 	var/list/_z_list = z_list
+	if (SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+		message_admins(span_adminnotice("SSmapping.levels_by_trait: z_list.len = [_z_list ? _z_list.len : "NULL"]"))
 	for(var/A in _z_list)
 		var/datum/space_level/S = A
 		if (S.traits[trait])
 			. += S.z_value
+	var/list/found_levels = .
+	if (SSweather.weather_coverage_handler.debug_verbose_coverage_messages)
+		message_admins(span_adminnotice("SSmapping.levels_by_trait: Returning [found_levels.len] levels: [found_levels.Join(", ")]"))
 
 /// Get a list of all z which have any of the specified traits
 /datum/controller/subsystem/mapping/proc/levels_by_any_trait(list/traits)
